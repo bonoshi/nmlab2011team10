@@ -13,6 +13,8 @@ public class test {
 
 	int aaa;
 
+	
+	int cc;
 	double g;
 	double abc;
 	double h;
