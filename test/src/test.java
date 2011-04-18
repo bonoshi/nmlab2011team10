@@ -5,7 +5,8 @@ public class test {
 	int d;
 	double e;
 	public test(){
-		System.out.println(e);
+		System.out.println(b);
 		System.out.println(d);
+		System.out.println(c);
 	}
 }
