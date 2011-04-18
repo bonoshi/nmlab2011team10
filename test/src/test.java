@@ -6,6 +6,7 @@ public class test {
 	double e;
 	public test(){
 		System.out.println(b);
+		System.out.println(b);
 		System.out.println(d);
 		System.out.println(c);
 	}
