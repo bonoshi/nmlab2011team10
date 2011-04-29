@@ -4,7 +4,7 @@ package NMLab.team10.rollingthecheese;
 
 public class WelcomeThread extends Thread {
     WelcomeView father;
-    boolean isRunning;
+    public boolean isRunning;
     
     public WelcomeThread(WelcomeView father){
         this.father = father;

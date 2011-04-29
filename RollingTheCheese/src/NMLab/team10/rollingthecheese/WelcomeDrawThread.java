@@ -7,7 +7,7 @@ public class WelcomeDrawThread extends Thread {
     WelcomeView father;
     SurfaceHolder holder;
     int sleepSpan = 100;
-    boolean isRunning;
+    public boolean isRunning;
     
     public WelcomeDrawThread(WelcomeView father,SurfaceHolder holder){
         this.father = father;

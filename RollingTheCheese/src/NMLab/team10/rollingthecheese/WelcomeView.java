@@ -2,7 +2,6 @@ package NMLab.team10.rollingthecheese;
 
 import android.view.MotionEvent;
 import android.view.SurfaceView;
-import android.R.integer;
 import android.content.Context;                        
 import android.content.res.Resources;                   
 import android.graphics.Bitmap;                        
@@ -25,11 +24,12 @@ public class WelcomeView extends SurfaceView implements SurfaceHolder.Callback{
         super(father);
         getHolder().addCallback(this);
         initBitmap(father);
+        initRect();
         this.father = father;
         welcomeThread = new WelcomeThread(this);
         welcomeDrawThread = new WelcomeDrawThread(this,getHolder());        
     }
-    Bitmap full;
+    
     public void initBitmap(Context context){
         Resources r = context.getResources();
         titleBitmap = BitmapFactory.decodeResource(r, R.drawable.title);
@@ -71,7 +71,8 @@ public class WelcomeView extends SurfaceView implements SurfaceHolder.Callback{
         }
         if(welcomeDrawThread.isAlive()){             
             welcomeDrawThread.isRunning = false;
-        }   
+        }
+        //System.out.println("destroyed");
         
     }
     @Override
@@ -80,9 +81,10 @@ public class WelcomeView extends SurfaceView implements SurfaceHolder.Callback{
             int x = (int)event.getX();
             int y = (int)event.getY();
             if(connectToOtheRect.contains(x, y)){
-                
+                father.myHandler.sendEmptyMessage(InterThreadMsg.startGameView);
             }else if(waitingConnectRect.contains(x, y)){
-                
+                father.myHandler.sendEmptyMessage(InterThreadMsg.startGameView);
+      
             }
         }
         return true;
