@@ -13,14 +13,14 @@ public class RollingCheeseActivity extends Activity {
     GameView gameView;
     public GameThread gameThread;
 
-    cheese cheese[];
-    home homes[];
-    
-    
+    //Cheese cheese[];
+    //home homes[];
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);  
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -30,14 +30,14 @@ public class RollingCheeseActivity extends Activity {
         gameThread = new GameThread(this);
         setContentView(welcomeView);
     }
-    
+
     Handler myHandler = new Handler(){
         public void handleMessage(Message Msg){
             if(Msg.what == InterThreadMsg.startGameView){
                 setContentView(gameView);
-                
+
             }
         }
-        
+
     };
 }
