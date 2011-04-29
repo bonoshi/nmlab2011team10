@@ -9,6 +9,8 @@ public class GameThread extends Thread {
         this.father = father;
     }
     public void run(){
-        
+        while(true){
+           
+        }
     }
 }
