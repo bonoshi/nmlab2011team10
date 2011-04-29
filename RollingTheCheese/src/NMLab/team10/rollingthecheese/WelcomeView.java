@@ -17,11 +17,11 @@ public class WelcomeView extends SurfaceView implements SurfaceHolder.Callback{
     WelcomeDrawThread welcomeDrawThread;
     Rect connectToOtheRect;
     Rect waitingConnectRect;
-    RollingCheese father;
+    RollingCheeseActivity father;
     Bitmap titleBitmap;
     Bitmap connectBitmap;
     Bitmap waitBitmap;
-    public WelcomeView(RollingCheese father){
+    public WelcomeView(RollingCheeseActivity father){
         super(father);
         getHolder().addCallback(this);
         initBitmap(father);

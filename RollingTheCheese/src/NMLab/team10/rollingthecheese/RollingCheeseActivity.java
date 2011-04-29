@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class RollingCheese extends Activity {
+public class RollingCheeseActivity extends Activity {
     /** Called when the activity is first created. */
     WelcomeView welcomeView;
     @Override
