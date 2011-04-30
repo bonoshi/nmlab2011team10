@@ -17,6 +17,13 @@ public class House {
     public void setQual(CheeseQualityType qual) {
         this.qual = qual;
     }
+
     CheeseProdType prod;
     CheeseQualityType qual;
+
+}
+
+
+class HouseParameter {
+    static final int TimeInterval = 10000;//ms
 }

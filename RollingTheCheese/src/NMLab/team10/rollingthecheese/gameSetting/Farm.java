@@ -13,3 +13,7 @@ public class Farm {
     }
     MilkProdType prod;
 }
+
+class FarmParameter{
+    static final int TimeInterval = 10000;//ms
+}

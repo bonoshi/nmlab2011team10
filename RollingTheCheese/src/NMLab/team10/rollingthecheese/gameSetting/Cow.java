@@ -36,15 +36,16 @@ public class Cow {
 }
 
 class CowParameter {
+    static final int TimeInterval = 10000;//ms
+    
     static final int ProductionAmount = 50;
-    static final int TimeInterval = 10000;// ms
 
-    static final float GRAZING = 1.0F;
-    static final float HUSBANDRY = 1.8F;
-    static final float MECHANIZATION = 3.0F;
-    static final float GROWTH_HORMONE = 4.0F;
+    static final float Grazing = 1.0F;
+    static final float Husbandry = 1.8F;
+    static final float Mechanization = 3.0F;
+    static final float GrowthHormone = 4.0F;
 
-    static final float CRISIS = 0.6F;
+    static final float Crisis = 0.6F;
 }
 
 enum CowStatus {

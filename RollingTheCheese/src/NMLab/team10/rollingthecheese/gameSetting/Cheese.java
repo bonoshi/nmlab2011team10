@@ -7,12 +7,15 @@ class CheeseParameter {
         static final int Time = 2000;// ms
         static final int Endurance = 100;
         static final float Speed = 100F;// one pixel per 25ms
-        static final float Radix = 45;// pixel
+        static final float Radix = 36;// pixel
         static final int Cost = 50;
 
-        static final float SizeLarge = 2.0F;
-        static final float SizeMid = 1.0F;
-        static final float SizeSmall = 0.6F;
+//        static final float SizeLarge = 2.0F;
+//        static final float SizeMid = 1.0F;
+//        static final float SizeSmall = 0.6F;
+        static final float SizeLarge = 1.0F;
+        static final float SizeMid = 0.7F;
+        static final float SizeSmall = 0.45F;
 
         static final float CostLarge = 1.6F;
         static final float CostMid = 1.0F;
@@ -35,8 +38,27 @@ class CheeseParameter {
 
         static final float Size_Crisis = 0.7F;// ratio
         static final float Time_Crisis = 0.6F;// increment
-
     }
+
+    class Poison{
+        //for poison cheese and its contact infection
+        static final float PoisonDecreSmall = 4;
+        static final float PoisonDecreMid = 10;
+        static final float PoisonDecreLarge = 20;
+        static final int PoisonSmallCount = 2;//1~2
+        static final int PoisonMidCount = 4;//3~4
+        static final int PoisonLargeCount = 6;//5~6
+        static final int PoisonDecayTime = 1000;//ms
+    }
+
+    class Sweat{
+        //for sweaty cheese and its range and effect
+    }
+
+    class Fire{
+        //for firing cheese and its effect
+    }
+
 }
 
 public class Cheese {
@@ -64,7 +86,6 @@ public class Cheese {
             default:// not support
                 break;
         }
-
     }
 
     private CheeseType type;
@@ -75,12 +96,13 @@ public class Cheese {
     private float radix;
     public float x;// central x
     public float y;
+    private int poisonCount = 0;
 
     public void setType(CheeseType type) {
         this.type = type;
     }
 
-    public CheeseType getType() {
+    public CheeseType getType() {//for occqoo
         return type;
     }
 
@@ -92,7 +114,7 @@ public class Cheese {
         return endurance;
     }
 
-    public float getHPPercent() {
+    public float getHPPercent() {//for occqoo
         return (((float) endurance) / maxEndurance);
     }
 
@@ -100,7 +122,7 @@ public class Cheese {
         this.speed = speed;
     }
 
-    public float getSpeed() {
+    public float getSpeed() {//for occqoo
         return speed;
     }
 
@@ -108,7 +130,7 @@ public class Cheese {
         this.owner = owner;
     }
 
-    public boolean isOwnerLeft() {
+    public boolean isOwnerLeft() {//for occqoo
         return owner;
     }
 
@@ -120,16 +142,24 @@ public class Cheese {
         return maxEndurance;
     }
 
-    public float getUpperLeftX() {
+    public float getUpperLeftX() {//for occqoo
         return (x - radix);
     }
 
-    public float getUpperLeftY() {
+    public float getUpperLeftY() {//for occqoo
         return (y - radix);
     }
 
+    public void setPoisonCount(int poisonCount) {
+        this.poisonCount = poisonCount;
+    }
+
+    public int getPoisonCount() {
+        return poisonCount;
+    }
+
     public static final CheeseType Normal = CheeseType.NORMAL;
-    public static final CheeseType Casumarzu = CheeseType.CASUMARZU;
+    public static final CheeseType Casumarzu = CheeseType.POISON;
     public static final CheeseType Sweaty = CheeseType.SWEATY;
     public static final CheeseType Firing = CheeseType.FIRING;
 
@@ -146,5 +176,5 @@ enum CheeseSize {
 }
 
 enum CheeseType {
-    NORMAL, CASUMARZU, SWEATY, FIRING
+    NORMAL, POISON, SWEATY, FIRING
 }
