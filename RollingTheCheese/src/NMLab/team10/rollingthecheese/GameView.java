@@ -32,11 +32,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         public boolean isRecovering;
         
         public int posX;
-        public int V;
+        public double V;
         public int fingerX;
         public int prev_fingerX;
-        public int recover_a;
-        public int prev_time;
+        public double recover_a;
+        public long prev_time;
         
         public Scroll(){
             posX = 0;
@@ -64,14 +64,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         }
         public int doCalc(){
             //Log.e("scroll posX",String.format("%d", posX));
-            int cur_time = (int)(System.nanoTime()/1000000000);
-            int delta_time = cur_time - prev_time;
+            long cur_time = System.nanoTime();
+            long delta_time = cur_time - prev_time;
+            prev_time = cur_time;
             if(isPressing){
                 if(prev_isPressing == false){      // run when finger down
                     prev_isPressing = true;                   
                     prev_fingerX = fingerX;
                     isRecovering = false;
                     recover_a = 0;
+                    V = 0;
+                    return posX;
                 }else{                             //run when move
                     if((posX>rightEdge && fingerX-prev_fingerX > 0)
                      || (posX<leftEdge && fingerX-prev_fingerX < 0)){
@@ -82,20 +85,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                     
                     }
                        
-                    V = (fingerX - prev_fingerX)/delta_time;
+                    V = (double)(fingerX - prev_fingerX)/(double)delta_time;
                     
                     prev_fingerX = fingerX;
+                    return posX;
                 }
             }else{                                 //run when finger up
                 prev_isPressing = false;
+                posX += V*delta_time;
                 if(!isRecovering){
                     if(posX>rightEdge&&V>0 ){
-                        V = -4 * (posX-rightEdge);
-                        recover_a = 8 * (posX-rightEdge);
+                        V = -0.000000004 * (double)(posX-rightEdge);
+                        recover_a = 0.000000000000000008 * (double)(posX-rightEdge);
                         isRecovering = true;
                     }else if(posX<leftEdge&&V<0){
-                        V = -4 * (posX - leftEdge);
-                        recover_a = 8*(posX - leftEdge);
+                        V = -0.000000004 * (double)(posX-leftEdge);
+                        recover_a = 0.000000000000000008 * (double)(posX-leftEdge);
                         isRecovering = true;
                     }
                 }
@@ -106,13 +111,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                     recover_a = 0;
                     V=0;
                 }else{                     
-                        V+=recover_a*delta_time;
+                    V+=recover_a*delta_time;
                 }
-
+                
+                return posX;
             }
-            prev_time = cur_time;
-            Log.e("Scroll",String.format("V:%d", V));
-            return posX;
+            //prev_time = cur_time;
+            //Log.e("Scroll",String.format("p:%d", posX));
+            //return posX;
             
         }
     }
@@ -134,7 +140,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     }
     public void doDraw(Canvas canvas){
         int tranX = scroll.doCalc();
-        
+        Log.e("",String.format("%d ", tranX));
         canvas.translate(tranX, 0);
         canvas.drawBitmap(backgroundBitmap, 0,0, null);
        
