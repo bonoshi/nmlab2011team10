@@ -119,6 +119,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
                     }
                        
                     V = (double)(fingerX - prev_fingerX)/(double)delta_time;
+                    if(V>0.0000004)V=0.0000004; 
+                       
                     
                     prev_fingerX = fingerX;
                     return posX;
@@ -172,6 +174,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         
     }
     public void doDraw(Canvas canvas){
+
         //int tranX = scroll.doCalc();
         //Log.e("",String.format("%d ", tranX));
         canvas.translate(posX, 0);

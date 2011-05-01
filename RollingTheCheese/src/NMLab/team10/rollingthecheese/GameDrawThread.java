@@ -8,7 +8,7 @@ public class GameDrawThread extends Thread {
     GameView father;
     SurfaceHolder surfaceHolder;
     int sleepSpan = 30;
-    
+
     public GameDrawThread(GameView father,SurfaceHolder holder) {
         this.father = father;
         this.surfaceHolder = holder;
