@@ -1,6 +1,10 @@
 package NMLab.team10.rollingthecheese;
 
+import java.util.Currency;
+
+import android.view.MotionEvent;
 import android.view.SurfaceView;
+import android.R.integer;
 import android.content.Context;                        
 import android.content.res.Resources;                   
 import android.graphics.Bitmap;                        
@@ -14,13 +18,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     Bitmap backgroundBitmap;
     RollingCheeseActivity father;
     
+    Scroll scroll;
+    private class Scroll{
+        public boolean isPressing;
+        public int x;
+        public void doCalc(){
+            
+        }
+    }
+    
     public GameView(RollingCheeseActivity father){
         super(father);
         this.father = father;
         getHolder().addCallback(this);
         initBitmap(father);
         gameDrawThread = new GameDrawThread(this, getHolder());
-        
+        scroll = new Scroll();
        
     }
     
@@ -56,6 +69,23 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
             father.gameThread.isRunning = false;
         }           
     }
+     
+    
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        int x = (int)event.getX();
+        if(event.getAction() == MotionEvent.ACTION_DOWN){
+            scroll.isPressing = true;
+            scroll.x = x;
+        }else if(event.getAction() == MotionEvent.ACTION_MOVE){
+            scroll.x = x;
+        }else if(event.getAction() == MotionEvent.ACTION_UP){
+            scroll.isPressing = false;
+        }
+        return true;
+    }
+    
+    
     
     
 }
