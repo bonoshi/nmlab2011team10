@@ -18,7 +18,39 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     GameDrawThread gameDrawThread;
     Bitmap backgroundBitmap;
     RollingCheeseActivity father;
+    Scroll scroll;
+    int posX;
+    int prevFingerX;
+    long prevTime;
+    private class Scroll extends Thread{
+        private static final int leftEdge = -800;
+        private static final int rightEdge = 0;
+        private static final int quantizeConst = 40; 
+        
+        double V;
+        double A;
+        
+        
+        
+        public Scroll(){
+                
+        }
+        
+        public void run(){
+            prevTime = System.nanoTime();
+            while(true){
+                
+                try {
+                    sleep(30);
+                } catch (InterruptedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
     
+    /*
     Scroll scroll;
     private class Scroll{
         private static final int leftEdge = -800;
@@ -37,6 +69,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         public int prev_fingerX;
         public double recover_a;
         public long prev_time;
+        
         
         public Scroll(){
             posX = 0;
@@ -64,9 +97,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         }
         public int doCalc(){
             //Log.e("scroll posX",String.format("%d", posX));
-            long cur_time = System.nanoTime();
-            long delta_time = cur_time - prev_time;
-            prev_time = cur_time;
+            //long cur_time = System.nanoTime();
+            long delta_time = 30000;//cur_time - prev_time;
+            //prev_time = cur_time;
             if(isPressing){
                 if(prev_isPressing == false){      // run when finger down
                     prev_isPressing = true;                   
@@ -122,7 +155,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
             
         }
     }
-    
+    */
     public GameView(RollingCheeseActivity father){
         super(father);
         this.father = father;
@@ -139,9 +172,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
         
     }
     public void doDraw(Canvas canvas){
-        int tranX = scroll.doCalc();
-        Log.e("",String.format("%d ", tranX));
-        canvas.translate(tranX, 0);
+        //int tranX = scroll.doCalc();
+        //Log.e("",String.format("%d ", tranX));
+        canvas.translate(posX, 0);
         canvas.drawBitmap(backgroundBitmap, 0,0, null);
        
         
@@ -174,12 +207,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback{
     public boolean onTouchEvent(MotionEvent event){
         int x = (int)event.getX();
         if(event.getAction() == MotionEvent.ACTION_DOWN){
-            scroll.isPressing = true;
-            scroll.fingerX = x;
+            scroll.stop();
+            prevFingerX = x;
+            prevTime = System.nanoTime();
+           // scroll.isPressing = true;
+            //scroll.fingerX = x;
         }else if(event.getAction() == MotionEvent.ACTION_MOVE){
-            scroll.fingerX = x;
+            prevTime = System.nanoTime();
+            posX += x - prevFingerX;                        
+            prevFingerX = x;
+            
+            //scroll.fingerX = x;
         }else if(event.getAction() == MotionEvent.ACTION_UP){
-            scroll.isPressing = false;
+            long deltaT = System.nanoTime() - prevTime;
+            scroll.V = (double)(x - prevFingerX)/(double)deltaT;
+            //scroll.isPressing = false;
         }
         return true;
     }
