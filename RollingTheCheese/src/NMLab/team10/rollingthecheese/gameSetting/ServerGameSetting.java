@@ -3,12 +3,13 @@ package NMLab.team10.rollingthecheese.gameSetting;
 import java.util.LinkedList;
 
 class GlobalParameter {
-    static final long TimePerDay = 60000;// 60sec = 60000ms
+    public static final long TimePerDay = 60000;// 60sec = 60000ms
+    public static final int FramePeriod = 30;//30ms
 }
 
-public class SynGameSetting {
+public class ServerGameSetting {
 
-    public SynGameSetting() {
+    public ServerGameSetting() {
         // TODO Auto-generated constructor stub
     }
 
@@ -22,8 +23,8 @@ public class SynGameSetting {
     // setting relating to players' properties. E.g., construction...
     // float leftStartBorder = 0F;
     // float rightStartBorder = 1600F;
-    private Projector leftProjector = new Projector(Projector.Left);
-    private Projector rightProjector = new Projector(Projector.Right);
+    private Projector leftProjector = new Projector();
+    private Projector rightProjector = new Projector();
     private House leftHouse = new House();
     private House rightHouse = new House();
     private Farm leftFarm = new Farm();
@@ -40,6 +41,7 @@ public class SynGameSetting {
     private LinkedList<Cheese> rightCheeseList;
     private LinkedList<Cow> leftCowList;
     private LinkedList<Cow> rightCowList;
+    private LinkedList<FireLine> fileLineList;
 
     public int getTime() {
         return time;
@@ -175,7 +177,15 @@ public class SynGameSetting {
 
     public void setRightCowList(LinkedList<Cow> rightCowList) {
         this.rightCowList = rightCowList;
-    };
+    }
+
+    public LinkedList<FireLine> getFileLineList() {
+        return fileLineList;
+    }
+
+    public void setFileLineList(LinkedList<FireLine> fileLineList) {
+        this.fileLineList = fileLineList;
+    }
 
 }
 
@@ -218,15 +228,3 @@ class MilkProdEnum {// according to farm
     public static final byte Hormone = 3;
 };
 
-class DestructState {
-    public DestructState() {
-        // TODO Auto-generated constructor stub
-    }
-
-    public boolean fense = false;
-    public boolean power = false;
-    public boolean smallCheese = false;
-    public boolean slowCheese = false;// produce slower
-    public boolean milk = false;
-
-}

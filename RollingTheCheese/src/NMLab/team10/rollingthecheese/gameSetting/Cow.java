@@ -15,7 +15,7 @@ public class Cow {//have display light type
     private int amount;// throughput
     private int interval;// time interval;
     private byte animation;//animation
-    private boolean headingLeft;//direction
+    private boolean headLeft;//direction
 
     public float getUpperLeftX() {
         return x;// bonoshi: size??margin??
@@ -57,12 +57,12 @@ public class Cow {//have display light type
         return animation;
     }
 
-    public void setHeadingLeft(boolean headingLeft) {
-        this.headingLeft = headingLeft;
+    public void setHeadLeft(boolean headLeft) {
+        this.headLeft = headLeft;
     }
 
-    public boolean isHeadingLeft() {
-        return headingLeft;
+    public boolean isHeadLeft() {
+        return headLeft;
     }
 
     public static final byte Normal = CowStatusEnum.NORMAL;

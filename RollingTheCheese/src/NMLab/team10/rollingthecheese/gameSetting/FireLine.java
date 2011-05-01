@@ -46,6 +46,14 @@ public class FireLine {//have display light type
         return (strength <= 0);
     }
 
+    public void setType(byte type) {
+        this.type = type;
+    }
+
+    public byte getType() {
+        return type;
+    }
+
     public void setStartX(float startX) {
         this.startX = startX;
     }

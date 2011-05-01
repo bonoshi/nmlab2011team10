@@ -1,18 +1,19 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-class CheeseParameter {//have display light type
+class CheeseParameter {// have display light type
 
     class Normal {// normal cheese
 
         public static final int Time = 2000;// ms
         public static final float Endurance = 100F;
-        public static final float Speed = 100F;// one pixel per 25ms
+        public static final float DistancePerSec = 100F;
+        public static final float Speed = DistancePerSec / GlobalParameter.FramePeriod;// 1sec 100pixel
         public static final float Radix = 36;// pixel
         public static final int Cost = 50;
 
-//        static final float SizeLarge = 2.0F;
-//        static final float SizeMed = 1.0F;
-//        static final float SizeSmall = 0.6F;
+        // static final float SizeLarge = 2.0F;
+        // static final float SizeMed = 1.0F;
+        // static final float SizeSmall = 0.6F;
         public static final float SizeLarge = 1.0F;
         public static final float SizeMed = 0.7F;
         public static final float SizeSmall = 0.45F;
@@ -40,23 +41,23 @@ class CheeseParameter {//have display light type
         public static final float Time_Crisis = 0.6F;// increment
     }
 
-    class Poison{
-        //for poison cheese and its contact infection
+    class Poison {
+        // for poison cheese and its contact infection
         public static final float PoisonDecreSmall = 4;
         public static final float PoisonDecreMed = 10;
         public static final float PoisonDecreLarge = 20;
-        public static final int PoisonSmallCount = 2;//1~2
-        public static final int PoisonMedCount = 4;//3~4
-        public static final int PoisonLargeCount = 6;//5~6
-        public static final int PoisonDecayTime = 1000;//ms
+        public static final int PoisonSmallCount = 2;// 1~2
+        public static final int PoisonMedCount = 4;// 3~4
+        public static final int PoisonLargeCount = 6;// 5~6
+        public static final int PoisonDecayTime = 1000;// ms
     }
 
-    class Sweat{
-        //for sweaty cheese and its range and effect
+    class Sweat {
+        // for sweaty cheese and its range and effect
     }
 
-    class Fire{
-        //for firing cheese and its effect
+    class Fire {
+        // for firing cheese and its effect
     }
 
 }
@@ -64,9 +65,9 @@ class CheeseParameter {//have display light type
 public class Cheese {
 
     // Cheese a = new Cheese(Cheese.Normal, Cheese.Large, Cheese.Left);
-//    public Cheese(byte type, byte size, boolean whichSide) {
+    // public Cheese(byte type, byte size, boolean whichSide) {
     public Cheese(byte type, byte size) {
-//        setOwner(whichSide);
+        // setOwner(whichSide);
         setType(type);
         setSize(size);
         switch (type) {
@@ -95,7 +96,8 @@ public class Cheese {
     private float endurance;
     private float maxEndurance;
     private float speed;
-//    private boolean owner;
+    private short spinAngle = 0;
+    // private boolean owner;
     private float radix;
     public float x;// central x
     public float y;
@@ -105,7 +107,7 @@ public class Cheese {
         this.type = type;
     }
 
-    public byte getType() {//for occqoo
+    public byte getType() {// for occqoo
         return type;
     }
 
@@ -125,25 +127,21 @@ public class Cheese {
         return endurance;
     }
 
-    public float getHPPercent() {//for occqoo
-        return (endurance / maxEndurance);
-    }
-
     public void setSpeed(float speed) {
         this.speed = speed;
     }
 
-    public float getSpeed() {//for occqoo
+    public float getSpeed() {// for occqoo
         return speed;
     }
 
-//    public void setOwner(boolean owner) {
-//        this.owner = owner;
-//    }
-//
-//    public boolean isOwnerLeft() {//for occqoo
-//        return owner;
-//    }
+    // public void setOwner(boolean owner) {
+    // this.owner = owner;
+    // }
+    //
+    // public boolean isOwnerLeft() {//for occqoo
+    // return owner;
+    // }
 
     public void setMaxEndurance(float maxEndurance) {
         this.maxEndurance = maxEndurance;
@@ -153,11 +151,11 @@ public class Cheese {
         return maxEndurance;
     }
 
-    public float getUpperLeftX() {//for occqoo
+    public float getUpperLeftX() {// for occqoo
         return (x - radix);
     }
 
-    public float getUpperLeftY() {//for occqoo
+    public float getUpperLeftY() {// for occqoo
         return (y - radix);
     }
 
@@ -169,6 +167,25 @@ public class Cheese {
         return poisonCount;
     }
 
+    public void regreshAngle() {
+        switch (type) {
+            case Normal: {
+                // angleChangePerSec = 2pi/360 * X * radix = CheeseParameter.Normal.DistancePerSec;
+                float delta = (CheeseParameter.Normal.DistancePerSec / radix) / 57.296F;
+                delta /= GlobalParameter.FramePeriod;
+                spinAngle += ((short) Math.round(delta));
+                if (spinAngle > 359)
+                    spinAngle%=360;
+            }
+            default:// not support
+                break;
+        }
+    }
+
+    public short getSpinAngle() {
+        return spinAngle;
+    }
+
     public static final byte Normal = CheeseEnum.Normal;
     public static final byte Casumarzu = CheeseEnum.Poison;
     public static final byte Sweaty = CheeseEnum.Sweaty;
@@ -177,6 +194,7 @@ public class Cheese {
     public static final byte Large = CheeseSizeEnum.Large;
     public static final byte Medium = CheeseSizeEnum.Medium;
     public static final byte Small = CheeseSizeEnum.Small;
+    public static final byte Tiny = CheeseSizeEnum.Tiny;
 
     public static final boolean Right = false;
     public static final boolean Left = true;

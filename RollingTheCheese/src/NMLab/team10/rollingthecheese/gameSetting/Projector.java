@@ -50,9 +50,8 @@ class ProjectorParameter {
 }
 
 public class Projector {
-    public Projector(boolean whichSide) {
+    public Projector() {
         this.setType(Board);
-        this.setOwner(whichSide);
     }
 
     public synchronized float exceedAmount(float d, float radix) {
@@ -117,7 +116,7 @@ public class Projector {
         }
     }
 
-    public synchronized int upgradeMilk() {
+    public synchronized int getUpMilk() {
         switch (type) {
             case Board:
                 return ProjectorParameter.Board.upgradeMilk;
@@ -126,7 +125,7 @@ public class Projector {
         }
     }
 
-    public synchronized String upgradeMilkText() {//for occqoo
+    public synchronized String getUpMilkText() {//for occqoo
         switch (type) {
             case Board:
                 return Integer.toString(ProjectorParameter.Board.upgradeMilk);
@@ -145,6 +144,13 @@ public class Projector {
         }
     }
 
+    public Projector clone(){
+        Projector p = new Projector();
+        p.setOwner(owner);
+        p.setType(type);
+        return p;
+    }
+
     protected byte type;
     private boolean owner;
 
@@ -155,4 +161,6 @@ public class Projector {
 
     public static final boolean Right = false;
     public static final boolean Left = true;
+
+    public static ProjectorParameter P;
 }
