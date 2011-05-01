@@ -4,51 +4,51 @@ class CheeseParameter {
 
     class Normal {// normal cheese
 
-        static final int Time = 2000;// ms
-        static final int Endurance = 100;
-        static final float Speed = 100F;// one pixel per 25ms
-        static final float Radix = 36;// pixel
-        static final int Cost = 50;
+        public static final int Time = 2000;// ms
+        public static final float Endurance = 100F;
+        public static final float Speed = 100F;// one pixel per 25ms
+        public static final float Radix = 36;// pixel
+        public static final int Cost = 50;
 
 //        static final float SizeLarge = 2.0F;
-//        static final float SizeMid = 1.0F;
+//        static final float SizeMed = 1.0F;
 //        static final float SizeSmall = 0.6F;
-        static final float SizeLarge = 1.0F;
-        static final float SizeMid = 0.7F;
-        static final float SizeSmall = 0.45F;
+        public static final float SizeLarge = 1.0F;
+        public static final float SizeMed = 0.7F;
+        public static final float SizeSmall = 0.45F;
 
-        static final float CostLarge = 1.6F;
-        static final float CostMid = 1.0F;
-        static final float CostSmall = 0.7F;
+        public static final float CostLarge = 1.6F;
+        public static final float CostMed = 1.0F;
+        public static final float CostSmall = 0.7F;
 
-        static final float Board = 1.0F;
-        static final float Slide = 1.3F;
-        static final float Cannon = 1.8F;
-        static final float Rocket = 2.4F;
+        public static final float Board = 1.0F;
+        public static final float Slide = 1.3F;
+        public static final float Cannon = 1.8F;
+        public static final float Rocket = 2.4F;
 
-        static final float For_fun = 1.5F;
-        static final float After_hours = 1.0F;
-        static final float Bakery = 0.6F;
-        static final float Food_factory = 0.2F;
+        public static final float For_fun = 1.5F;
+        public static final float After_hours = 1.0F;
+        public static final float Bakery = 0.6F;
+        public static final float Food_factory = 0.2F;
 
-        static final float Handmade = 1.0F;
-        static final float Cheese_mold = 1.2F;
-        static final float Food_chemisty = 1.5F;
-        static final float GMO = 2.0F;
+        public static final float Handmade = 1.0F;
+        public static final float Cheese_mold = 1.2F;
+        public static final float Food_chemisty = 1.5F;
+        public static final float GMO = 2.0F;
 
-        static final float Size_Crisis = 0.7F;// ratio
-        static final float Time_Crisis = 0.6F;// increment
+        public static final float Size_Crisis = 0.7F;// ratio
+        public static final float Time_Crisis = 0.6F;// increment
     }
 
     class Poison{
         //for poison cheese and its contact infection
-        static final float PoisonDecreSmall = 4;
-        static final float PoisonDecreMid = 10;
-        static final float PoisonDecreLarge = 20;
-        static final int PoisonSmallCount = 2;//1~2
-        static final int PoisonMidCount = 4;//3~4
-        static final int PoisonLargeCount = 6;//5~6
-        static final int PoisonDecayTime = 1000;//ms
+        public static final float PoisonDecreSmall = 4;
+        public static final float PoisonDecreMed = 10;
+        public static final float PoisonDecreLarge = 20;
+        public static final int PoisonSmallCount = 2;//1~2
+        public static final int PoisonMedCount = 4;//3~4
+        public static final int PoisonLargeCount = 6;//5~6
+        public static final int PoisonDecayTime = 1000;//ms
     }
 
     class Sweat{
@@ -64,20 +64,21 @@ class CheeseParameter {
 public class Cheese {
 
     // Cheese a = new Cheese(Cheese.Normal, Cheese.Large, Cheese.Left);
-    public Cheese(CheeseType type, CheeseSize size, boolean whichSide) {
+    public Cheese(byte type, byte size, boolean whichSide) {
         setOwner(whichSide);
         setType(type);
+        setSize(size);
         switch (type) {
-            case NORMAL: {
+            case Normal: {
                 radix = CheeseParameter.Normal.Radix;
                 switch (size) {
-                    case LARGE:
+                    case Large:
                         radix *= CheeseParameter.Normal.SizeLarge;
                         break;
-                    case MID:
-                        radix *= CheeseParameter.Normal.SizeMid;
+                    case Medium:
+                        radix *= CheeseParameter.Normal.SizeMed;
                         break;
-                    case SMALL:
+                    case Small:
                         radix *= CheeseParameter.Normal.SizeSmall;
                         break;
                 }
@@ -88,9 +89,10 @@ public class Cheese {
         }
     }
 
-    private CheeseType type;
-    private int endurance;
-    private int maxEndurance;
+    private byte type;
+    private byte size;
+    private float endurance;
+    private float maxEndurance;
     private float speed;
     private boolean owner;
     private float radix;
@@ -98,24 +100,32 @@ public class Cheese {
     public float y;
     private int poisonCount = 0;
 
-    public void setType(CheeseType type) {
+    public void setType(byte type) {
         this.type = type;
     }
 
-    public CheeseType getType() {//for occqoo
+    public byte getType() {//for occqoo
         return type;
     }
 
-    public void setEndurance(int endurance) {
+    public void setSize(byte size) {
+        this.size = size;
+    }
+
+    public byte getSize() {
+        return size;
+    }
+
+    public void setEndurance(float endurance) {
         this.endurance = endurance;
     }
 
-    public int getEndurance() {
+    public float getEndurance() {
         return endurance;
     }
 
     public float getHPPercent() {//for occqoo
-        return (((float) endurance) / maxEndurance);
+        return (endurance / maxEndurance);
     }
 
     public void setSpeed(float speed) {
@@ -134,11 +144,11 @@ public class Cheese {
         return owner;
     }
 
-    public void setMaxEndurance(int maxEndurance) {
+    public void setMaxEndurance(float maxEndurance) {
         this.maxEndurance = maxEndurance;
     }
 
-    public int getMaxEndurance() {
+    public float getMaxEndurance() {
         return maxEndurance;
     }
 
@@ -158,23 +168,29 @@ public class Cheese {
         return poisonCount;
     }
 
-    public static final CheeseType Normal = CheeseType.NORMAL;
-    public static final CheeseType Casumarzu = CheeseType.POISON;
-    public static final CheeseType Sweaty = CheeseType.SWEATY;
-    public static final CheeseType Firing = CheeseType.FIRING;
+    public static final byte Normal = CheeseEnum.Normal;
+    public static final byte Casumarzu = CheeseEnum.Poison;
+    public static final byte Sweaty = CheeseEnum.Sweaty;
+    public static final byte Firing = CheeseEnum.Firing;
 
-    public static final CheeseSize Large = CheeseSize.LARGE;
-    public static final CheeseSize Mid = CheeseSize.MID;
-    public static final CheeseSize Small = CheeseSize.SMALL;
+    public static final byte Large = CheeseSizeEnum.Large;
+    public static final byte Medium = CheeseSizeEnum.Medium;
+    public static final byte Small = CheeseSizeEnum.Small;
 
     public static final boolean Right = false;
     public static final boolean Left = true;
 }
 
-enum CheeseSize {
-    LARGE, MID, SMALL
+class CheeseSizeEnum {
+    public static final byte Large = 0;
+    public static final byte Medium = 1;
+    public static final byte Small = 2;
+    public static final byte Tiny = 3;
 }
 
-enum CheeseType {
-    NORMAL, POISON, SWEATY, FIRING
+class CheeseEnum {
+    public static final byte Normal = 0;
+    public static final byte Poison = 1;
+    public static final byte Sweaty = 2;
+    public static final byte Firing = 3;
 }

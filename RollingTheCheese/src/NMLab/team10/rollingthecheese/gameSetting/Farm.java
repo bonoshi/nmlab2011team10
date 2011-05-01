@@ -2,16 +2,16 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 public class Farm {
     public Farm() {
-        this.setProd(MilkProdType.Grazing);
+        this.setProd(MilkProdEnum.Grazing);
     }
-    public MilkProdType getProd() {
+    public byte getProd() {
         return prod;
     }
 
-    public void setProd(MilkProdType prod) {
+    public void setProd(byte prod) {
         this.prod = prod;
     }
-    MilkProdType prod;
+    byte prod;
 }
 
 class FarmParameter{

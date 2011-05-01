@@ -9,7 +9,7 @@ public class Cow {
         interval = CowParameter.TimeInterval;
     }
 
-    CowStatus status = Normal;
+    byte status = Normal;
     private float x;// central x
     private float y;
     public int amount;// throughput
@@ -20,7 +20,7 @@ public class Cow {
     }
 
     public void setNormal() {
-        this.status = Leak;
+        this.status = Normal;
     }
 
     public float getUpperLeftX() {
@@ -31,23 +31,24 @@ public class Cow {
         return y;//
     }
 
-    public static final CowStatus Normal = CowStatus.NORMAL;
-    public static final CowStatus Leak = CowStatus.LEAK;
+    public static final byte Normal = CowStatusEnum.NORMAL;
+    public static final byte Leak = CowStatusEnum.LEAK;
 }
 
 class CowParameter {
-    static final int TimeInterval = 10000;//ms
-    
-    static final int ProductionAmount = 50;
+    public static final int TimeInterval = 10000;//ms
 
-    static final float Grazing = 1.0F;
-    static final float Husbandry = 1.8F;
-    static final float Mechanization = 3.0F;
-    static final float GrowthHormone = 4.0F;
+    public static final int ProductionAmount = 50;
 
-    static final float Crisis = 0.6F;
+    public static final float Grazing = 1.0F;
+    public static final float Husbandry = 1.8F;
+    public static final float Mechanization = 3.0F;
+    public static final float GrowthHormone = 4.0F;
+
+    public static final float Crisis = 0.6F;
 }
 
-enum CowStatus {
-    NORMAL, LEAK
+class CowStatusEnum {
+    public static final byte NORMAL = 0;
+    public static final byte LEAK = 1;
 }

@@ -2,24 +2,24 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 public class House {
     public House() {
-        this.setProd(CheeseProdType.ForFun);
-        this.setQual(CheeseQualityType.Handmade);
+        this.setProd(CheeseProdEnum.ForFun);
+        this.setQual(CheeseQualityEnum.Handmade);
     }
-    public CheeseProdType getProd() {
+    public byte getProd() {
         return prod;
     }
-    public void setProd(CheeseProdType prod) {
+    public void setProd(byte prod) {
         this.prod = prod;
     }
-    public CheeseQualityType getQual() {
+    public byte getQual() {
         return qual;
     }
-    public void setQual(CheeseQualityType qual) {
+    public void setQual(byte qual) {
         this.qual = qual;
     }
 
-    CheeseProdType prod;
-    CheeseQualityType qual;
+    byte prod;
+    byte qual;
 
 }
 

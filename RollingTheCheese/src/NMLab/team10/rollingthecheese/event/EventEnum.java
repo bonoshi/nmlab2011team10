@@ -29,40 +29,40 @@ Destruction（只能晚上做，每晚最多每種放一個）：
         牛奶減產（Milk Leak）：晚上使用，立即生效較長一段時間
 ****************************************************************************/
 
-public enum EventType {
+public class EventEnum {
     //1 => Cow Queue
-    PurchaseCow,
+    public static final byte PurchaseCow = 0;
     //2 => Cheese Queue
-    OriginalCheeseSmall,
-    OriginalCheeseMid,
-    OriginalCheeseLarge,
+    public static final byte OriginalCheeseSmall = 1;
+    public static final byte OriginalCheeseMed = 2;
+    public static final byte OriginalCheeseLarge = 3;
     //3 => Cheese Queue
-    CasuMarzuSmall,
-    CasuMarzuMid,
-    CasuMarzuLarge,
+    public static final byte CasuMarzuSmall = 4;
+    public static final byte CasuMarzuMed = 5;
+    public static final byte CasuMarzuLarge = 6;
     //4 => Cheese Queue
-    SweatyCheeseSmall,
-    SweatyCheeseMid,
-    SweatyCheeseLarge,
+    public static final byte SweatyCheeseSmall = 7;
+    public static final byte SweatyCheeseMed = 8;
+    public static final byte SweatyCheeseLarge = 9;
     //5 => Cheese Queue
-    FiringCheeseSmall,
-    FiringCheeseMid,
-    FiringCheeseLarge,
+    public static final byte FiringCheeseSmall = 10;
+    public static final byte FiringCheeseMed = 11;
+    public static final byte FiringCheeseLarge = 12;
     //6 => Cancel Cheese Thread
-    CancelCheese,
+    public static final byte CancelCheese = 13;
     //7 => Construction Queue
-    Projector,
-    CheeseProd,
-    CheeseQual,
-    MilkProd,
+    public static final byte Projector = 14;
+    public static final byte CheeseProd = 15;
+    public static final byte CheeseQual = 16;
+    public static final byte MilkProd = 17;
     //8 => Destruction Queue
-    IntoTheWild,
-    BlackOut,
-    MiceArmy,
-    LazyWeekend,
-    MilkLeak,
+    public static final byte byteoTheWild = 18;
+    public static final byte BlackOut = 19;
+    public static final byte MiceArmy = 20;
+    public static final byte LazyWeekend = 21;
+    public static final byte MilkLeak = 22;
     //other bidirectional message => bonoshi and occqoo will discuss later!
-    Quit,
-    Pause,
-    Surrender,
+    public static final byte Quit = 23;
+    public static final byte Pause = 24;
+    public static final byte Surrender = 25;
 }

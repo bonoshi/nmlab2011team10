@@ -15,9 +15,9 @@ public class SynGameSetting {
     // setting relating to global display
     // String leftName = "LeftName";
     // String rightName = "RightName";
-    private long time = 0;// current time of a day
-    private ClimateType climate = ClimateType.Sunny;
-    private BackGroundType background = BackGroundType.SpringFarm;
+    private int time = 0;// current time of a day
+    private byte climate = ClimateEnum.Sunny;
+    private byte background = BackGroundEnum.SpringFarm;
 
     // setting relating to players' properties. E.g., construction...
     // float leftStartBorder = 0F;
@@ -41,27 +41,27 @@ public class SynGameSetting {
     private LinkedList<Cow> leftCowList;
     private LinkedList<Cow> rightCowList;
 
-    public long getTime() {
+    public int getTime() {
         return time;
     }
 
-    public void setTime(long time) {
+    public void setTime(int time) {
         this.time = time;
     }
 
-    public ClimateType getClimate() {
+    public byte getClimate() {
         return climate;
     }
 
-    public void setClimate(ClimateType climate) {
+    public void setClimate(byte climate) {
         this.climate = climate;
     }
 
-    public BackGroundType getBackground() {
+    public byte getBackground() {
         return background;
     }
 
-    public void setBackground(BackGroundType background) {
+    public void setBackground(byte background) {
         this.background = background;
     }
 
@@ -179,28 +179,43 @@ public class SynGameSetting {
 
 }
 
-enum BackGroundType {
-    SpringFarm
+class BackGroundEnum {
+    public static final byte SpringFarm = 0;
 };
 
-enum ClimateType {
-    Sunny, Cloudy, Rainy, Snowy
+class ClimateEnum {
+    public static final byte Sunny = 0;
+    public static final byte Cloudy = 1;
+    public static final byte Rainy = 2;
+    public static final byte Snowy = 3;
 };
 
-enum ProjectorType {// according to projector
-    Board, Slide, Cannon, Rocket
+class ProjectorEnum {// according to projector
+    public static final byte Board = 0;
+    public static final byte Slide = 1;
+    public static final byte Cannon = 2;
+    public static final byte Rocket = 3;
 };
 
-enum CheeseProdType {// according to house
-    ForFun, AfterHours, Bakery, FoodFactory
+class CheeseProdEnum {// according to house
+    public static final byte ForFun = 0;
+    public static final byte AfterHours = 1;
+    public static final byte Bakery = 2;
+    public static final byte FoodFactory = 3;
 };
 
-enum CheeseQualityType {// according to house
-    Handmade, CheeseMold, FoodChemisty, GMO
+class CheeseQualityEnum {// according to house
+    public static final byte Handmade = 0;
+    public static final byte CheeseMold = 1;
+    public static final byte FoodChemisty = 2;
+    public static final byte GMO = 3;
 };
 
-enum MilkProdType {// according to farm
-    Grazing, Husbandry, Mechanization, Hormone
+class MilkProdEnum {// according to farm
+    public static final byte Grazing = 0;
+    public static final byte Husbandry = 1;
+    public static final byte Mechanization = 2;
+    public static final byte Hormone = 3;
 };
 
 class DestructState {
@@ -213,5 +228,5 @@ class DestructState {
     public boolean smallCheese = false;
     public boolean slowCheese = false;// produce slower
     public boolean milk = false;
-    
+
 }

@@ -90,11 +90,11 @@ public class Projector {
         return owner;
     }
 
-    public void setType(ProjectorType type) {
+    public void setType(byte type) {
         this.type = type;
     }
 
-    public ProjectorType getType() {//for occqoo
+    public byte getType() {//for occqoo
         return type;
     }
 
@@ -138,21 +138,21 @@ public class Projector {
     public synchronized void upgrade() {
         switch (type) {
             case Board:
-                this.type = ProjectorType.Slide;
+                this.type = ProjectorEnum.Slide;
                 break;
             default:// no use
                 break;
         }
     }
 
-    protected ProjectorType type;
+    protected byte type;
     private boolean owner;
     public static ProjectorParameter P;
 
-    public static final ProjectorType Board = ProjectorType.Board;
-    public static final ProjectorType Slide = ProjectorType.Slide;
-    public static final ProjectorType Cannon = ProjectorType.Cannon;
-    public static final ProjectorType Rocket = ProjectorType.Rocket;
+    public static final byte Board = ProjectorEnum.Board;
+    public static final byte Slide = ProjectorEnum.Slide;
+    public static final byte Cannon = ProjectorEnum.Cannon;
+    public static final byte Rocket = ProjectorEnum.Rocket;
 
     public static final boolean Right = false;
     public static final boolean Left = true;

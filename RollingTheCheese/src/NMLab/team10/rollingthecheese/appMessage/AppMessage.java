@@ -2,10 +2,10 @@ package NMLab.team10.rollingthecheese.appMessage;
 
 public class AppMessage {
 
-    AppMessageType type;
+    AppMessageEnum type;
     Object data;
 
-    public AppMessage(AppMessageType type) {
+    public AppMessage(AppMessageEnum type) {
         this.type = type;
     }
 
@@ -13,11 +13,11 @@ public class AppMessage {
         this.data = o;
     }
 
-    public AppMessageType getType() {
+    public AppMessageEnum getType() {
         return type;
     }
 
-    public void setType(AppMessageType type) {
+    public void setType(AppMessageEnum type) {
         this.type = type;
     }
 }
