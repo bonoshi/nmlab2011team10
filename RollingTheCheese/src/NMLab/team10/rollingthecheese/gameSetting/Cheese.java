@@ -1,6 +1,6 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-class CheeseParameter {
+class CheeseParameter {//have display light type
 
     class Normal {// normal cheese
 
@@ -64,8 +64,9 @@ class CheeseParameter {
 public class Cheese {
 
     // Cheese a = new Cheese(Cheese.Normal, Cheese.Large, Cheese.Left);
-    public Cheese(byte type, byte size, boolean whichSide) {
-        setOwner(whichSide);
+//    public Cheese(byte type, byte size, boolean whichSide) {
+    public Cheese(byte type, byte size) {
+//        setOwner(whichSide);
         setType(type);
         setSize(size);
         switch (type) {
@@ -94,7 +95,7 @@ public class Cheese {
     private float endurance;
     private float maxEndurance;
     private float speed;
-    private boolean owner;
+//    private boolean owner;
     private float radix;
     public float x;// central x
     public float y;
@@ -136,13 +137,13 @@ public class Cheese {
         return speed;
     }
 
-    public void setOwner(boolean owner) {
-        this.owner = owner;
-    }
-
-    public boolean isOwnerLeft() {//for occqoo
-        return owner;
-    }
+//    public void setOwner(boolean owner) {
+//        this.owner = owner;
+//    }
+//
+//    public boolean isOwnerLeft() {//for occqoo
+//        return owner;
+//    }
 
     public void setMaxEndurance(float maxEndurance) {
         this.maxEndurance = maxEndurance;

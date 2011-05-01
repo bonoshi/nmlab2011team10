@@ -1,11 +1,11 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-public class FireLine {
+public class FireLine {//have display light type
 
-    public FireLine(byte type, int s, int e) {
+    public FireLine(byte type, float s, int length) {
         this.type = type;
-        this.startX = s;
-        this.endX = e;
+        this.setStartX(s);
+        this.setLength(length);
         switch (type) {
             case Small:
                 strength = FireParameter.Small.Strength;
@@ -46,9 +46,25 @@ public class FireLine {
         return (strength <= 0);
     }
 
+    public void setStartX(float startX) {
+        this.startX = startX;
+    }
+
+    public float getStartX() {
+        return startX;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
     byte type;
     private float startX;
-    private float endX;
+    private int length;
 
     private int strength;
 

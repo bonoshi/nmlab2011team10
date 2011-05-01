@@ -1,27 +1,21 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-public class Cow {
+public class Cow {//have display light type
 
     public Cow() {
         // x = ;
         // y = ;
-        amount = CowParameter.ProductionAmount;
-        interval = CowParameter.TimeInterval;
+        setAmount(CowParameter.ProductionAmount);
+        setInterval(CowParameter.TimeInterval);
     }
 
-    byte status = Normal;
+    private byte status = Normal;
     private float x;// central x
     private float y;
-    public int amount;// throughput
-    public int interval;// time interval;
-
-    public void setLeak() {
-        this.status = Leak;
-    }
-
-    public void setNormal() {
-        this.status = Normal;
-    }
+    private int amount;// throughput
+    private int interval;// time interval;
+    private byte animation;//animation
+    private boolean headingLeft;//direction
 
     public float getUpperLeftX() {
         return x;// bonoshi: size??margin??
@@ -29,6 +23,46 @@ public class Cow {
 
     public float getUpperLeftY() {
         return y;//
+    }
+
+    public void setStatus(byte status) {
+        this.status = status;
+    }
+
+    public byte getStatus() {
+        return status;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setInterval(int interval) {
+        this.interval = interval;
+    }
+
+    public int getInterval() {
+        return interval;
+    }
+
+    public void setAnimation(byte animation) {
+        this.animation = animation;
+    }
+
+    public byte getAnimation() {
+        return animation;
+    }
+
+    public void setHeadingLeft(boolean headingLeft) {
+        this.headingLeft = headingLeft;
+    }
+
+    public boolean isHeadingLeft() {
+        return headingLeft;
     }
 
     public static final byte Normal = CowStatusEnum.NORMAL;

@@ -147,7 +147,6 @@ public class Projector {
 
     protected byte type;
     private boolean owner;
-    public static ProjectorParameter P;
 
     public static final byte Board = ProjectorEnum.Board;
     public static final byte Slide = ProjectorEnum.Slide;
