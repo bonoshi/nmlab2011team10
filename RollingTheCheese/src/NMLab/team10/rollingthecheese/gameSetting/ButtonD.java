@@ -1,11 +1,12 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-public class ButtonD {
-    //Cow Button
-    public byte cowPercent = 100;
-    public byte cowNum = 0;
+import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 
-    //CheeseButton
+public class ButtonD{
+    //Cow Button => get from cow queue
+    public byte cowPercent = 100;
+
+    //CheeseButton => get from cheese queue
     public byte normalSmallP = 100;
     public byte normalMedP = 100;
     public byte normalLargeP = 100;
@@ -32,19 +33,39 @@ public class ButtonD {
     public byte firingMedN = 0;
     public byte firingLargeN = 0;
 
-    //Construct Button
+    //Construct Button => get from construct queue
     public byte projectorPercent = 100;
     public byte cheeseProdPercent = 100;
     public byte cheeseQualPercent = 100;
     public byte MilkProdPercent = 100;
 
-    //Destruction Button
+    //Destruction Button => get from GameSetting => DestructState => Display
     public boolean fenseDisplay = false;
     public boolean powerDisplay = false;
     public boolean smallCheeseDisplay = false;
     public boolean slowCheeseDisplay = false;
     public boolean milkDisplay = false;
 
-    //Cancel Button
-    public boolean cowButton = false; 
+    public static ButtonD createLeftButtonD(EventQueueCenter eqc, DestructState ds){
+        ButtonD b = new ButtonD();
+        b.fenseDisplay = ds.fenseDisplay;
+        b.powerDisplay = ds.powerDisplay;
+        b.smallCheeseDisplay = ds.smallCheeseDisplay;
+        b.slowCheeseDisplay = ds.slowCheeseDisplay;
+        b.milkDisplay = ds.milkDisplay;
+        return b;
+    }
+
+    public static ButtonD createRightButtonD(EventQueueCenter eqc, DestructState ds){
+        ButtonD b = new ButtonD();
+        b.fenseDisplay = ds.fenseDisplay;
+        b.powerDisplay = ds.powerDisplay;
+        b.smallCheeseDisplay = ds.smallCheeseDisplay;
+        b.slowCheeseDisplay = ds.slowCheeseDisplay;
+        b.milkDisplay = ds.milkDisplay;
+        return b;
+    }
+
+    //Cancel Button => by occqoo
+    //public boolean cowButton = false;
 }

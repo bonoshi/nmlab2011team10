@@ -6,11 +6,11 @@ import java.util.Queue;
 public class EventQueue {
 
     public EventQueue() {
-        queue = new LinkedList<Object>();
+        queue = new LinkedList<Byte>();
         this.waitingTime = 0;
     }
 
-    public synchronized void push(Object o){
+    public synchronized void push(byte o) {
         try {
             queue.add(o);
         } catch (Exception e) {
@@ -18,8 +18,12 @@ public class EventQueue {
         }
     }
 
-    public synchronized Object pop(){
+    public synchronized byte pop() {
         return queue.poll();
+    }
+
+    public synchronized byte peak() {
+        return queue.peek();
     }
 
     public synchronized int getWaitingTime() {
@@ -30,15 +34,32 @@ public class EventQueue {
         this.waitingTime = waitingTime;
     }
 
-    public synchronized int getSize(){
+    public synchronized int getSize() {
         return queue.size();
     }
 
-    public synchronized void clear(){
+    public synchronized void clear() {
         queue.clear();
     }
 
-    Queue<Object> queue = null;
-    int waitingTime;
+    public synchronized boolean findEvent(byte event){
+        return queue.contains(event);
+    }
 
+    public synchronized boolean isHead(byte event){
+        return queue.peek().equals(event);
+    }
+
+    public synchronized void removeEvent(byte event){
+        queue.remove(event);
+    }
+
+    Queue<Byte> queue = null;
+    int waitingTime;
+    int waitingTimeMax;
+
+    public byte getPercent(){
+        byte percent = (byte) Math.round(100F * waitingTime / waitingTimeMax);
+        return percent;
+    }
 }

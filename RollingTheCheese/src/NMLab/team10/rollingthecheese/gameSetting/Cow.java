@@ -16,6 +16,7 @@ public class Cow {//have display light type
     private int interval;// time interval;
     private byte animation;//animation
     private boolean headLeft;//direction
+    private boolean owner;
 
     public float getUpperLeftX() {
         return x;// bonoshi: size??margin??
@@ -64,22 +65,20 @@ public class Cow {//have display light type
     public boolean isHeadLeft() {
         return headLeft;
     }
+    
+     public void setOwner(boolean owner) {
+     this.owner = owner;
+     }
+    
+     public boolean isOwnerLeft() {
+     return owner;
+     }
 
     public static final byte Normal = CowStatusEnum.NORMAL;
     public static final byte Leak = CowStatusEnum.LEAK;
-}
 
-class CowParameter {
-    public static final int TimeInterval = 10000;//ms
-
-    public static final int ProductionAmount = 50;
-
-    public static final float Grazing = 1.0F;
-    public static final float Husbandry = 1.8F;
-    public static final float Mechanization = 3.0F;
-    public static final float GrowthHormone = 4.0F;
-
-    public static final float Crisis = 0.6F;
+    public static final boolean Right = false;
+    public static final boolean Left = true;
 }
 
 class CowStatusEnum {

@@ -1,6 +1,6 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-public class FireLine {//have display light type
+public class FireLine {// have display light type
 
     public FireLine(byte type, float s, int length) {
         this.type = type;
@@ -70,34 +70,25 @@ public class FireLine {//have display light type
         return length;
     }
 
+    public void setOwner(boolean owner) {
+        this.owner = owner;
+    }
+
+    public boolean isOwnerLeft() {
+        return owner;
+    }
+
     byte type;
     private float startX;
     private int length;
 
     private int strength;
 
+    private boolean owner;
+
     public static final byte Small = FireEnum.Small;
     public static final byte Medium = FireEnum.Medium;
     public static final byte Large = FireEnum.Large;
-}
-
-class FireParameter {
-    public static final int Length = 20;// minimum pixels in length for a fire segment
-
-    class Small {
-        public static final int Strength = 20;
-        public static final float Damage = 1.0F;
-    }
-
-    class Medium {
-        public static final int Strength = 30;
-        public static final float Damage = 1.5F;
-    }
-
-    class Large {
-        public static final int Strength = 40;
-        public static final float Damage = 2.2F;
-    }
 }
 
 class FireEnum {

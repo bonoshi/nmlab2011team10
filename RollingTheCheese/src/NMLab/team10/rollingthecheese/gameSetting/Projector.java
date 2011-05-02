@@ -1,54 +1,5 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-class ProjectorParameter {
-
-    static final int TimeInterval = 10000;//ms
-
-    static class Board {
-        static final float offset;// pixel
-        static final float drawX;
-        static final float drawY;
-        static final float startX;
-        static final float startY;
-        static final float endX;
-        static final float endY;
-        static final float angelX;
-        static final float angelY;
-        static final float length;
-        static final int upgradeMilk;
-        // static final float point1X = 70;
-        // static final float point1Y = 92;
-        static {
-            offset = 202;
-            drawX = 110;
-            drawY = 92;
-            startX = 110;
-            startY = 92;
-            endX = 202;
-            endY = 0;
-            angelX = 0.3825F;
-            angelY = 0.9239F;
-            length = (1.414F * (endY - endX));
-            upgradeMilk = 1000;
-        }
-
-        static float exceedAmount(float d, float radix) {
-            float exceed = (float) (d - (length - radix / 1.414F));
-            return exceed;
-        }
-
-        static float getCheeseX(float d, float radix) {
-            float x = startX + d / 1.414F + radix / 1.414F;
-            return x;
-        }
-
-        static float getCheeseY(float d, float radix) {
-            float y = startY - d / 1.414F + radix / 1.414F;
-            return y;
-        }
-    }
-}
-
 public class Projector {
     public Projector() {
         this.setType(Board);
@@ -119,7 +70,11 @@ public class Projector {
     public synchronized int getUpMilk() {
         switch (type) {
             case Board:
-                return ProjectorParameter.Board.upgradeMilk;
+                return ProjectorParameter.SlideMilk;
+            case Slide:
+                return ProjectorParameter.CannonMilk;
+            case Cannon:
+                return ProjectorParameter.RocketMilk;
             default:// no use
                 return Integer.MAX_VALUE;
         }
@@ -128,10 +83,31 @@ public class Projector {
     public synchronized String getUpMilkText() {//for occqoo
         switch (type) {
             case Board:
-                return Integer.toString(ProjectorParameter.Board.upgradeMilk);
+                return Integer.toString(ProjectorParameter.SlideMilk);
+            case Slide:
+                return Integer.toString(ProjectorParameter.CannonMilk);
+            case Cannon:
+                return Integer.toString(ProjectorParameter.RocketMilk);
             default:// no use
                 return "MAX";
         }
+    }
+
+    public synchronized int getUpTime() {
+        switch (type) {
+            case Board:
+                return ProjectorParameter.SlideTime;
+            case Slide:
+                return ProjectorParameter.CannonTime;
+            case Cannon:
+                return ProjectorParameter.RocketTime;
+            default:// no use
+                return 0;
+        }
+    }
+
+    public synchronized boolean canUpgrade(){
+        return !(type==Rocket);
     }
 
     public synchronized void upgrade() {

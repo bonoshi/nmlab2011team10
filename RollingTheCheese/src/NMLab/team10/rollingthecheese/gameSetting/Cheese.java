@@ -1,107 +1,61 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-class CheeseParameter {// have display light type
-
-    class Normal {// normal cheese
-
-        public static final int Time = 2000;// ms
-        public static final float Endurance = 100F;
-        public static final float DistancePerSec = 100F;
-        public static final float Speed = DistancePerSec / GlobalParameter.FramePeriod;// 1sec 100pixel
-        public static final float Radix = 36;// pixel
-        public static final int Cost = 50;
-
-        // static final float SizeLarge = 2.0F;
-        // static final float SizeMed = 1.0F;
-        // static final float SizeSmall = 0.6F;
-        public static final float SizeLarge = 1.0F;
-        public static final float SizeMed = 0.7F;
-        public static final float SizeSmall = 0.45F;
-
-        public static final float CostLarge = 1.6F;
-        public static final float CostMed = 1.0F;
-        public static final float CostSmall = 0.7F;
-
-        public static final float Board = 1.0F;
-        public static final float Slide = 1.3F;
-        public static final float Cannon = 1.8F;
-        public static final float Rocket = 2.4F;
-
-        public static final float For_fun = 1.5F;
-        public static final float After_hours = 1.0F;
-        public static final float Bakery = 0.6F;
-        public static final float Food_factory = 0.2F;
-
-        public static final float Handmade = 1.0F;
-        public static final float Cheese_mold = 1.2F;
-        public static final float Food_chemisty = 1.5F;
-        public static final float GMO = 2.0F;
-
-        public static final float Size_Crisis = 0.7F;// ratio
-        public static final float Time_Crisis = 0.6F;// increment
-    }
-
-    class Poison {
-        // for poison cheese and its contact infection
-        public static final float PoisonDecreSmall = 4;
-        public static final float PoisonDecreMed = 10;
-        public static final float PoisonDecreLarge = 20;
-        public static final int PoisonSmallCount = 2;// 1~2
-        public static final int PoisonMedCount = 4;// 3~4
-        public static final int PoisonLargeCount = 6;// 5~6
-        public static final int PoisonDecayTime = 1000;// ms
-    }
-
-    class Sweat {
-        // for sweaty cheese and its range and effect
-    }
-
-    class Fire {
-        // for firing cheese and its effect
-    }
-
-}
-
 public class Cheese {
 
     // Cheese a = new Cheese(Cheese.Normal, Cheese.Large, Cheese.Left);
     // public Cheese(byte type, byte size, boolean whichSide) {
     public Cheese(byte type, byte size) {
-        // setOwner(whichSide);
         setType(type);
         setSize(size);
+        //setOwner(whichSide);
         switch (type) {
-            case Normal: {
-                radix = CheeseParameter.Normal.Radix;
+            case Original: {
                 switch (size) {
                     case Large:
-                        radix *= CheeseParameter.Normal.SizeLarge;
+                        radix = CheeseParameter.Normal.RadixLarge;
                         break;
                     case Medium:
-                        radix *= CheeseParameter.Normal.SizeMed;
+                        radix = CheeseParameter.Normal.RadixMed;
                         break;
                     case Small:
-                        radix *= CheeseParameter.Normal.SizeSmall;
+                        radix = CheeseParameter.Normal.RadixSmall;
+                        break;
+                    case Tiny:
+                        radix = CheeseParameter.Normal.RadixTiny;
                         break;
                 }
                 break;
             }
-            default:// not support
+            case Casumarzu: {
                 break;
+            }
+            case Sweaty: {
+                break;
+            }
+            case Firing: {
+                break;
+            }
         }
     }
 
+    // set by constructor
     private byte type;
     private byte size;
-    private float endurance;
-    private float maxEndurance;
-    private float speed;
-    private short spinAngle = 0;
-    // private boolean owner;
     private float radix;
+    //private boolean owner;
+
+    //set by initialization
+    private float maxEndurance;
+    private float endurance;
+    private float speed;
     public float x;// central x
     public float y;
-    private int poisonCount = 0;
+
+    //automatically initialize value
+    private short spinAngle;
+    private int poisonCount;
+    private float prepareD;
+    private boolean joinBattle;
 
     public void setType(byte type) {
         this.type = type;
@@ -135,16 +89,139 @@ public class Cheese {
         return speed;
     }
 
-    // public void setOwner(boolean owner) {
-    // this.owner = owner;
-    // }
-    //
-    // public boolean isOwnerLeft() {//for occqoo
-    // return owner;
-    // }
+//    public void setOwner(boolean owner) {
+//        this.owner = owner;
+//    }
+//
+//    public boolean isOwnerLeft() {
+//        return owner;
+//    }
 
-    public void setMaxEndurance(float maxEndurance) {
-        this.maxEndurance = maxEndurance;
+    public void initialPara(House house, Projector projector) {
+
+        spinAngle = 0;
+        poisonCount = 0;
+        prepareD = 0;
+        joinBattle = false;
+
+        switch (type) {
+            case Original: {
+                maxEndurance = CheeseParameter.Normal.Endurance;
+                speed = CheeseParameter.Normal.Speed;
+                switch (size) {
+                    case Large: {
+                        maxEndurance *= CheeseParameter.Normal.ENLarge;
+                        break;
+                    }
+                    case Medium: {
+                        maxEndurance *= CheeseParameter.Normal.ENMed;
+                        break;
+                    }
+                    case Small: {
+                        maxEndurance *= CheeseParameter.Normal.ENSmall;
+                        break;
+                    }
+                    case Tiny: {
+                        maxEndurance *= CheeseParameter.Normal.ENTiny;
+                        break;
+                    }
+                }
+                break;
+            }
+            case Casumarzu: {
+                switch (size) {
+                    case Large: {
+                        break;
+                    }
+                    case Medium: {
+                        break;
+                    }
+                    case Small: {
+                        break;
+                    }
+                    case Tiny: {
+                        break;
+                    }
+                }
+                break;
+            }
+            case Sweaty: {
+                switch (size) {
+                    case Large: {
+                        break;
+                    }
+                    case Medium: {
+                        break;
+                    }
+                    case Small: {
+                        break;
+                    }
+                    case Tiny: {
+                        break;
+                    }
+                }
+                break;
+            }
+            case Firing: {
+                switch (size) {
+                    case Large: {
+                        break;
+                    }
+                    case Medium: {
+                        break;
+                    }
+                    case Small: {
+                        break;
+                    }
+                    case Tiny: {
+                        break;
+                    }
+                }
+                break;
+            }
+        }
+
+        switch (house.getQual()) {
+            case Handmade: {
+                maxEndurance *= HouseParameter.Handmade;
+                break;
+            }
+            case CheeseMold: {
+                maxEndurance *= HouseParameter.CheeseMold;
+                break;
+            }
+            case FoodChemisty: {
+                maxEndurance *= HouseParameter.FoodChemisty;
+                break;
+            }
+            case GMO: {
+                maxEndurance *= HouseParameter.GMO;
+                break;
+            }
+        }
+        endurance = maxEndurance;
+
+        switch (projector.type) {
+            case Board: {
+                speed*=ProjectorParameter.BoardSpeed;
+                x = ProjectorParameter.Board.getCheeseX(prepareD, radix);
+                y = ProjectorParameter.Board.getCheeseY(prepareD, radix);
+                break;
+            }
+            case Slide: {
+                speed*=ProjectorParameter.SlideSpeed;
+                break;
+            }
+            case Cannon: {
+                speed*=ProjectorParameter.CannonSpeed;
+                break;
+            }
+            case Rocket: {
+                speed*=ProjectorParameter.RocketSpeed;
+                break;
+            }
+        }
+
     }
 
     public float getMaxEndurance() {
@@ -169,13 +246,14 @@ public class Cheese {
 
     public void regreshAngle() {
         switch (type) {
-            case Normal: {
-                // angleChangePerSec = 2pi/360 * X * radix = CheeseParameter.Normal.DistancePerSec;
+            case Original: {
+                // angleChangePerSec = 2pi/360 * X * radix =
+                // CheeseParameter.Normal.DistancePerSec;
                 float delta = (CheeseParameter.Normal.DistancePerSec / radix) / 57.296F;
                 delta /= GlobalParameter.FramePeriod;
                 spinAngle += ((short) Math.round(delta));
                 if (spinAngle > 359)
-                    spinAngle%=360;
+                    spinAngle %= 360;
             }
             default:// not support
                 break;
@@ -186,7 +264,15 @@ public class Cheese {
         return spinAngle;
     }
 
-    public static final byte Normal = CheeseEnum.Normal;
+    public void setJoinBattle(boolean joinBattle) {
+        this.joinBattle = joinBattle;
+    }
+
+    public boolean isJoinBattle() {
+        return joinBattle;
+    }
+
+    public static final byte Original = CheeseEnum.Original;
     public static final byte Casumarzu = CheeseEnum.Poison;
     public static final byte Sweaty = CheeseEnum.Sweaty;
     public static final byte Firing = CheeseEnum.Firing;
@@ -195,6 +281,21 @@ public class Cheese {
     public static final byte Medium = CheeseSizeEnum.Medium;
     public static final byte Small = CheeseSizeEnum.Small;
     public static final byte Tiny = CheeseSizeEnum.Tiny;
+
+    public static final byte ForFun = CheeseProdEnum.ForFun;
+    public static final byte AfterHours = CheeseProdEnum.AfterHours;
+    public static final byte Bakery = CheeseProdEnum.Bakery;
+    public static final byte FoodFactory = CheeseProdEnum.FoodFactory;
+
+    public static final byte Handmade = CheeseQualityEnum.Handmade;
+    public static final byte CheeseMold = CheeseQualityEnum.CheeseMold;
+    public static final byte FoodChemisty = CheeseQualityEnum.FoodChemisty;
+    public static final byte GMO = CheeseQualityEnum.GMO;
+
+    public static final byte Board = ProjectorEnum.Board;
+    public static final byte Slide = ProjectorEnum.Slide;
+    public static final byte Cannon = ProjectorEnum.Cannon;
+    public static final byte Rocket = ProjectorEnum.Rocket;
 
     public static final boolean Right = false;
     public static final boolean Left = true;
@@ -208,7 +309,7 @@ class CheeseSizeEnum {
 }
 
 class CheeseEnum {
-    public static final byte Normal = 0;
+    public static final byte Original = 0;
     public static final byte Poison = 1;
     public static final byte Sweaty = 2;
     public static final byte Firing = 3;

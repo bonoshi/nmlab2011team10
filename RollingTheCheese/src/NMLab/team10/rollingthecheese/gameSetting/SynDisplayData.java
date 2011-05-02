@@ -2,6 +2,8 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 import java.util.LinkedList;
 
+import NMLab.team10.rollingthecheese.event.EventQueueCenter;
+
 public class SynDisplayData {
 
     int time;// current time of a day
@@ -16,6 +18,8 @@ public class SynDisplayData {
     Farm rightFarm;
     int leftMilk;
     int rightMilk;
+    byte leftHouseHpPercent;
+    byte rightHouseHpPercent;
 
     LinkedList<CheeseDisplay> leftCheeseList = new LinkedList<CheeseDisplay>();
     LinkedList<CheeseDisplay> rightCheeseList = new LinkedList<CheeseDisplay>();
@@ -23,17 +27,19 @@ public class SynDisplayData {
     LinkedList<CowDisplay> rightCowList = new LinkedList<CowDisplay>();
     LinkedList<FireLineDisplay> fireLineList = new LinkedList<FireLineDisplay>();
 
-    //DestructButton leftDestructB = new DestructButton();
-    //DestructButton rightDestructB = new DestructButton();
-    //ConstructButton leftConstructB = new ConstructButton();
-    //ConstructButton rightConstructB = new ConstructButton();
-    //CheeseButton leftCheeseB = new CheeseButton();
-    //CheeseButton rightCheeseB = new CheeseButton();
+    // DestructButton leftDestructB = new DestructButton();
+    // DestructButton rightDestructB = new DestructButton();
+    // ConstructButton leftConstructB = new ConstructButton();
+    // ConstructButton rightConstructB = new ConstructButton();
+    // CheeseButton leftCheeseB = new CheeseButton();
+    // CheeseButton rightCheeseB = new CheeseButton();
 
     byte leftSpecialState = 0;
     byte rightSpecialState = 0;
 
-    public void refreshData(ServerGameSetting s) {
+    ButtonD buttonD = new ButtonD();
+
+    public void refreshData(ServerGameSetting s, EventQueueCenter eqc, boolean whichSide) {
 
         synchronized (s) {
 
@@ -56,35 +62,46 @@ public class SynDisplayData {
             cloneCowList(rightCowList, s.getRightCowList());
             cloneFireList(fireLineList, s.getFileLineList());
 
-            //for button display
-            //leftDestructB = s.getLeftDestruct().clone();
-            //rightDestructB = s.getRightDestruct().clone();
-            //leftConstruct
-            //rightConstruct
+            if (whichSide) {
+                this.buttonD = ButtonD.createLeftButtonD(eqc, s.getLeftDestruct());
+            } else {
+                this.buttonD = ButtonD.createRightButtonD(eqc, s.getRightDestruct());
+            }
 
-//            leftCheeseList = s.getLeftCheeseList();
-//            rightCheeseList = s.getRightCheeseList();
-//            leftCowList = s.getLeftCowList();
-//            rightCowList = s.getRightCowList();
+            // for button display
+            // leftDestructB = s.getLeftDestruct().clone();
+            // rightDestructB = s.getRightDestruct().clone();
+            // leftConstruct
+            // rightConstruct
+
+            // leftCheeseList = s.getLeftCheeseList();
+            // rightCheeseList = s.getRightCheeseList();
+            // leftCowList = s.getLeftCowList();
+            // rightCowList = s.getRightCowList();
         }
     }
 
-    private void cloneCheeseList(LinkedList<CheeseDisplay> toList, LinkedList<Cheese> fromList){
+    private void cloneCheeseList(LinkedList<CheeseDisplay> toList, LinkedList<Cheese> fromList) {
         toList.clear();
         for (int i = 0; i < fromList.size(); i++) {
             toList.add(new CheeseDisplay(fromList.get(i)));
         }
     }
-    private void cloneCowList(LinkedList<CowDisplay> toList, LinkedList<Cow> fromList){
+
+    private void cloneCowList(LinkedList<CowDisplay> toList, LinkedList<Cow> fromList) {
         toList.clear();
         for (int i = 0; i < fromList.size(); i++) {
             toList.add(new CowDisplay(fromList.get(i)));
         }
     }
-    private void cloneFireList(LinkedList<FireLineDisplay> toList, LinkedList<FireLine> fromList){
+
+    private void cloneFireList(LinkedList<FireLineDisplay> toList, LinkedList<FireLine> fromList) {
         toList.clear();
         for (int i = 0; i < fromList.size(); i++) {
             toList.add(new FireLineDisplay(fromList.get(i)));
         }
     }
+
+    public static final boolean Right = false;
+    public static final boolean Left = true;
 }

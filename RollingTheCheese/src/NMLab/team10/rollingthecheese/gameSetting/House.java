@@ -24,6 +24,10 @@ public class House {
         }
     }
 
+    public synchronized boolean canUpgradeProd(){
+        return !(prod==FoodFactory);
+    }
+
     public int getUpProdMilk(){
         switch (prod) {
             case ForFun:
@@ -54,6 +58,21 @@ public class House {
         }
     }
 
+    public int getUpProdTime(){
+        switch (prod) {
+            case ForFun:
+                return HouseParameter.AfterHoursMilk;
+            case AfterHours:
+                return HouseParameter.BakeryMilk;
+            case Bakery:
+                return HouseParameter.FoodFactoryMilk;
+            case FoodFactory:
+                return Integer.MAX_VALUE;
+            default:// no use
+                return Integer.MAX_VALUE;
+        }
+    }
+
     public byte getProd() {
         return prod;
     }
@@ -78,6 +97,10 @@ public class House {
             default:// no use
                 break;
         }
+    }
+
+    public synchronized boolean canUpgradeQual(){
+        return !(qual==GMO);
     }
 
     public int getUpQualMilk(){
@@ -107,6 +130,19 @@ public class House {
                 return "MAX";
             default:// no use
                 return "NOUSE";
+        }
+    }
+    
+    public int getUpQualTime(){
+        switch (qual) {
+            case Handmade:
+                return HouseParameter.CheeseMoldTime;
+            case CheeseMold:
+                return HouseParameter.FoodChemistyTime;
+            case FoodChemisty:
+                return HouseParameter.GMOTime;
+            default:// no use
+                return 0;
         }
     }
 
@@ -149,16 +185,4 @@ public class House {
     public static final byte GMO = CheeseQualityEnum.GMO;
 
     public static HouseParameter P;
-}
-
-class HouseParameter {
-    static final int TimeInterval = 10000;// ms
-
-    static final int AfterHoursMilk = 1000;
-    static final int BakeryMilk = 1000;
-    static final int FoodFactoryMilk = 1000;
-
-    static final int CheeseMoldMilk = 1000;
-    static final int FoodChemistyMilk = 1000;
-    static final int GMOMilk = 1000;
 }
