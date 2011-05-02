@@ -5,15 +5,15 @@ public class Cow {//have display light type
     public Cow() {
         // x = ;
         // y = ;
-        setAmount(CowParameter.ProductionAmount);
-        setInterval(CowParameter.TimeInterval);
+        //setAmount(CowParameter.ProductionAmount);
+        //setInterval(CowParameter.TimeInterval);
     }
 
     private byte status = Normal;
     private float x;// central x
     private float y;
-    private int amount;// throughput
-    private int interval;// time interval;
+    //private int amount;// throughput
+    //private int interval;// time interval;
     private byte animation;//animation
     private boolean headLeft;//direction
     private boolean owner;
@@ -34,21 +34,21 @@ public class Cow {//have display light type
         return status;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setInterval(int interval) {
-        this.interval = interval;
-    }
-
-    public int getInterval() {
-        return interval;
-    }
+//    public void setAmount(int amount) {
+//        this.amount = amount;
+//    }
+//
+//    public int getAmount() {
+//        return amount;
+//    }
+//
+//    public void setInterval(int interval) {
+//        this.interval = interval;
+//    }
+//
+//    public int getInterval() {
+//        return interval;
+//    }
 
     public void setAnimation(byte animation) {
         this.animation = animation;
@@ -65,11 +65,11 @@ public class Cow {//have display light type
     public boolean isHeadLeft() {
         return headLeft;
     }
-    
+
      public void setOwner(boolean owner) {
      this.owner = owner;
      }
-    
+
      public boolean isOwnerLeft() {
      return owner;
      }

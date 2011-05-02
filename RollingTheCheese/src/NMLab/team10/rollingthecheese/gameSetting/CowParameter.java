@@ -1,7 +1,9 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
 public class CowParameter {
-    public static final int TimeInterval = 10000;// ms
+    public static final int MilkInterval = 10000;//ms, produce milk
+
+    public static final int WaitingTime = 6000;
 
     public static final int ProductionAmount = 50;
 

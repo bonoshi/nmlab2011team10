@@ -34,7 +34,7 @@ public class EventQueueCenter {
                     byte event = popEvent(whichSide);
                     if (event == EventEnum.PurchaseCow) {
                         EventQueue cowQue = (whichSide) ? leftCowQueue : rightCowQueue;
-                        if (cowQue.getSize() > 0)
+                        if (cowQue.getSize() > 0)// ensure only one cow in list!
                             continue;
 
                         LinkedList<Cow> cowList = (whichSide) ? setting.getLeftCowList() : setting.getLeftCowList();
@@ -45,7 +45,8 @@ public class EventQueueCenter {
 
                         int milk = (whichSide) ? setting.getLeftMilk() : setting.getRightMilk();
                         if ((milk -= CowParameter.getPrice(cowNum)) >= 0) {
-                            popCowEvent(event, whichSide);
+                            addCowEvent(event, whichSide);
+                            cowQue.setWaitingTime(CowParameter.WaitingTime);
                         } else {
                             continue;
                         }
@@ -95,11 +96,11 @@ public class EventQueueCenter {
                         triggerDest(event, whichSide);
 
                     } else if (event == EventEnum.Quit) {
-
+                        // bonoshi: not yet complete
                     } else if (event == EventEnum.Pause) {
-
+                        // bonoshi: not yet complete
                     } else if (event == EventEnum.Surrender) {
-
+                        // bonoshi: not yet complete
                     } else {
                         // should not happen
                     }
@@ -135,13 +136,49 @@ public class EventQueueCenter {
                     }
                     if (cheeseQue.getSize() > 0)
                         cheeseQue.setWaitingTime(CheeseParameter.getTime(cheeseQue.peak()));
+                    else
+                        cheeseQue.setWaitingTime(0);
                 }
             }
         }
     }
 
     public void fetchCons() {
+        for (int i = 0; i < 2; i++) {
+            boolean whichSide = (i == 0) ? Left : Right;
+            EventQueue consQue = (whichSide) ? leftConsQueue : rightConsQueue;
 
+            synchronized (consQue) {
+                if (consQue.getSize() > 0 && consQue.getWaitingTime() <= 0) {
+
+                    byte event = popConsEvent(whichSide);
+                    switch (event) {
+                        case EventEnum.Projector: {
+                            Projector p = (whichSide) ? setting.getLeftProjector() : setting.getRightProjector();
+                            p.upgrade();
+                        }
+                        case EventEnum.CheeseProd: {
+                            House h = (whichSide) ? setting.getLeftHouse() : setting.getRightHouse();
+                            h.upgradeProd();
+                        }
+                        case EventEnum.CheeseQual: {
+                            House h = (whichSide) ? setting.getLeftHouse() : setting.getRightHouse();
+                            h.upgradeQual();
+                        }
+                        case EventEnum.MilkProd: {
+                            Farm f = (whichSide) ? setting.getLeftFarm() : setting.getRightFarm();
+                            f.upgradeProd();
+                        }
+                    }
+
+                    if (consQue.getSize() > 0) {
+                        consQue.setWaitingTime(getConsTime(consQue.peak(), whichSide));
+                    } else {
+                        consQue.setWaitingTime(0);
+                    }
+                }
+            }
+        }
     }
 
     public int getConsPrice(byte event, boolean whichSide) {
@@ -186,6 +223,28 @@ public class EventQueueCenter {
             }
         }
         return 0;
+    }
+
+    public boolean getConsCanUpgrade(byte event, boolean whichSide) {
+        switch (event) {
+            case EventEnum.Projector: {
+                Projector p = (whichSide) ? setting.getLeftProjector() : setting.getRightProjector();
+                return p.canUpgrade();
+            }
+            case EventEnum.CheeseProd: {
+                House h = (whichSide) ? setting.getLeftHouse() : setting.getRightHouse();
+                return h.canUpgradeProd();
+            }
+            case EventEnum.CheeseQual: {
+                House h = (whichSide) ? setting.getLeftHouse() : setting.getRightHouse();
+                return h.canUpgradeQual();
+            }
+            case EventEnum.MilkProd: {
+                Farm f = (whichSide) ? setting.getLeftFarm() : setting.getRightFarm();
+                return f.canUpgrade();
+            }
+        }
+        return false;
     }
 
     public void triggerDest(byte desEvent, boolean whichSide) {// trigger
@@ -256,7 +315,7 @@ public class EventQueueCenter {
         int milk = (whichSide) ? setting.getLeftMilk() : setting.getRightMilk();
 
         if (consQue.getSize() > 0) {
-            if (consQue.findEvent(event)) {
+            if (consQue.findEvent(event)) {// cancel the construction
                 boolean isHead = consQue.isHead(event);
                 consQue.removeEvent(event);
                 milk += getConsPrice(event, whichSide);
@@ -276,9 +335,15 @@ public class EventQueueCenter {
             }
         }
 
+        if (!getConsCanUpgrade(event, whichSide))
+            return;
+
         if ((milk -= getConsPrice(event, whichSide)) >= 0) {
-            if (consQue.getSize() == 0)
-                consQue.setWaitingTime(getConsTime(event, whichSide));
+            if (consQue.getSize() > 0) {
+                consQue.setWaitingTime(getConsTime(consQue.peak(), whichSide));
+            } else {
+                consQue.setWaitingTime(0);
+            }
             addCheeseEvent(event, whichSide);
         } else {
             return;
@@ -319,6 +384,11 @@ public class EventQueueCenter {
                 ds.milkTriggered = false;
                 ds.milk = true;
                 ds.milkCountDown = DestructParameter.MilkTime;
+                LinkedList<Cow> cowList = (i == 0) ? setting.getLeftCowList() : setting.getRightCowList();
+                for (int j = 0; j < cowList.size(); j++) {
+                    Cow cow = cowList.get(j);
+                    cow.setStatus(Cow.Leak);
+                }
             }
         }
     }
@@ -354,16 +424,38 @@ public class EventQueueCenter {
             if (ds.milk && (ds.milkCountDown <= 0)) {
                 ds.milk = false;
                 ds.milkDisplay = false;
+                LinkedList<Cow> cowList = (i == 0) ? setting.getLeftCowList() : setting.getRightCowList();
+                for (int j = 0; j < cowList.size(); j++) {
+                    Cow cow = cowList.get(j);
+                    cow.setStatus(Cow.Normal);
+                }
             }
         }
     }
 
     public void fetchCow() {
-        /*
-         * synchronized (leftCowQueue){
-         *
-         * }
-         */
+        for (int i = 0; i < 2; i++) {
+            boolean whichSide = (i == 0) ? Left : Right;
+            EventQueue cowQueue = (whichSide) ? leftCowQueue : rightCowQueue;
+
+            synchronized (cowQueue) {
+                if (cowQueue.getSize() > 0 && cowQueue.getWaitingTime() <= 0) {
+                    popCheeseEvent(whichSide);
+
+                    Cow cow = new Cow();// bonoshi: need to initialize!!!!!!
+                    if (whichSide) {
+                        setting.getLeftCowList().add(cow);
+                    } else {
+                        setting.getRightCowList().add(cow);
+                    }
+                    if (cowQueue.getSize() > 0) {
+                        cowQueue.setWaitingTime(CowParameter.WaitingTime);
+                    } else {
+                        cowQueue.setWaitingTime(0);
+                    }
+                }
+            }
+        }
     }
 
     public void addEvent(Byte i, boolean whichSide) {
@@ -418,7 +510,7 @@ public class EventQueueCenter {
         return temp;
     }
 
-    public void popCowEvent(Byte i, boolean whichSide) {
+    public void addCowEvent(Byte i, boolean whichSide) {
         if (whichSide) {
             synchronized (leftCowQueue) {
                 leftCowQueue.push(i);
@@ -430,7 +522,7 @@ public class EventQueueCenter {
         }
     }
 
-    public Byte getCowEvent(boolean whichSide) {
+    public Byte popCowEvent(boolean whichSide) {
         Byte temp = 0;
         if (whichSide) {
             synchronized (leftCowQueue) {
@@ -444,7 +536,7 @@ public class EventQueueCenter {
         return temp;
     }
 
-    public void popDesEvent(Byte i, boolean whichSide) {
+    public void addDesEvent(Byte i, boolean whichSide) {
         if (whichSide) {
             synchronized (leftDesQueue) {
                 leftDesQueue.push(i);
@@ -456,7 +548,7 @@ public class EventQueueCenter {
         }
     }
 
-    public Byte getDesEvent(boolean whichSide) {
+    public Byte popDesEvent(boolean whichSide) {
         Byte temp = 0;
         if (whichSide) {
             synchronized (leftDesQueue) {
@@ -470,7 +562,7 @@ public class EventQueueCenter {
         return temp;
     }
 
-    public void popConsEvent(Byte i, boolean whichSide) {
+    public void addConsEvent(Byte i, boolean whichSide) {
         if (whichSide) {
             synchronized (leftConsQueue) {
                 leftConsQueue.push(i);
@@ -482,7 +574,7 @@ public class EventQueueCenter {
         }
     }
 
-    public Byte getConsEvent(boolean whichSide) {
+    public Byte popConsEvent(boolean whichSide) {
         Byte temp = 0;
         if (whichSide) {
             synchronized (leftConsQueue) {
