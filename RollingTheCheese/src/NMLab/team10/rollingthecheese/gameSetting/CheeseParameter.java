@@ -4,6 +4,9 @@ import NMLab.team10.rollingthecheese.event.EventEnum;
 
 public class CheeseParameter {// have display light type
 
+    public static final float DamageUnit = 5.0F;
+    public static final byte MaximumDeadAnim = 10;
+
     public class Normal {// normal cheese
 
         public static final int Time = 2000;// ms
@@ -43,13 +46,13 @@ public class CheeseParameter {// have display light type
 
     public class Poison {
         // for poison cheese and its contact infection
-        public static final float PoisonDecreSmall = 4;
-        public static final float PoisonDecreMed = 10;
-        public static final float PoisonDecreLarge = 20;
-        public static final int PoisonSmallCount = 2;// 1~2
-        public static final int PoisonMedCount = 4;// 3~4
-        public static final int PoisonLargeCount = 6;// 5~6
-        public static final int PoisonDecayTime = 1000;// ms
+        public static final float PoisonDecreSmall = 0.1F;
+        public static final float PoisonDecreMed = 0.2F;
+        public static final float PoisonDecreLarge = 0.3F;
+        public static final short PoisonSmallCount = 2500/GlobalParameter.FramePeriod;//
+        public static final short PoisonMedCount = 3500/GlobalParameter.FramePeriod;//
+        public static final short PoisonLargeCount = 5000/GlobalParameter.FramePeriod;//
+        //public static final int PoisonDecayTime = 1000;// ms
     }
 
     public class Sweat {
@@ -58,6 +61,7 @@ public class CheeseParameter {// have display light type
 
     public class Fire {
         // for firing cheese and its effect
+        public static final int recurTime = 100;  //recur
     }
 
     EventEnum E;

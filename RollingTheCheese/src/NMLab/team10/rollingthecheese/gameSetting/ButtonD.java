@@ -7,7 +7,7 @@ public class ButtonD{
     public byte cowPercent = 100;
 
     //CheeseButton => get from cheese queue
-    public byte normalSmallP = 100;
+    public byte normalSmallP = 100;//percent
     public byte normalMedP = 100;
     public byte normalLargeP = 100;
     public byte poisonSmallP = 100;
@@ -20,7 +20,7 @@ public class ButtonD{
     public byte firingMedP = 100;
     public byte firingLargeP = 100;
 
-    public byte normalSmallN = 0;
+    public byte normalSmallN = 0;//num
     public byte normalMedN = 0;
     public byte normalLargeN = 0;
     public byte poisonSmallN = 0;

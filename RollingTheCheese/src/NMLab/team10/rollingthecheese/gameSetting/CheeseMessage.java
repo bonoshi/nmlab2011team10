@@ -1,7 +1,7 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-public class CheeseDisplay {
-    public CheeseDisplay(Cheese c) {
+public class CheeseMessage {
+    public CheeseMessage(Cheese c) {
         type = c.getType();
         size = c.getSize();
         HPPercent = (byte) Math.round(100F * c.getEndurance() / c.getMaxEndurance());
@@ -10,6 +10,7 @@ public class CheeseDisplay {
         spinAngle = c.getSpinAngle();
         x = c.getUpperLeftX();
         y = c.getUpperLeftY();
+        createAnimation(c);//bonoshi: need to implement
     }
 
     public byte getType() {//Normal, Casumarzu, Sweaty, Firing
@@ -31,11 +32,23 @@ public class CheeseDisplay {
         return y;
     }
 
+    public void setAnimation(byte animation) {
+        this.animation = animation;
+    }
+
+    public byte getAnimation() {
+        return animation;
+    }
+
+    public void createAnimation(Cheese c){
+
+    }
+
     private byte type;
     private byte size;
     private byte HPPercent;
     private short spinAngle;
     private float x;// x for drawing
     private float y;
-    // public animation
+    private byte animation;//poison, on fire, dying animation, each has four picture
 }

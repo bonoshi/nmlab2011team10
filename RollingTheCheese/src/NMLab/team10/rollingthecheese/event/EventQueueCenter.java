@@ -117,9 +117,15 @@ public class EventQueueCenter {
             synchronized (cheeseQue) {
                 if (cheeseQue.getSize() > 0 && cheeseQue.getWaitingTime() <= 0) {
                     // byte event = getLeftCheese();
-                    // 時間到了直接拿cheese
+                    // 時間到了直接拿cheese，若Construction正在進行projector則無論如何都不拿
                     // 根據不同cheese建立不同種類、威力、大小、速度……
                     // 加入cheese list
+                    EventQueue consQue = (whichSide) ? leftConsQueue : rightConsQueue;
+                    if(consQue.getSize()>0){
+                        if(consQue.peak()==EventEnum.Projector)
+                            continue;
+                    }
+
                     boolean isSmallCrisis = (whichSide) ? setting.getLeftDestruct().smallCheese : setting
                             .getRightDestruct().smallCheese;
                     House house = (whichSide) ? setting.getLeftHouse() : setting.getRightHouse();

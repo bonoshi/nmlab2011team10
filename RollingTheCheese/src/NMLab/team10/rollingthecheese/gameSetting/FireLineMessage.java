@@ -1,13 +1,13 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-public class FireLineDisplay {
-    
-    public FireLineDisplay(FireLine f) {
+public class FireLineMessage {
+
+    public FireLineMessage(FireLine f) {
         type = f.getType();
         startX = f.getStartX();
         length = f.getLength();
     }
-    
+
     public byte getType() {// Small, Medium, Large
         return type;
     }

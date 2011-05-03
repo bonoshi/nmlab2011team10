@@ -1,8 +1,8 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-public class CowDisplay {
+public class CowMessage {
 
-    public CowDisplay(Cow c) {
+    public CowMessage(Cow c) {
         status = c.getStatus();
         x = c.getUpperLeftX();
         y = c.getUpperLeftY();

@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 
-public class SynDisplayData {
+public class SynMessageData {
 
     int time;// current time of a day
     byte climate;
@@ -21,11 +21,11 @@ public class SynDisplayData {
     byte leftHouseHpPercent;
     byte rightHouseHpPercent;
 
-    LinkedList<CheeseDisplay> leftCheeseList = new LinkedList<CheeseDisplay>();
-    LinkedList<CheeseDisplay> rightCheeseList = new LinkedList<CheeseDisplay>();
-    LinkedList<CowDisplay> leftCowList = new LinkedList<CowDisplay>();
-    LinkedList<CowDisplay> rightCowList = new LinkedList<CowDisplay>();
-    LinkedList<FireLineDisplay> fireLineList = new LinkedList<FireLineDisplay>();
+    LinkedList<CheeseMessage> leftCheeseList = new LinkedList<CheeseMessage>();
+    LinkedList<CheeseMessage> rightCheeseList = new LinkedList<CheeseMessage>();
+    LinkedList<CowMessage> leftCowList = new LinkedList<CowMessage>();
+    LinkedList<CowMessage> rightCowList = new LinkedList<CowMessage>();
+    LinkedList<FireLineMessage> fireLineList = new LinkedList<FireLineMessage>();
 
     // DestructButton leftDestructB = new DestructButton();
     // DestructButton rightDestructB = new DestructButton();
@@ -81,24 +81,24 @@ public class SynDisplayData {
         }
     }
 
-    private void cloneCheeseList(LinkedList<CheeseDisplay> toList, LinkedList<Cheese> fromList) {
+    private void cloneCheeseList(LinkedList<CheeseMessage> toList, LinkedList<Cheese> fromList) {
         toList.clear();
         for (int i = 0; i < fromList.size(); i++) {
-            toList.add(new CheeseDisplay(fromList.get(i)));
+            toList.add(new CheeseMessage(fromList.get(i)));
         }
     }
 
-    private void cloneCowList(LinkedList<CowDisplay> toList, LinkedList<Cow> fromList) {
+    private void cloneCowList(LinkedList<CowMessage> toList, LinkedList<Cow> fromList) {
         toList.clear();
         for (int i = 0; i < fromList.size(); i++) {
-            toList.add(new CowDisplay(fromList.get(i)));
+            toList.add(new CowMessage(fromList.get(i)));
         }
     }
 
-    private void cloneFireList(LinkedList<FireLineDisplay> toList, LinkedList<FireLine> fromList) {
+    private void cloneFireList(LinkedList<FireLineMessage> toList, LinkedList<FireLine> fromList) {
         toList.clear();
         for (int i = 0; i < fromList.size(); i++) {
-            toList.add(new FireLineDisplay(fromList.get(i)));
+            toList.add(new FireLineMessage(fromList.get(i)));
         }
     }
 

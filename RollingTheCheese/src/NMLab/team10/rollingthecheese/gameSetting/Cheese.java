@@ -52,10 +52,19 @@ public class Cheese {
     public float y;
 
     //automatically initialize value
-    private short spinAngle;
-    private int poisonCount;
-    private float prepareD;
     private boolean joinBattle;
+    private float prepareD;
+
+    private short spinAngle;
+
+    private boolean isDead;
+    private byte deadAnimation;
+
+    private boolean isPoison;
+    private short poisonAmount;//for poison
+
+    //only for fireCheese
+    FireLine fireLine;
 
     public void setType(byte type) {
         this.type = type;
@@ -100,9 +109,12 @@ public class Cheese {
     public void initialPara(House house, Projector projector) {
 
         spinAngle = 0;
-        poisonCount = 0;
         prepareD = 0;
         joinBattle = false;
+        isDead = false;
+        deadAnimation = 0;
+        isPoison = false;
+        poisonAmount = 0;
 
         switch (type) {
             case Original: {
@@ -236,12 +248,38 @@ public class Cheese {
         return (y - radix);
     }
 
-    public void setPoisonCount(int poisonCount) {
-        this.poisonCount = poisonCount;
+    public void setPoisonAmount(short poisonAmount) {
+        this.poisonAmount = poisonAmount;
     }
 
-    public int getPoisonCount() {
-        return poisonCount;
+    public short getPoisonAmount() {
+        return poisonAmount;
+    }
+
+    public void poisonDamage(){
+    //for poison
+        if(isPoison){
+            if(poisonAmount<=CheeseParameter.Poison.PoisonSmallCount){
+                endurance-=CheeseParameter.Poison.PoisonDecreSmall;
+            }
+            else if(poisonAmount<=CheeseParameter.Poison.PoisonMedCount){
+                endurance-=CheeseParameter.Poison.PoisonDecreMed;
+            }
+            else{
+                endurance-=CheeseParameter.Poison.PoisonDecreLarge;
+            }
+        }
+    }
+
+    public void decrePoisonAmount(){
+    //for poison
+        if(poisonAmount>0)
+            poisonAmount--;
+    }
+
+    public void reCoverPoison() {
+    //for poison
+        isPoison = (poisonAmount>0);
     }
 
     public void regreshAngle() {
@@ -270,6 +308,30 @@ public class Cheese {
 
     public boolean isJoinBattle() {
         return joinBattle;
+    }
+
+    public void setDead(boolean isDead) {
+        this.isDead = isDead;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
+
+    public void setDeadAnimation(byte deadAnimation) {
+        this.deadAnimation = deadAnimation;
+    }
+
+    public byte getDeadAnimation() {
+        return deadAnimation;
+    }
+
+    public boolean isPoison() {
+        return isPoison;
+    }
+
+    public void setPoison(boolean isPoison) {
+        this.isPoison = isPoison;
     }
 
     public static final byte Original = CheeseEnum.Original;
