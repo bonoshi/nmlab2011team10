@@ -1,6 +1,6 @@
 package NMLab.team10.rollingthecheese;
 
-import android.R.integer;
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -59,7 +59,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawBitmap(skyBitmap,newX/4-40,0,null);
         canvas.drawBitmap(backgroundBitmap, newX/2-80,0,null);
         canvas.drawBitmap(farmBitmap, newX/2-80,0,null);
-        canvas.drawBitmap(houseBitmap, newX - 160,200,null);
+        canvas.drawBitmap(houseBitmap, newX - 160+60,200,null);
         canvas.drawBitmap(grassBitmap, newX-160,430, null);
         canvas.drawBitmap(buttomBitmap, 5, 10, null);
 
