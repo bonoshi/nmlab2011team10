@@ -60,7 +60,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawBitmap(backgroundBitmap, newX/2-80,0,null);
         canvas.drawBitmap(farmBitmap, newX/2-80,0,null);
         canvas.drawBitmap(houseBitmap, newX - 160+60,200,null);
-        canvas.drawBitmap(wood_slideBitmap, newX -160+50,275, null);
+        canvas.drawBitmap(wood_slideBitmap, newX -160+60,275, null);
         canvas.drawBitmap(grassBitmap, newX-160,430, null);
         canvas.drawBitmap(buttomBitmap, 5, 10, null);
 
