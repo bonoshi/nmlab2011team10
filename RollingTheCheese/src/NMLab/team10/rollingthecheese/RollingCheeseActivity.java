@@ -1,6 +1,11 @@
 package NMLab.team10.rollingthecheese;
 
 
+import java.util.ArrayList;
+
+import NMLab.team10.rollingthecheese.gameSetting.CheeseDisplay;
+import NMLab.team10.rollingthecheese.gameSetting.Farm;
+import NMLab.team10.rollingthecheese.gameSetting.House;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,13 +15,15 @@ import android.view.WindowManager;
 
 public class RollingCheeseActivity extends Activity {
     /** Called when the activity is first created. */
-    WelcomeView welcomeView;
-    GameView gameView;
+    public WelcomeView welcomeView;
+    public GameView gameView;
     public GameThread gameThread;
 
-    //Cheese cheese[];
-    //home homes[];
-
+    public House leftHouse,rightHouse;
+    public Farm leftFarm, rightFarm;
+    public ArrayList<CheeseDisplay> leftCheeseDisplays;
+    public ArrayList<CheeseDisplay> rightCheeseDisplays;
+    
 
     
     @Override

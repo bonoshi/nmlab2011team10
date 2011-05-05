@@ -18,9 +18,11 @@ public class GameDrawThread extends Thread {
         Canvas canvas = null;
         while(isRunning){
             try{
+                Canvas canvas2 = new Canvas();
+                father.doDraw(canvas2);
                 canvas = surfaceHolder.lockCanvas(null);
                 synchronized(surfaceHolder){
-                    father.doDraw(canvas);              
+                    canvas = canvas2;              
                 }
             }
             catch(Exception e){
