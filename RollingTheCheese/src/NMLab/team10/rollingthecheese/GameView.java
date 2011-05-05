@@ -120,8 +120,13 @@ public class GameView extends View implements SurfaceHolder.Callback {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             scroll.isPressing = true;
             scroll.fingerX = x;
+            scroll.prev_fingerX = x;
+            scroll.isRecovering = false;
+            scroll.recover_a = 0;
+            scroll.V = 0;
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             scroll.fingerX = x;
+            vTracker.addMovement(event);
             vTracker.computeCurrentVelocity(1);
             scroll.V = vTracker.getXVelocity(); 
         } else if (event.getAction() == MotionEvent.ACTION_UP) {

@@ -43,18 +43,14 @@ public class ScrollThread extends Thread {
         long cur_time;
         long delta_time;
         while (true) {
-                Log.e("V",String.format("%f", V));
+                //Log.e("V",String.format("%f", V));
                 cur_time = System.nanoTime();
                 delta_time = cur_time - prev_time;
                 prev_time = cur_time;
-                if (isPressing) {
-                    if (prev_isPressing == false) { // run when finger down
-                        prev_isPressing = true;
-                        prev_fingerX = fingerX;
-                        isRecovering = false;
-                        recover_a = 0;
-                        V = 0;
-                    } else { // run when move
+                delta_time/=1000000;
+                
+
+                if (isPressing) {                   
                         if ((posX > rightEdge && fingerX - prev_fingerX > 0)
                                 || (posX < leftEdge && fingerX
                                         - prev_fingerX < 0)) {
@@ -62,24 +58,21 @@ public class ScrollThread extends Thread {
                         } else {
                             posX += (fingerX - prev_fingerX);
                         }
-                       /* V = (double) (fingerX - prev_fingerX)
-                                / (double) delta_time;
-                        if (V > 0.0000002)
-                            V = 0.0000002;*/
+
                         prev_fingerX = fingerX;
-                    }
-                } else { // run when finger up
-                    prev_isPressing = false;
-                    posX += V * delta_time;
-                    if (!isRecovering) {
+                } else { 
+                    
+                    if (!isRecovering) {  
                         if (posX > rightEdge && V > 0) {
-                            V = -0.000000004 * (double) (posX - rightEdge);
-                            recover_a = 0.000000000000000008 * (double) (posX - rightEdge);
+                            V = -0.004 * (double) (posX - rightEdge);
+                            recover_a = 0.0008 * (double) (posX - rightEdge);
                             isRecovering = true;
                         } else if (posX < leftEdge && V < 0) {
-                            V = -0.000000004 * (double) (posX - leftEdge);
-                            recover_a = 0.000000000000000008 * (double) (posX - leftEdge);
+                            V = -0.004 * (double) (posX - leftEdge);
+                            recover_a = 0.0008 * (double) (posX - leftEdge);
                             isRecovering = true;
+                        }else{
+                            posX += V * delta_time;
                         }
                     }
 
@@ -94,13 +87,15 @@ public class ScrollThread extends Thread {
                     }
 
                 
-            }
 
-            try {
-                Thread.sleep(100);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                }
+            
+                try {
+                    Thread.sleep(30);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
         }
 
     }
