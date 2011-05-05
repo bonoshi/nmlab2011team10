@@ -6,14 +6,11 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.VelocityTracker;
 import android.view.View;
 
-public class GameView extends View implements SurfaceHolder.Callback {
+public class GameView extends View  {
     
     RollingCheeseActivity father;
     GameDrawThread gameDrawThread;
@@ -32,7 +29,6 @@ public class GameView extends View implements SurfaceHolder.Callback {
     public GameView(RollingCheeseActivity father) {
         super(father);
         this.father = father;
-        //getHolder().addCallback(this);
         initBitmap(father);
         scroll = new ScrollThread();
         scroll.start();
@@ -68,7 +64,6 @@ public class GameView extends View implements SurfaceHolder.Callback {
         int newX;
 
         newX = scroll.posX;
-
         canvas.drawBitmap(skyBitmap,newX/4-40,0,null);
         canvas.drawBitmap(backgroundBitmap, newX/2-80,0,null);
         canvas.drawBitmap(farmBitmap, newX/2-80,0,null);
@@ -81,38 +76,14 @@ public class GameView extends View implements SurfaceHolder.Callback {
         
         canvas.drawBitmap(buttomBitmap, 5, 10, null);
         canvas.translate(newX, 0);
-      //draw cheese and cow here
+        //draw cheese and cow here
         canvas.translate(-newX, 0);
-        //Log.e("draw","fasfa");
+
         
 
     }
 
-    public void surfaceChanged(SurfaceHolder holder, int format, int width,
-            int height) {
-    }
 
-    public void surfaceCreated(SurfaceHolder holder) {
-        if (!father.gameThread.isAlive()) {
-            father.gameThread.isRunning = true;
-            father.gameThread.start();
-        }
-        if (!gameDrawThread.isAlive()) {
-            gameDrawThread.isRunning = true;
-            gameDrawThread.start();
-        }
-
-    }
-
-    public void surfaceDestroyed(SurfaceHolder holder) {
-        if (gameDrawThread.isAlive()) {
-            gameDrawThread.isRunning = false;
-
-        }
-        if (father.gameThread.isAlive()) {
-            father.gameThread.isRunning = false;
-        }
-    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

@@ -1,29 +1,22 @@
 package NMLab.team10.rollingthecheese;
 
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.util.Log;
-import android.view.SurfaceHolder;
+
+
+
 
 public class GameDrawThread extends Thread {
     public boolean isRunning;
     GameView father;
-    SurfaceHolder surfaceHolder;
     int sleepSpan = 20;
     
     
     public GameDrawThread(GameView father) {
         this.father = father;
-
-        
     }
 
     public void run(){
-
-        while(isRunning){
-         
-         
-            father.postInvalidate();
+        while(isRunning){ 
+            father.postInvalidate(); // make GameView to do onDraw()
             try{
                 Thread.sleep(sleepSpan);        
             }
