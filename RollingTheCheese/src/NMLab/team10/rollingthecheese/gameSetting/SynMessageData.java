@@ -12,8 +12,8 @@ public class SynMessageData {
 
     Projector leftProjector;
     Projector rightProjector;
-    House leftHouse;
-    House rightHouse;
+    HouseMessage leftHouse;
+    HouseMessage rightHouse;
     Farm leftFarm;
     Farm rightFarm;
     int leftMilk;
@@ -25,7 +25,8 @@ public class SynMessageData {
     LinkedList<CheeseMessage> rightCheeseList = new LinkedList<CheeseMessage>();
     LinkedList<CowMessage> leftCowList = new LinkedList<CowMessage>();
     LinkedList<CowMessage> rightCowList = new LinkedList<CowMessage>();
-    LinkedList<FireLineMessage> fireLineList = new LinkedList<FireLineMessage>();
+    LinkedList<FireLineMessage> leftFireList = new LinkedList<FireLineMessage>();
+    LinkedList<FireLineMessage> rightFireList = new LinkedList<FireLineMessage>();
 
     // DestructButton leftDestructB = new DestructButton();
     // DestructButton rightDestructB = new DestructButton();
@@ -49,18 +50,19 @@ public class SynMessageData {
 
             leftProjector = s.getLeftProjector().clone();
             rightProjector = s.getRightProjector().clone();
-            leftHouse = s.getLeftHouse().clone();
-            rightHouse = s.getRightHouse().clone();
+            leftHouse = new HouseMessage(s.getLeftHouse());
+            rightHouse = new HouseMessage(s.getRightHouse());
             leftFarm = s.getLeftFarm().clone();
             rightFarm = s.getRightFarm().clone();
             leftMilk = s.getLeftMilk();
             rightMilk = s.getRightMilk();
 
-            cloneCheeseList(leftCheeseList, s.getLeftCheeseList());
-            cloneCheeseList(rightCheeseList, s.getRightCheeseList());
-            cloneCowList(leftCowList, s.getLeftCowList());
-            cloneCowList(rightCowList, s.getRightCowList());
-            cloneFireList(fireLineList, s.getFileLineList());
+            createCheeseMessage(leftCheeseList, s.getLeftCheeseList());
+            createCheeseMessage(rightCheeseList, s.getRightCheeseList());
+            createCowMessage(leftCowList, s.getLeftCowList());
+            createCowMessage(rightCowList, s.getRightCowList());
+            createFireMessage(leftFireList, s.getLeftFireList());
+            createFireMessage(rightFireList, s.getRightFireList());
 
             if (whichSide) {
                 this.buttonD = ButtonD.createLeftButtonD(eqc, s.getLeftDestruct());
@@ -81,24 +83,24 @@ public class SynMessageData {
         }
     }
 
-    private void cloneCheeseList(LinkedList<CheeseMessage> toList, LinkedList<Cheese> fromList) {
+    private void createCheeseMessage(LinkedList<CheeseMessage> toList, LinkedList<Cheese> fromList) {
         toList.clear();
         for (int i = 0; i < fromList.size(); i++) {
-            toList.add(new CheeseMessage(fromList.get(i)));
+            toList.add(new CheeseMessage(fromList.get(i), Cheese.getID()));
         }
     }
 
-    private void cloneCowList(LinkedList<CowMessage> toList, LinkedList<Cow> fromList) {
+    private void createCowMessage(LinkedList<CowMessage> toList, LinkedList<Cow> fromList) {
         toList.clear();
         for (int i = 0; i < fromList.size(); i++) {
-            toList.add(new CowMessage(fromList.get(i)));
+            toList.add(new CowMessage(fromList.get(i), Cow.getID()));
         }
     }
 
-    private void cloneFireList(LinkedList<FireLineMessage> toList, LinkedList<FireLine> fromList) {
+    private void createFireMessage(LinkedList<FireLineMessage> toList, LinkedList<FireLine> fromList) {
         toList.clear();
         for (int i = 0; i < fromList.size(); i++) {
-            toList.add(new FireLineMessage(fromList.get(i)));
+            toList.add(new FireLineMessage(fromList.get(i), FireLine.getID()));
         }
     }
 

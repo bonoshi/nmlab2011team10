@@ -1,11 +1,14 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
+import java.util.LinkedList;
+
 public class FireLine {// have display light type
 
-    public FireLine(byte type, float s, int length) {
+    public FireLine(Cheese c, byte type, float x) {
+        this.fireCheese = c;
         this.type = type;
-        this.setStartX(s);
-        this.setLength(length);
+        this.startX = x;
+        this.endX = x;
         switch (type) {
             case Small:
                 strength = FireParameter.Small.Strength;
@@ -27,7 +30,7 @@ public class FireLine {// have display light type
                 break;
             case Medium:
                 if (strength <= FireParameter.Small.Strength)
-                    type = Medium;
+                    type = Small;
                 break;
             case Large:
                 if (strength <= FireParameter.Medium.Strength)
@@ -38,12 +41,45 @@ public class FireLine {// have display light type
         }
     }
 
-    public void decrement() {
-        strength--;
+    public void move(boolean whichSide) {
+        startX = fireCheese.x;
+        if (strength > 0) {
+            strength--;
+        } else {
+            if (whichSide) {
+                endX += fireCheese.getSpeed();
+                if (endX > startX)
+                    endX = startX;
+            } else {
+                endX -= fireCheese.getSpeed();
+                if (endX < startX)
+                    endX = startX;
+            }
+        }
+    }
+
+    public void fireDamage(LinkedList<Cheese> list, boolean whichSide) {
+        for (int i = 0; i < list.size(); i++) {
+            Cheese cheese = list.get(i);
+            if (cheese.getType() == Cheese.Firing)
+                continue;
+            if (whichSide) {
+                if(startX>=cheese.x && endX<=cheese.x){
+                    cheese.setEndurance(cheese.getEndurance() - this.getDamage());
+                    cheese.setOnFire(this.type);
+                }
+            }
+            else{
+                if(startX<=cheese.x && endX>=cheese.x){
+                    cheese.setEndurance(cheese.getEndurance() - this.getDamage());
+                    cheese.setOnFire(this.type);
+                }
+            }
+        }
     }
 
     public boolean isDead() {
-        return (strength <= 0);
+        return (strength <= 0 && endX == startX);
     }
 
     public void setType(byte type) {
@@ -62,37 +98,86 @@ public class FireLine {// have display light type
         return startX;
     }
 
-    public void setLength(int length) {
-        this.length = length;
+    //
+    // public void setOwner(boolean owner) {
+    // this.owner = owner;
+    // }
+    //
+    // public boolean isOwnerLeft() {
+    // return owner;
+    // }
+
+    public static short getID() {
+        return (ID++);
     }
 
-    public int getLength() {
-        return length;
+    public void setEndX(float endX) {
+        this.endX = endX;
     }
 
-    public void setOwner(boolean owner) {
-        this.owner = owner;
+    public float getEndX() {
+        return endX;
     }
 
-    public boolean isOwnerLeft() {
-        return owner;
+    public void setFireCheese(Cheese fireCheese) {
+        this.fireCheese = fireCheese;
     }
 
-    byte type;
+    public Cheese getFireCheese() {
+        return fireCheese;
+    }
+
+    public float getDamage(){
+        switch (type) {
+            case Small:
+                return FireParameter.Small.Damage;
+            case Medium:
+                return FireParameter.Medium.Damage;
+            case Large:
+                return FireParameter.Large.Damage;
+            default:
+                return 0.0F;
+        }
+    }
+
+    private static short ID = 0;
+    private byte type;
     private float startX;
-    private int length;
+    private float endX;
 
     private int strength;
 
-    private boolean owner;
+    // private boolean owner;
+
+    // link to Firing Cheese
+    private Cheese fireCheese;
 
     public static final byte Small = FireEnum.Small;
     public static final byte Medium = FireEnum.Medium;
     public static final byte Large = FireEnum.Large;
+
+    public static final boolean Right = false;
+    public static final boolean Left = true;
+
+    public static byte getFireSFromCheese(Cheese c){
+        switch (c.getSize()) {
+            case CheeseSizeEnum.Large:
+                return Large;
+            case CheeseSizeEnum.Medium:
+                return Medium;
+            case CheeseSizeEnum.Small:
+                return Small;
+            case CheeseSizeEnum.Tiny:
+                return Small;
+            default:
+                return Small;
+
+        }
+    }
 }
 
 class FireEnum {
-    public static final byte Small = 0;
-    public static final byte Medium = 1;
-    public static final byte Large = 2;
+    public static final byte Small = 1;
+    public static final byte Medium = 2;
+    public static final byte Large = 3;
 }

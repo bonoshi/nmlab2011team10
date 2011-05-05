@@ -1,5 +1,7 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
+import java.util.LinkedList;
+
 public class Cheese {
 
     // Cheese a = new Cheese(Cheese.Normal, Cheese.Large, Cheese.Left);
@@ -7,7 +9,7 @@ public class Cheese {
     public Cheese(byte type, byte size) {
         setType(type);
         setSize(size);
-        //setOwner(whichSide);
+        // setOwner(whichSide);
         switch (type) {
             case Original: {
                 switch (size) {
@@ -38,33 +40,39 @@ public class Cheese {
         }
     }
 
+    private static short ID = 0;
+
+    public static short getID() {
+        return (ID++);
+    }
+
     // set by constructor
     private byte type;
     private byte size;
     private float radix;
-    //private boolean owner;
+    // private boolean owner;
 
-    //set by initialization
+    // set by initialization
     private float maxEndurance;
     private float endurance;
     private float speed;
     public float x;// central x
     public float y;
 
-    //automatically initialize value
+    // automatically initialize value
     private boolean joinBattle;
     private float prepareD;
 
     private short spinAngle;
 
     private boolean isDead;
-    private byte deadAnimation;
 
     private boolean isPoison;
-    private short poisonAmount;//for poison
+    private short poisonAmount;// for poison
+    private byte poisonState;
 
-    //only for fireCheese
-    FireLine fireLine;
+    private byte fireState;
+    private boolean isBump;
 
     public void setType(byte type) {
         this.type = type;
@@ -98,23 +106,33 @@ public class Cheese {
         return speed;
     }
 
-//    public void setOwner(boolean owner) {
-//        this.owner = owner;
-//    }
-//
-//    public boolean isOwnerLeft() {
-//        return owner;
-//    }
+    public void setRadix(float radix) {
+        this.radix = radix;
+    }
 
-    public void initialPara(House house, Projector projector) {
+    public float getRadix() {
+        return radix;
+    }
+
+    // public void setOwner(boolean owner) {
+    // this.owner = owner;
+    // }
+    //
+    // public boolean isOwnerLeft() {
+    // return owner;
+    // }
+
+    public void initialPara(House house, Projector projector, boolean whichSide) {
 
         spinAngle = 0;
         prepareD = 0;
         joinBattle = false;
         isDead = false;
-        deadAnimation = 0;
         isPoison = false;
         poisonAmount = 0;
+        poisonState = 0;
+        fireState = 0;
+        isBump = false;
 
         switch (type) {
             case Original: {
@@ -215,24 +233,25 @@ public class Cheese {
 
         switch (projector.type) {
             case Board: {
-                speed*=ProjectorParameter.BoardSpeed;
-                x = ProjectorParameter.Board.getCheeseX(prepareD, radix);
-                y = ProjectorParameter.Board.getCheeseY(prepareD, radix);
+                speed *= ProjectorParameter.BoardSpeed;
                 break;
             }
             case Slide: {
-                speed*=ProjectorParameter.SlideSpeed;
+                speed *= ProjectorParameter.SlideSpeed;
                 break;
             }
             case Cannon: {
-                speed*=ProjectorParameter.CannonSpeed;
+                speed *= ProjectorParameter.CannonSpeed;
                 break;
             }
             case Rocket: {
-                speed*=ProjectorParameter.RocketSpeed;
+                speed *= ProjectorParameter.RocketSpeed;
                 break;
             }
         }
+
+        x = projector.getCheeseX(prepareD, radix, whichSide);
+        y = projector.getCheeseY(prepareD, radix, whichSide);
 
     }
 
@@ -240,13 +259,13 @@ public class Cheese {
         return maxEndurance;
     }
 
-    public float getUpperLeftX() {// for occqoo
-        return (x - radix);
-    }
-
-    public float getUpperLeftY() {// for occqoo
-        return (y - radix);
-    }
+    // public float getUpperLeftX() {// for occqoo
+    // return (x - radix);
+    // }
+    //
+    // public float getUpperLeftY() {// for occqoo
+    // return (y - radix);
+    // }
 
     public void setPoisonAmount(short poisonAmount) {
         this.poisonAmount = poisonAmount;
@@ -256,46 +275,44 @@ public class Cheese {
         return poisonAmount;
     }
 
-    public void poisonDamage(){
-    //for poison
-        if(isPoison){
-            if(poisonAmount<=CheeseParameter.Poison.PoisonSmallCount){
-                endurance-=CheeseParameter.Poison.PoisonDecreSmall;
-            }
-            else if(poisonAmount<=CheeseParameter.Poison.PoisonMedCount){
-                endurance-=CheeseParameter.Poison.PoisonDecreMed;
-            }
-            else{
-                endurance-=CheeseParameter.Poison.PoisonDecreLarge;
+    public void recoverPoison() {
+        // for poison
+        if (poisonAmount == 0) {
+            isPoison = false;
+            poisonState = 0;
+        }
+    }
+
+    public void poisonDamage() {
+        // for poison
+        if (isPoison) {
+            if (poisonAmount <= CheeseParameter.Poison.PoisonSmallCount) {
+                endurance -= CheeseParameter.Poison.PoisonDecreSmall;
+                poisonState = 1;
+            } else if (poisonAmount <= CheeseParameter.Poison.PoisonMedCount) {
+                endurance -= CheeseParameter.Poison.PoisonDecreMed;
+                poisonState = 2;
+            } else {
+                endurance -= CheeseParameter.Poison.PoisonDecreLarge;
+                poisonState = 3;
             }
         }
     }
 
-    public void decrePoisonAmount(){
-    //for poison
-        if(poisonAmount>0)
+    public void decrePoisonAmount() {
+        // for poison
+        if (poisonAmount > 0)
             poisonAmount--;
     }
 
-    public void reCoverPoison() {
-    //for poison
-        isPoison = (poisonAmount>0);
-    }
-
-    public void regreshAngle() {
-        switch (type) {
-            case Original: {
-                // angleChangePerSec = 2pi/360 * X * radix =
-                // CheeseParameter.Normal.DistancePerSec;
-                float delta = (CheeseParameter.Normal.DistancePerSec / radix) / 57.296F;
-                delta /= GlobalParameter.FramePeriod;
-                spinAngle += ((short) Math.round(delta));
-                if (spinAngle > 359)
-                    spinAngle %= 360;
-            }
-            default:// not support
-                break;
-        }
+    // public void refreshAngle(float d) {
+    public void refreshAngle() {
+        // angleChangePerSec = 2pi/360 * X * radix =
+        // CheeseParameter.Normal.DistancePerSec;
+        // float delta = (d / radix) / 57.296F;
+        float delta = (speed / radix) / 57.296F;
+        spinAngle += ((short) Math.round(delta));
+        spinAngle %= 360;
     }
 
     public short getSpinAngle() {
@@ -318,20 +335,118 @@ public class Cheese {
         return isDead;
     }
 
-    public void setDeadAnimation(byte deadAnimation) {
-        this.deadAnimation = deadAnimation;
-    }
-
-    public byte getDeadAnimation() {
-        return deadAnimation;
-    }
-
     public boolean isPoison() {
         return isPoison;
     }
 
     public void setPoison(boolean isPoison) {
         this.isPoison = isPoison;
+    }
+
+    public void setPoisonState(byte poisonState) {
+        this.poisonState = poisonState;
+    }
+
+    public byte getPoisonState() {
+        return poisonState;
+    }
+
+    public void resetFireState() {
+        this.fireState = 0;
+    }
+
+    public void setOnFire(byte fireState) {
+        if (fireState > this.fireState)
+            this.fireState = fireState;
+    }
+
+    public byte getFireState() {
+        return fireState;
+    }
+
+    public void checkDead() {
+        if (endurance <= 0)
+            this.isDead = true;
+    }
+
+    public boolean checkCrowd(LinkedList<Cheese> list) {
+        int size = list.size();
+        if (size == 0) {
+            return false;
+        } else {
+            Cheese c = list.get(size);
+            if (Cheese.distance(this, c) >= (this.getRadix() + c.getRadix()))
+                return false;
+            return true;
+        }
+    }
+
+    // useful for the only cheese at front-line
+    public void moveByDistance(float d, boolean whichSide, Projector p) {
+        if (!joinBattle) {
+            float accumD = d + prepareD;
+            float exceed = p.exceedAmount(accumD, radix);
+            if (exceed < 0) {
+                prepareD += d;
+                x = p.getCheeseX(accumD, radix, whichSide);
+                y = p.getCheeseY(accumD, radix, whichSide);
+            } else {
+                joinBattle = true;
+                x = p.getBattleCheeseX(accumD, radix, whichSide);
+                y = radix;
+            }
+        } else {
+            if (whichSide) {
+                x += d;
+            } else {
+                x -= d;
+            }
+        }
+    }
+
+    // useful for the only cheese at front-line
+    public void backByDistance(float d, boolean whichSide, Projector p) {
+        if (!joinBattle) {
+            float accumD = prepareD - d;
+            x = p.getCheeseX(accumD, radix, whichSide);
+            y = p.getCheeseY(accumD, radix, whichSide);
+        } else {
+            if (whichSide) {
+                x -= d;
+                float exceed = (x - p.getBattleBorderX(d, whichSide));
+                if(exceed < 0.0F){
+                    joinBattle = false;
+                    float maxPrepareD = p.getMaxPrepareD(radix);
+                    prepareD = maxPrepareD + exceed;
+                    x = p.getCheeseX(prepareD, radix, whichSide);
+                    y = p.getCheeseY(prepareD, radix, whichSide);
+                }
+            } else {
+                x += d;
+                float exceed = (p.getBattleBorderX(d, whichSide) - x);
+                if(exceed < 0.0F){
+                    joinBattle = false;
+                    float maxPrepareD = p.getMaxPrepareD(radix);
+                    prepareD = maxPrepareD + exceed;
+                    x = p.getCheeseX(prepareD, radix, whichSide);
+                    y = p.getCheeseY(prepareD, radix, whichSide);
+                }
+            }
+        }
+    }
+
+    public static float distance(Cheese a, Cheese b) {
+        float dx = a.x - b.x;
+        float dy = a.y - b.y;
+        return (float) Math.sqrt(dx * dx + dy * dy);
+    }
+
+    public void setBump(boolean isBump) {
+        this.isBump = isBump;
+    }
+
+    public boolean isBump() {
+        return isBump;
     }
 
     public static final byte Original = CheeseEnum.Original;

@@ -1,16 +1,16 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
 public class CheeseMessage {
-    public CheeseMessage(Cheese c) {
+    public CheeseMessage(Cheese c, short ID) {
         type = c.getType();
         size = c.getSize();
-        HPPercent = (byte) Math.round(100F * c.getEndurance() / c.getMaxEndurance());
-        if (HPPercent == 0 && c.getEndurance() > 0.0F)
-            HPPercent = 1;
-        spinAngle = c.getSpinAngle();
-        x = c.getUpperLeftX();
-        y = c.getUpperLeftY();
-        createAnimation(c);//bonoshi: need to implement
+        HPPercent = (byte) Math.ceil(100.0 * c.getEndurance() / c.getMaxEndurance());
+        //spinAngle = c.getSpinAngle();
+        x = c.x;
+        y = c.y;
+        this.ID = ID;
+        this.setFire(c.getFireState());
+        this.setPoison(c.getPoisonState());
     }
 
     public byte getType() {//Normal, Casumarzu, Sweaty, Firing
@@ -22,9 +22,6 @@ public class CheeseMessage {
     public int getHPPercent() {
         return HPPercent;
     }
-    public short getSpinAngle() {
-        return spinAngle;
-    }
     public float getX() {
         return x;
     }
@@ -32,23 +29,44 @@ public class CheeseMessage {
         return y;
     }
 
-    public void setAnimation(byte animation) {
-        this.animation = animation;
+    public void setID(short iD) {
+        ID = iD;
     }
 
-    public byte getAnimation() {
-        return animation;
+    public short getID() {
+        return ID;
     }
 
-    public void createAnimation(Cheese c){
-
+    public void setFire(byte f){
+        badState &= ~FireIndex;
+        badState |= f;
     }
+
+    public void setPoison(byte p){
+        badState &= ~PoisonIndex;
+        badState |= p<<2;
+    }
+
+    public void setIsBump(boolean b){
+        badState &= ~BumpIndex;
+        if(b){
+            badState |= BumpIndex;
+        }
+    }
+
+    private short ID;
 
     private byte type;
     private byte size;
     private byte HPPercent;
-    private short spinAngle;
+    //private short spinAngle;
     private float x;// x for drawing
     private float y;
-    private byte animation;//poison, on fire, dying animation, each has four picture
+    //private byte animation;//poison, on fire, dying animation, each has four picture
+    private byte badState;
+
+    //for bad state
+    public static final byte FireIndex = ((byte) 3);
+    public static final byte PoisonIndex = ((byte) 3) << 2;
+    public static final byte BumpIndex = ((byte) 1) << 4;
 }

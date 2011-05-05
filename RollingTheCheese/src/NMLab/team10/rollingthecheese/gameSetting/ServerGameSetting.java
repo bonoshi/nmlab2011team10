@@ -1,5 +1,6 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class ServerGameSetting {
@@ -28,8 +29,6 @@ public class ServerGameSetting {
     private Farm rightFarm = new Farm();
     private int leftMilk = 100;
     private int rightMilk = 100;
-    private int leftHouseHP = GlobalParameter.HouseMaxHp;
-    private int rightHouseHP = GlobalParameter.HouseMaxHp;
 
     // setting relating to destruction done to farm
     private DestructState leftDestruct = new DestructState();
@@ -40,7 +39,8 @@ public class ServerGameSetting {
     private LinkedList<Cheese> rightCheeseList;
     private LinkedList<Cow> leftCowList;
     private LinkedList<Cow> rightCowList;
-    private LinkedList<FireLine> fileLineList;
+    private LinkedList<FireLine> leftFireList;
+    private LinkedList<FireLine> rightFireList;
 
     public int getTime() {
         return time;
@@ -76,6 +76,14 @@ public class ServerGameSetting {
 
     public Projector getRightProjector() {
         return rightProjector;
+    }
+
+    public Projector getProjector(boolean whichSide) {
+        if (whichSide) {
+            return leftProjector;
+        } else {
+            return rightProjector;
+        }
     }
 
     public void setRightProjector(Projector rightProjector) {
@@ -178,14 +186,6 @@ public class ServerGameSetting {
         this.rightCowList = rightCowList;
     }
 
-    public LinkedList<FireLine> getFileLineList() {
-        return fileLineList;
-    }
-
-    public void setFileLineList(LinkedList<FireLine> fileLineList) {
-        this.fileLineList = fileLineList;
-    }
-
     public void timeElasping() {
         // Time++
         time += GlobalParameter.FramePeriod;
@@ -193,74 +193,287 @@ public class ServerGameSetting {
         // Milk
         milkIncrease(1.0F, Left);
         milkIncrease(1.0F, Right);
-        //cheese time
-        //construction time
-        //cow time
+        // cheese time
+        // construction time
+        // cow time
+        takeAction();
     }
 
-    public void milkIncrease(float ratio, boolean whichSide){
+    public void milkIncrease(float ratio, boolean whichSide) {
         LinkedList<Cow> list;
         byte prod = 0;
-        if(whichSide){
+        if (whichSide) {
             list = leftCowList;
             prod = leftFarm.prod;
-        }
-        else{
+        } else {
             list = rightCowList;
             prod = rightFarm.prod;
         }
         float incre = 0.0F;
         switch (prod) {
-            case Grazing:{
-                ratio*=Farm.GrazingRatio;
+            case Grazing: {
+                ratio *= Farm.GrazingRatio;
                 break;
             }
-            case Husbandry:{
-                ratio*=Farm.HormoneRatio;
+            case Husbandry: {
+                ratio *= Farm.HormoneRatio;
                 break;
             }
-            case Mechanization:{
-                ratio*=Farm.MechanizationRatio;
+            case Mechanization: {
+                ratio *= Farm.MechanizationRatio;
                 break;
             }
-            case Hormone:{
-                ratio*=Farm.HormoneRatio;
+            case Hormone: {
+                ratio *= Farm.HormoneRatio;
                 break;
             }
         }
         for (int i = 0; i < list.size(); i++) {
             Cow cow = list.get(i);
-            if(cow.getStatus()==Cow.Leak){
-                incre += (CowParameter.ProductionAmount)*(CowParameter.Crisis);
-            }
-            else{
+            if (cow.getStatus() == Cow.Leak) {
+                incre += (CowParameter.ProductionAmount) * (CowParameter.Crisis);
+            } else {
                 incre += CowParameter.ProductionAmount;
             }
         }
-        if(whichSide){
-            leftMilk = leftMilk + Math.round(incre*ratio);
+        if (whichSide) {
+            leftMilk = leftMilk + Math.round(incre * ratio);
+        } else {
+            rightMilk = rightMilk + Math.round(incre * ratio);
         }
-        else{
-            rightMilk = rightMilk + Math.round(incre*ratio);
+    }
+
+    private void takeAction() {
+        // First step
+        clearDeadCheese(leftCheeseList);
+        clearDeadCheese(rightCheeseList);
+
+        // Second step
+        move();
+
+        // Third Step
+
+        // Fourth Step
+        checkCheeseDead(leftCheeseList);
+        checkCheeseDead(rightCheeseList);
+    }
+
+    private void clearDeadCheese(LinkedList<Cheese> list) {
+        for (Iterator<Cheese> iterator = list.iterator(); iterator.hasNext();) {
+            Cheese cheese = (Cheese) iterator.next();
+            if (cheese.isDead())
+                iterator.remove();
         }
     }
 
-
-
-    public void setLeftHouseHP(int leftHouseHP) {
-        this.leftHouseHP = leftHouseHP;
+    private void checkCheeseDead(LinkedList<Cheese> list) {
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).checkDead();
+        }
     }
 
-    public int getLeftHouseHP() {
-        return leftHouseHP;
+    private void move() {
+        // first move heads of two sequence
+        moveHead();
+
+        // move following left cheese
+        if (leftCheeseList.size() > 1) {
+            for (int i = 1; i < leftCheeseList.size(); i++) {
+                followCheese(leftCheeseList.get(i), leftCheeseList.get(i - 1), Left, this.getLeftProjector());
+            }
+        }
+
+        // move following right cheese
+        if (rightCheeseList.size() > 1) {
+            for (int i = 1; i < rightCheeseList.size(); i++) {
+                followCheese(rightCheeseList.get(i), rightCheeseList.get(i - 1), Right,
+                        this.getRightProjector());
+            }
+        }
     }
 
-    public void setRightHouseHP(int rightHouseHP) {
-        this.rightHouseHP = rightHouseHP;
+    private void moveHead() {
+        if (leftCheeseList.size() == 0 || rightCheeseList.size() == 0) {
+            if (leftCheeseList.size() > 0) {
+                Cheese leftC = leftCheeseList.getFirst();
+                boolean leftJoinBattle = leftC.isJoinBattle();// for fire
+                leftC.moveByDistance(leftC.getSpeed(), Left, this.getLeftProjector());
+                if (!leftJoinBattle && leftC.isJoinBattle()) {
+                    FireLine f = new FireLine(leftC, FireLine.getFireSFromCheese(leftC), this
+                            .getLeftProjector().getBattleBorderX(leftC.getRadix(), Left));
+                    leftFireList.add(f);
+
+                }
+                // fix if already bump into the enemy's house
+                if (leftC.x > this.getRightHouse().getBoader(Right) + BumpOffset) {
+                    leftC.x = this.getRightHouse().getBoader(Right) + BumpOffset;
+                    leftC.setBump(true);
+                } else {
+                    leftC.setBump(false);
+                }
+            }
+            if (rightCheeseList.size() > 0) {
+                Cheese rightC = rightCheeseList.getFirst();
+                boolean rightJoinBattle = rightC.isJoinBattle();// for fire
+                rightC.moveByDistance(rightC.getSpeed(), Right, this.getRightProjector());
+                if (!rightJoinBattle && rightC.isJoinBattle()) {
+                    FireLine f = new FireLine(rightC, FireLine.getFireSFromCheese(rightC), this
+                            .getRightProjector().getBattleBorderX(rightC.getRadix(), Right));
+                    rightFireList.add(f);
+                }
+                if (rightC.x > this.getLeftHouse().getBoader(Left) + BumpOffset) {
+                    rightC.x = this.getLeftHouse().getBoader(Left) + BumpOffset;
+                    rightC.setBump(true);
+                } else {
+                    rightC.setBump(false);
+                }
+            }
+            return;
+        }
+        Cheese leftC = leftCheeseList.getFirst();
+        Cheese rightC = rightCheeseList.getFirst();
+        float leftMoveAmount = leftC.getSpeed();
+        float rightMoveAmount = rightC.getSpeed();
+        int times = 4;
+
+        boolean leftJoinBattle = leftC.isJoinBattle();
+        boolean rightJoinBattle = rightC.isJoinBattle();
+
+        for (int i = 0; i < times; i++) {
+            // distance that can at most be traveled forward
+            float distance = Cheese.distance(leftC, rightC) - (leftC.getRadix() + rightC.getRadix())
+                    + BumpOffset;
+            if (distance > -1.0F) {// move forward, -1.0F is for float error
+                                   // tolerance
+                // the exceed amount of distance if we just let two cheese go
+                // under their speed
+                float exceed = leftMoveAmount + rightMoveAmount - distance;
+                if (exceed < 0.0F) {// no exceed => go straight!
+
+                    // no need to calculate!
+                    if (leftMoveAmount == 0 && rightMoveAmount == 0) {
+                        break;
+                    }
+
+                    leftC.moveByDistance(leftMoveAmount, Left, this.getLeftProjector());
+                    rightC.moveByDistance(rightMoveAmount, Right, this.getRightProjector());
+
+                    // fix if already bump into the enemy's house
+                    if (leftC.x > this.getRightHouse().getBoader(Right) + BumpOffset) {
+                        leftC.x = this.getRightHouse().getBoader(Right) + BumpOffset;
+                        // leftMoveAmount = leftC.x -
+                        // (this.getRightHouse().getBoader(Right) + BumpOffset);
+                        leftC.setBump(true);
+                    } else {
+                        // leftMoveAmount = 0;
+                    }
+                    if (rightC.x < this.getLeftHouse().getBoader(Left) - BumpOffset) {
+                        rightC.x = this.getLeftHouse().getBoader(Left) - BumpOffset;
+                        // rightMoveAmount = rightC.x -
+                        // (this.getLeftHouse().getBoader(Left) - BumpOffset);
+                        rightC.setBump(true);
+                    } else {
+                        // rightMoveAmount = 0;
+                    }
+                    leftMoveAmount = 0;
+                    rightMoveAmount = 0;
+                } else {
+                    // when left is destroying the house on the right
+                    if (leftC.x > this.getRightHouse().getBoader(Right)) {
+                        leftC.setBump(true);
+                        if (distance > rightMoveAmount) {
+                            rightC.moveByDistance(rightMoveAmount, Right, this.getRightProjector());
+                        } else {
+                            rightC.moveByDistance(distance, Right, this.getRightProjector());
+                            rightC.setBump(true);
+                        }
+                        // when right is destroying the house on the right
+                    } else if (rightC.x < this.getLeftHouse().getBoader(Left)) {
+                        rightC.setBump(true);
+                        if (distance > leftMoveAmount) {
+                            leftC.moveByDistance(leftMoveAmount, Left, this.getLeftProjector());
+                        } else {
+                            leftC.moveByDistance(distance, Left, this.getLeftProjector());
+                            leftC.setBump(true);
+                        }
+                        leftC.moveByDistance(distance, Left, this.getLeftProjector());
+                    } else {
+                        float fracLeft = (distance * leftC.getSpeed())
+                                / (leftC.getSpeed() + rightC.getSpeed());
+                        float fracRight = distance - fracLeft;
+                        leftC.moveByDistance(fracLeft, Left, this.getLeftProjector());
+                        rightC.moveByDistance(fracRight, Right, this.getRightProjector());
+                        leftMoveAmount -= fracLeft;
+                        rightMoveAmount -= fracRight;
+                        leftC.setBump(true);
+                        rightC.setBump(true);
+                    }
+                }
+            } else {// backward
+                distance = -distance - 1.0F;
+                float fracLeft = (distance * leftC.getSpeed()) / (leftC.getSpeed() + rightC.getSpeed());
+                float fracRight = distance - fracLeft;
+                leftC.backByDistance(fracLeft, Left, this.getLeftProjector());
+                rightC.backByDistance(fracRight, Right, this.getRightProjector());
+                leftMoveAmount += fracLeft;
+                rightMoveAmount += fracRight;
+                leftC.setBump(false);
+                rightC.setBump(false);
+            }
+        }
+
+        if (!leftJoinBattle && leftC.isJoinBattle()) {
+            FireLine f = new FireLine(leftC, FireLine.getFireSFromCheese(leftC), this.getLeftProjector()
+                    .getBattleBorderX(leftC.getRadix(), Left));
+            leftFireList.add(f);
+        }
+        if (!rightJoinBattle && rightC.isJoinBattle()) {
+            FireLine f = new FireLine(rightC, FireLine.getFireSFromCheese(rightC), this.getRightProjector()
+                    .getBattleBorderX(rightC.getRadix(), Right));
+            rightFireList.add(f);
+        }
+
     }
 
-    public int getRightHouseHP() {
-        return rightHouseHP;
+    private void followCheese(Cheese back, Cheese front, boolean whichSide, Projector p) {
+        boolean joinBattle = back.isJoinBattle();
+        float moveAmount = back.getSpeed();
+        // the exceed amount of distance if we just let two cheese go
+        // under their speed
+
+        int times = 2;
+
+        for (int i = 0; i < times; i++) {
+            float distance = Cheese.distance(back, front) - (back.getRadix() + front.getRadix())
+                    + FollowOffset;
+            if (distance > -1.0F) {
+                if (moveAmount == 0) {
+                    break;
+                }
+                float exceed = moveAmount - distance;
+                if (exceed < 0.0F) {// just move at most as it can!
+                    back.moveByDistance(moveAmount, whichSide, p);
+                    moveAmount = 0;
+                } else {
+                    back.moveByDistance(distance, whichSide, p);
+                    moveAmount -= distance;
+                }
+            } else {
+                distance = -distance - 1.0F;
+                back.backByDistance(distance, whichSide, p);
+                moveAmount += distance;
+            }
+        }
+
+        if (!joinBattle && back.isJoinBattle()) {
+            FireLine f = new FireLine(back, FireLine.getFireSFromCheese(back), p.getBattleBorderX(
+                    back.getRadix(), whichSide));
+            if (whichSide) {
+                leftFireList.add(f);
+            } else {
+                rightFireList.add(f);
+            }
+        }
     }
 
     public void setNight(boolean isNight) {
@@ -271,6 +484,22 @@ public class ServerGameSetting {
         return isNight;
     }
 
+    public void setLeftFireList(LinkedList<FireLine> leftFireList) {
+        this.leftFireList = leftFireList;
+    }
+
+    public LinkedList<FireLine> getLeftFireList() {
+        return leftFireList;
+    }
+
+    public void setRightFireList(LinkedList<FireLine> rightFireList) {
+        this.rightFireList = rightFireList;
+    }
+
+    public LinkedList<FireLine> getRightFireList() {
+        return rightFireList;
+    }
+
     public static final byte Grazing = MilkProdEnum.Grazing;
     public static final byte Husbandry = MilkProdEnum.Husbandry;
     public static final byte Mechanization = MilkProdEnum.Mechanization;
@@ -278,6 +507,9 @@ public class ServerGameSetting {
 
     public static final boolean Right = false;
     public static final boolean Left = true;
+
+    public static final float BumpOffset = GlobalParameter.BumpOffset;
+    public static final float FollowOffset = GlobalParameter.FollowOffset;
 }
 
 class BackGroundEnum {

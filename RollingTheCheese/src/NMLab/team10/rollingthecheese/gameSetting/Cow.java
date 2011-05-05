@@ -9,22 +9,27 @@ public class Cow {//have display light type
         //setInterval(CowParameter.TimeInterval);
     }
 
+    private static short ID = 0;
+    public static short getID(){
+        return (ID++);
+    }
+
     private byte status = Normal;
-    private float x;// central x
-    private float y;
+//    private float x;// central x
+//    private float y;
     //private int amount;// throughput
     //private int interval;// time interval;
-    private byte animation;//animation
-    private boolean headLeft;//direction
-    private boolean owner;
+//    private byte animation;//animation
+//    private boolean headLeft;//direction
+//    private boolean owner;
 
-    public float getUpperLeftX() {
-        return x;// bonoshi: size??margin??
-    }
-
-    public float getUpperLeftY() {
-        return y;//
-    }
+//    public float getUpperLeftX() {
+//        return x;// bonoshi: size??margin??
+//    }
+//
+//    public float getUpperLeftY() {
+//        return y;//
+//    }
 
     public void setStatus(byte status) {
         this.status = status;
@@ -49,30 +54,30 @@ public class Cow {//have display light type
 //    public int getInterval() {
 //        return interval;
 //    }
-
-    public void setAnimation(byte animation) {
-        this.animation = animation;
-    }
-
-    public byte getAnimation() {
-        return animation;
-    }
-
-    public void setHeadLeft(boolean headLeft) {
-        this.headLeft = headLeft;
-    }
-
-    public boolean isHeadLeft() {
-        return headLeft;
-    }
-
-     public void setOwner(boolean owner) {
-     this.owner = owner;
-     }
-
-     public boolean isOwnerLeft() {
-     return owner;
-     }
+//
+//    public void setAnimation(byte animation) {
+//        this.animation = animation;
+//    }
+//
+//    public byte getAnimation() {
+//        return animation;
+//    }
+//
+//    public void setHeadLeft(boolean headLeft) {
+//        this.headLeft = headLeft;
+//    }
+//
+//    public boolean isHeadLeft() {
+//        return headLeft;
+//    }
+//
+//     public void setOwner(boolean owner) {
+//     this.owner = owner;
+//     }
+//
+//     public boolean isOwnerLeft() {
+//     return owner;
+//     }
 
     public static final byte Normal = CowStatusEnum.NORMAL;
     public static final byte Leak = CowStatusEnum.LEAK;

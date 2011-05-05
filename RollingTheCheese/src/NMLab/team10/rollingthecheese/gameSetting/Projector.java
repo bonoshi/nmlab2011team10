@@ -14,19 +14,46 @@ public class Projector {
         }
     }
 
-    public synchronized float getCheeseX(float d, float radix) {
+    public synchronized float getCheeseX(float d, float radix, boolean whichSide) {
         switch (type) {
             case Board:
-                return (ProjectorParameter.Board.getCheeseX(d, radix));
+                return (ProjectorParameter.Board.getCheeseX(d, radix, whichSide));
             default:// no use
                 return 0F;
         }
     }
 
-    public synchronized float getCheeseY(float d, float radix) {
+    public synchronized float getCheeseY(float d, float radix, boolean whichSide) {
         switch (type) {
             case Board:
-                return (ProjectorParameter.Board.getCheeseY(d, radix));
+                return (ProjectorParameter.Board.getCheeseY(d, radix, whichSide));
+            default:// no use
+                return 0F;
+        }
+    }
+
+    public synchronized float getBattleCheeseX(float d, float radix, boolean whichSide) {
+        switch (type) {
+            case Board:
+                return (ProjectorParameter.Board.getBattleCheeseX(d, radix, whichSide));
+            default:// no use
+                return 0F;
+        }
+    }
+
+    public synchronized float getMaxPrepareD(float radix) {
+        switch (type) {
+            case Board:
+                return (ProjectorParameter.Board.getMaxPrepareD(radix));
+            default:// no use
+                return 0F;
+        }
+    }
+
+    public synchronized float getBattleBorderX(float radix, boolean whichSide){
+        switch (type) {
+            case Board:
+                return (ProjectorParameter.Board.getBattleBorderX(radix, whichSide));
             default:// no use
                 return 0F;
         }
@@ -46,25 +73,6 @@ public class Projector {
 
     public byte getType() {//for occqoo
         return type;
-    }
-
-
-    public synchronized float getUpperLeftX(){//for occqoo
-        switch (type) {
-            case Board:
-                return (ProjectorParameter.Board.drawX);
-            default:// no use
-                return 0F;
-        }
-    }
-
-    public synchronized float getUpperLeftY(){//for occqoo
-        switch (type) {
-            case Board:
-                return (ProjectorParameter.Board.drawY);
-            default:// no use
-                return 0F;
-        }
     }
 
     public synchronized int getUpMilk() {

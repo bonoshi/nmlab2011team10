@@ -4,19 +4,25 @@ public class House {
     public House() {
         this.setProd(CheeseProdEnum.ForFun);
         this.setQual(CheeseQualityEnum.Handmade);
+        this.setHP(HouseParameter.ForFunHP);
+        this.setHPPercent((byte) 100);
     }
 
-    public void upgradeProd(){
+    public void upgradeProd() {
         switch (prod) {
-            case ForFun:
+            case ForFun: {
                 this.prod = AfterHours;
+                HP = (int) Math.ceil(getHPPercent() * getHouseMaxHP() / 100.0);
                 break;
+            }
             case AfterHours:
-               this.prod = Bakery;
-               break;
+                this.prod = Bakery;
+                HP = (int) Math.ceil(getHPPercent() * getHouseMaxHP() / 100.0);
+                break;
             case Bakery:
-               this.prod = FoodFactory;
-               break;
+                this.prod = FoodFactory;
+                HP = (int) Math.ceil(getHPPercent() * getHouseMaxHP() / 100.0);
+                break;
             case FoodFactory:
                 break;
             default:// no use
@@ -24,11 +30,11 @@ public class House {
         }
     }
 
-    public synchronized boolean canUpgradeProd(){
-        return !(prod==FoodFactory);
+    public synchronized boolean canUpgradeProd() {
+        return !(prod == FoodFactory);
     }
 
-    public int getUpProdMilk(){
+    public int getUpProdMilk() {
         switch (prod) {
             case ForFun:
                 return HouseParameter.AfterHoursMilk;
@@ -43,7 +49,7 @@ public class House {
         }
     }
 
-    public String getUpProdMilkText(){
+    public String getUpProdMilkText() {
         switch (prod) {
             case ForFun:
                 return Integer.toString(HouseParameter.AfterHoursMilk);
@@ -58,7 +64,7 @@ public class House {
         }
     }
 
-    public int getUpProdTime(){
+    public int getUpProdTime() {
         switch (prod) {
             case ForFun:
                 return HouseParameter.AfterHoursMilk;
@@ -73,6 +79,21 @@ public class House {
         }
     }
 
+    public int getHouseMaxHP() {
+        switch (prod) {
+            case ForFun:
+                return HouseParameter.ForFunHP;
+            case AfterHours:
+                return HouseParameter.AfterHoursHP;
+            case Bakery:
+                return HouseParameter.BakeryHP;
+            case FoodFactory:
+                return HouseParameter.FoodFactoryHP;
+            default:// no use
+                return 0;
+        }
+    }
+
     public byte getProd() {
         return prod;
     }
@@ -81,17 +102,17 @@ public class House {
         this.prod = prod;
     }
 
-    public void upgradeQual(){
+    public void upgradeQual() {
         switch (qual) {
             case Handmade:
                 this.qual = CheeseMold;
                 break;
             case CheeseMold:
-               this.qual = FoodChemisty;
-               break;
+                this.qual = FoodChemisty;
+                break;
             case FoodChemisty:
-               this.qual = GMO;
-               break;
+                this.qual = GMO;
+                break;
             case GMO:
                 break;
             default:// no use
@@ -99,11 +120,11 @@ public class House {
         }
     }
 
-    public synchronized boolean canUpgradeQual(){
-        return !(qual==GMO);
+    public synchronized boolean canUpgradeQual() {
+        return !(qual == GMO);
     }
 
-    public int getUpQualMilk(){
+    public int getUpQualMilk() {
         switch (qual) {
             case Handmade:
                 return HouseParameter.CheeseMoldMilk;
@@ -118,7 +139,7 @@ public class House {
         }
     }
 
-    public String getUpQualMilkText(){
+    public String getUpQualMilkText() {
         switch (qual) {
             case Handmade:
                 return Integer.toString(HouseParameter.CheeseMoldMilk);
@@ -132,8 +153,8 @@ public class House {
                 return "NOUSE";
         }
     }
-    
-    public int getUpQualTime(){
+
+    public int getUpQualTime() {
         switch (qual) {
             case Handmade:
                 return HouseParameter.CheeseMoldTime;
@@ -154,25 +175,43 @@ public class House {
         this.qual = qual;
     }
 
-    public void setOwner(boolean owner) {
-        this.owner = owner;
+    // public void setOwner(boolean owner) {
+    // this.owner = owner;
+    // }
+    //
+    // public boolean isOwnerLeft() {// for occqoo
+    // return owner;
+    // }
+
+    public void setHP(int hP) {
+        HP = hP;
     }
 
-    public boolean isOwnerLeft() {// for occqoo
-        return owner;
+    public int getHP() {
+        return HP;
     }
 
-    public House clone(){
-        House h = new House();
-        h.setProd(prod);
-        h.setQual(qual);
-        h.setOwner(owner);
-        return h;
+    public void decreHP(int a) {
+        HP -= a;
+        if (HP < 0)
+            HP = 0;
+        HPPercent = (byte) Math.ceil(100.0 * HP / getHouseMaxHP());
     }
 
-    byte prod;
-    byte qual;
-    private boolean owner;
+    public void setHPPercent(byte hPPercent) {
+        HPPercent = hPPercent;
+    }
+
+    public byte getHPPercent() {
+        return HPPercent;
+    }
+
+    private byte prod;
+    private byte qual;
+    private byte HPPercent;
+    private int HP;
+
+    // private boolean owner;
 
     public static final byte ForFun = CheeseProdEnum.ForFun;
     public static final byte AfterHours = CheeseProdEnum.AfterHours;
@@ -183,6 +222,37 @@ public class House {
     public static final byte CheeseMold = CheeseQualityEnum.CheeseMold;
     public static final byte FoodChemisty = CheeseQualityEnum.FoodChemisty;
     public static final byte GMO = CheeseQualityEnum.GMO;
+
+    public float getBoader(boolean whichSide) {
+        switch (prod) {
+            case ForFun:
+                if (whichSide) {
+                    return HouseParameter.ForFunBorder;
+                } else {
+                    return (GlobalParameter.MapWidth - HouseParameter.ForFunBorder);
+                }
+            case AfterHours:
+                if (whichSide) {
+                    return HouseParameter.AfterHoursBorder;
+                } else {
+                    return (GlobalParameter.MapWidth - HouseParameter.AfterHoursBorder);
+                }
+            case Bakery:
+                if (whichSide) {
+                    return HouseParameter.BakeryBorder;
+                } else {
+                    return (GlobalParameter.MapWidth - HouseParameter.BakeryBorder);
+                }
+            case FoodFactory:
+                if (whichSide) {
+                    return HouseParameter.FoodFactoryBorder;
+                } else {
+                    return (GlobalParameter.MapWidth - HouseParameter.FoodFactoryBorder);
+                }
+            default:// no use
+                return 0.0F;
+        }
+    }
 
     public static HouseParameter P;
 }

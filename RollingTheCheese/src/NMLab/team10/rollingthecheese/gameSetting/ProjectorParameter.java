@@ -2,7 +2,7 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 class ProjectorParameter {
 
-    static final int TimeInterval = 10000;//ms
+    static final int TimeInterval = 10000;// ms
 
     public static final float BoardSpeed = 1.0F;
     public static final float SlideSpeed = 1.3F;
@@ -18,9 +18,8 @@ class ProjectorParameter {
     static final int RocketTime = 12000;
 
     static class Board {
-        static final float offset;// pixel
-        static final float drawX;
-        static final float drawY;
+        static final float offsetLeft;// pixel
+        static final float offsetRight;// pixel
         static final float startX;
         static final float startY;
         static final float endX;
@@ -31,9 +30,8 @@ class ProjectorParameter {
         // static final float point1X = 70;
         // static final float point1Y = 92;
         static {
-            offset = 202;
-            drawX = 110;
-            drawY = 92;
+            offsetLeft = 202;
+            offsetRight = GlobalParameter.MapWidth - offsetLeft;
             startX = 110;
             startY = 92;
             endX = 202;
@@ -44,19 +42,59 @@ class ProjectorParameter {
         }
 
         static float exceedAmount(float d, float radix) {
-            float exceed = (float) (d - (length - radix / 1.414F));
+            float exceed = (float) (d - (length - radix * 0.414F));
             return exceed;
         }
 
-        static float getCheeseX(float d, float radix) {
+        static float getCheeseX(float d, float radix, boolean whichSide) {
             float x = startX + d / 1.414F + radix / 1.414F;
+            if (!whichSide) {// right
+                x = GlobalParameter.MapWidth - x;
+            }
             return x;
         }
 
-        static float getCheeseY(float d, float radix) {
+        static float getCheeseY(float d, float radix, boolean whichSide) {
             float y = startY - d / 1.414F + radix / 1.414F;
             return y;
         }
+
+//        static float getBattleCheeseX(float d, float radix, boolean whichSide) {
+//            float maxD = (length - radix * 0.414F);
+//            float exceed = (float) (d - maxD);
+//            float x = getCheeseX(maxD, radix, whichSide);
+//            x += exceed;
+//            if (!whichSide) {// right
+//                x = GlobalParameter.MapWidth - x;
+//            }
+//            return x;
+//        }
+
+        static float getBattleCheeseX(float exceed, float radix, boolean whichSide) {
+            float x = getCheeseX(getMaxPrepareD(radix), radix, whichSide);
+            x += exceed;
+            if (!whichSide) {// right
+                x = GlobalParameter.MapWidth - x;
+            }
+            return x;
+        }
+
+        static float getMaxPrepareD(float radix){
+            return (length - radix * 0.414F);
+        }
+
+        static float getBattleBorderX(float radix, boolean whichSide){
+            float x = getCheeseX(getMaxPrepareD(radix), radix, whichSide);
+            if (!whichSide) {// right
+                x = GlobalParameter.MapWidth - x;
+            }
+            return x;
+        }
+
+        //no need since it is equal to radix
+//        static float getBattleCheeseY(float d, float radix, boolean whichSide) {
+//            float y = startY - d / 1.414F + radix / 1.414F;
+//            return y;
+//        }
     }
 }
-
