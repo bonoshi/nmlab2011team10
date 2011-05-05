@@ -6,11 +6,13 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
-public class GameView extends SurfaceView implements SurfaceHolder.Callback {
+public class GameView extends View implements SurfaceHolder.Callback {
     
     RollingCheeseActivity father;
     GameDrawThread gameDrawThread;
@@ -28,11 +30,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public GameView(RollingCheeseActivity father) {
         super(father);
         this.father = father;
-        getHolder().addCallback(this);
+        //getHolder().addCallback(this);
         initBitmap(father);
-        gameDrawThread = new GameDrawThread(this, getHolder());
+        gameDrawThread = new GameDrawThread(this);
+        gameDrawThread.isRunning = true;
+        gameDrawThread.start();
         scroll = new ScrollThread();
         scroll.start();
+        
 
     }
 
@@ -49,8 +54,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         
         
     }
-
-    public void doDraw(Canvas canvas) {
+    //@Override
+    /*public void onDraw(Canvas canvas){
+        super.onDraw(canvas);
+    }*/
+    @Override
+    public void onDraw(Canvas canvas) {
 
         int newX;
         synchronized (scroll) {
@@ -70,7 +79,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         canvas.translate(newX, 0);
       //draw cheese and cow here
         canvas.translate(-newX, 0);
-        
+        //Log.e("draw","fasfa");
         
 
     }

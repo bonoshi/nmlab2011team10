@@ -2,6 +2,7 @@ package NMLab.team10.rollingthecheese;
 
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 public class GameDrawThread extends Thread {
@@ -10,9 +11,9 @@ public class GameDrawThread extends Thread {
     SurfaceHolder surfaceHolder;
     int sleepSpan = 30;
 
-    public GameDrawThread(GameView father,SurfaceHolder holder) {
+    public GameDrawThread(GameView father) {
         this.father = father;
-        this.surfaceHolder = holder;
+
         
     }
     public void run(){
@@ -41,9 +42,10 @@ public class GameDrawThread extends Thread {
             catch(Exception e){
                 e.printStackTrace();          
             }*/
-            Canvas canvas2 = new Canvas();
-            father.doDraw(canvas2);
-            father.draw(canvas2);
+            //Canvas canvas2 = new Canvas();
+            //father.doDraw(canvas2);
+            //Log.e("while","loop");
+            father.postInvalidate();
             try{
                 Thread.sleep(sleepSpan);        
             }
