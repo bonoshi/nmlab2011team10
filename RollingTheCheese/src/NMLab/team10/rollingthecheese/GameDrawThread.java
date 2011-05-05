@@ -9,7 +9,7 @@ public class GameDrawThread extends Thread {
     public boolean isRunning;
     GameView father;
     SurfaceHolder surfaceHolder;
-    int sleepSpan = 30;
+    int sleepSpan = 20;
     
     
     public GameDrawThread(GameView father) {
