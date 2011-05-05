@@ -1,5 +1,7 @@
 package NMLab.team10.rollingthecheese;
 
+import android.util.Log;
+
 public class ScrollThread extends Thread {
     private static final int leftEdge = -800;
     private static final int rightEdge = 0;
@@ -41,7 +43,7 @@ public class ScrollThread extends Thread {
         long cur_time;
         long delta_time;
         while (true) {
-            synchronized (this) {
+                Log.e("V",String.format("%f", V));
                 cur_time = System.nanoTime();
                 delta_time = cur_time - prev_time;
                 prev_time = cur_time;
@@ -60,10 +62,10 @@ public class ScrollThread extends Thread {
                         } else {
                             posX += (fingerX - prev_fingerX);
                         }
-                        V = (double) (fingerX - prev_fingerX)
+                       /* V = (double) (fingerX - prev_fingerX)
                                 / (double) delta_time;
                         if (V > 0.0000002)
-                            V = 0.0000002;
+                            V = 0.0000002;*/
                         prev_fingerX = fingerX;
                     }
                 } else { // run when finger up
@@ -91,7 +93,7 @@ public class ScrollThread extends Thread {
                         V += recover_a * delta_time;
                     }
 
-                }
+                
             }
 
             try {

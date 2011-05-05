@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.VelocityTracker;
 import android.view.View;
 
 public class GameView extends View implements SurfaceHolder.Callback {
@@ -26,17 +27,19 @@ public class GameView extends View implements SurfaceHolder.Callback {
     Bitmap skyBitmap;
     Bitmap buttomBitmap;
     
+    VelocityTracker vTracker; 
     
     public GameView(RollingCheeseActivity father) {
         super(father);
         this.father = father;
         //getHolder().addCallback(this);
         initBitmap(father);
+        scroll = new ScrollThread();
+        scroll.start();
         gameDrawThread = new GameDrawThread(this);
         gameDrawThread.isRunning = true;
         gameDrawThread.start();
-        scroll = new ScrollThread();
-        scroll.start();
+        vTracker = VelocityTracker.obtain();
         
 
     }
@@ -62,9 +65,9 @@ public class GameView extends View implements SurfaceHolder.Callback {
     public void onDraw(Canvas canvas) {
 
         int newX;
-        synchronized (scroll) {
-            newX = scroll.posX;
-        }
+        
+        newX = scroll.posX;
+        
         canvas.drawBitmap(skyBitmap,newX/4-40,0,null);
         canvas.drawBitmap(backgroundBitmap, newX/2-80,0,null);
         canvas.drawBitmap(farmBitmap, newX/2-80,0,null);
@@ -118,6 +121,8 @@ public class GameView extends View implements SurfaceHolder.Callback {
             scroll.fingerX = x;
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             scroll.fingerX = x;
+            vTracker.computeCurrentVelocity(1);
+            scroll.V = vTracker.getXVelocity(); 
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             scroll.isPressing = false;
         }
