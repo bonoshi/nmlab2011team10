@@ -40,6 +40,7 @@ public class GameView extends View implements SurfaceHolder.Callback {
         gameDrawThread.isRunning = true;
         gameDrawThread.start();
         vTracker = VelocityTracker.obtain();
+
         
 
     }
@@ -65,9 +66,9 @@ public class GameView extends View implements SurfaceHolder.Callback {
     public void onDraw(Canvas canvas) {
 
         int newX;
-        
+
         newX = scroll.posX;
-        
+
         canvas.drawBitmap(skyBitmap,newX/4-40,0,null);
         canvas.drawBitmap(backgroundBitmap, newX/2-80,0,null);
         canvas.drawBitmap(farmBitmap, newX/2-80,0,null);

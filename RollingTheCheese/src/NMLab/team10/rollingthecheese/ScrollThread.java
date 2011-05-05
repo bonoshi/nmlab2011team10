@@ -97,7 +97,7 @@ public class ScrollThread extends Thread {
             }
 
             try {
-                Thread.sleep(30);
+                Thread.sleep(100);
             } catch (Exception e) {
                 e.printStackTrace();
             }
