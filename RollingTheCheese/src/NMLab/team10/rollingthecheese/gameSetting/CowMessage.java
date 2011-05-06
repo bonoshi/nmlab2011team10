@@ -2,9 +2,9 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 public class CowMessage {
 
-    public CowMessage(Cow c, short ID) {
+    public CowMessage(Cow c) {
+        ID = c.getID();
         status = c.getStatus();
-        this.ID = ID;
     }
 
     public byte getStatus() {

@@ -53,7 +53,7 @@ public class Farm {
                 return "NOUSE";
         }
     }
-    
+
     public int getUpProdTime() {
         switch (prod) {
             case Grazing:
@@ -63,7 +63,7 @@ public class Farm {
             case Mechanization:
                 return FarmParameter.HormoneTime;
             default:// no use
-                return 0;
+                return Integer.MAX_VALUE;
         }
     }
 

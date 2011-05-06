@@ -1,14 +1,14 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
 public class CheeseMessage {
-    public CheeseMessage(Cheese c, short ID) {
+    public CheeseMessage(Cheese c) {
+        ID = c.getID();
         type = c.getType();
         size = c.getSize();
         HPPercent = (byte) Math.ceil(100.0 * c.getEndurance() / c.getMaxEndurance());
         //spinAngle = c.getSpinAngle();
         x = c.x;
         y = c.y;
-        this.ID = ID;
         this.setFire(c.getFireState());
         this.setPoison(c.getPoisonState());
     }

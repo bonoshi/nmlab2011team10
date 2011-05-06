@@ -3,15 +3,14 @@ package NMLab.team10.rollingthecheese.gameSetting;
 public class Cow {//have display light type
 
     public Cow() {
-        // x = ;
-        // y = ;
-        //setAmount(CowParameter.ProductionAmount);
-        //setInterval(CowParameter.TimeInterval);
+        ID = GlobalID++;
     }
 
-    private static short ID = 0;
-    public static short getID(){
-        return (ID++);
+    private static short GlobalID = 0;
+    private short ID;
+
+    public short getID(){
+        return ID;
     }
 
     private byte status = Normal;
@@ -78,6 +77,14 @@ public class Cow {//have display light type
 //     public boolean isOwnerLeft() {
 //     return owner;
 //     }
+
+    public static void setGlobalID(short globalID) {
+        GlobalID = globalID;
+    }
+
+    public static short getGlobalID() {
+        return GlobalID;
+    }
 
     public static final byte Normal = CowStatusEnum.NORMAL;
     public static final byte Leak = CowStatusEnum.LEAK;

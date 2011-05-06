@@ -21,19 +21,19 @@ class HouseParameter {
 
     //for cheese setting
     public static final float ForFun = 1.5F;
-    public static final int ForFunHP = 500;
+    public static final float ForFunHP = 500;
     public static final float ForFunBorder = 200;
 
     public static final float AfterHours = 1.0F;
-    public static final int AfterHoursHP = 650;
+    public static final float AfterHoursHP = 650;
     public static final float AfterHoursBorder = 200;
 
     public static final float Bakery = 0.6F;
-    public static final int BakeryHP = 1000;
+    public static final float BakeryHP = 1000;
     public static final float BakeryBorder = 200;
 
     public static final float FoodFactory = 0.2F;
-    public static final int FoodFactoryHP = 2000;
+    public static final float FoodFactoryHP = 2000;
     public static final float FoodFactoryBorder = 200;
 
     public static final float Handmade = 1.0F;

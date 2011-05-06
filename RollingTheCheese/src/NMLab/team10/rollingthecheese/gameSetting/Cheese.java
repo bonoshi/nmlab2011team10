@@ -7,6 +7,7 @@ public class Cheese {
     // Cheese a = new Cheese(Cheese.Normal, Cheese.Large, Cheese.Left);
     // public Cheese(byte type, byte size, boolean whichSide) {
     public Cheese(byte type, byte size) {
+        ID = GlobalID++;
         setType(type);
         setSize(size);
         // setOwner(whichSide);
@@ -40,10 +41,11 @@ public class Cheese {
         }
     }
 
-    private static short ID = 0;
+    private static short GlobalID = 0;
+    private short ID;
 
-    public static short getID() {
-        return (ID++);
+    public short getID() {
+        return ID;
     }
 
     // set by constructor
@@ -88,6 +90,12 @@ public class Cheese {
 
     public byte getSize() {
         return size;
+    }
+
+    public void decreEndurance(float endurance) {
+        this.endurance -= endurance;
+        if (this.endurance < 0)
+            this.endurance = 0;
     }
 
     public void setEndurance(float endurance) {
@@ -159,51 +167,69 @@ public class Cheese {
                 break;
             }
             case Casumarzu: {
+                maxEndurance = CheeseParameter.Poison.Endurance;
+                speed = CheeseParameter.Poison.Speed;
                 switch (size) {
                     case Large: {
+                        maxEndurance *= CheeseParameter.Poison.ENLarge;
                         break;
                     }
                     case Medium: {
+                        maxEndurance *= CheeseParameter.Poison.ENMed;
                         break;
                     }
                     case Small: {
+                        maxEndurance *= CheeseParameter.Poison.ENSmall;
                         break;
                     }
                     case Tiny: {
+                        maxEndurance *= CheeseParameter.Poison.ENTiny;
                         break;
                     }
                 }
                 break;
             }
             case Sweaty: {
+                maxEndurance = CheeseParameter.Sweat.Endurance;
+                speed = CheeseParameter.Sweat.Speed;
                 switch (size) {
                     case Large: {
+                        maxEndurance *= CheeseParameter.Sweat.ENLarge;
                         break;
                     }
                     case Medium: {
+                        maxEndurance *= CheeseParameter.Sweat.ENMed;
                         break;
                     }
                     case Small: {
+                        maxEndurance *= CheeseParameter.Sweat.ENSmall;
                         break;
                     }
                     case Tiny: {
+                        maxEndurance *= CheeseParameter.Sweat.ENTiny;
                         break;
                     }
                 }
                 break;
             }
             case Firing: {
+                maxEndurance = CheeseParameter.Fire.Endurance;
+                speed = CheeseParameter.Fire.Speed;
                 switch (size) {
                     case Large: {
+                        maxEndurance *= CheeseParameter.Fire.ENLarge;
                         break;
                     }
                     case Medium: {
+                        maxEndurance *= CheeseParameter.Fire.ENMed;
                         break;
                     }
                     case Small: {
+                        maxEndurance *= CheeseParameter.Fire.ENSmall;
                         break;
                     }
                     case Tiny: {
+                        maxEndurance *= CheeseParameter.Fire.ENTiny;
                         break;
                     }
                 }
@@ -255,6 +281,114 @@ public class Cheese {
 
     }
 
+    public float getNormalDamage() {
+        switch (size) {
+            case Large: {
+                return CheeseParameter.Normal.DamageLarge;
+            }
+            case Medium: {
+                return CheeseParameter.Normal.DamageMed;
+            }
+            case Small: {
+                return CheeseParameter.Normal.DamageSmall;
+            }
+            case Tiny: {
+                return CheeseParameter.Normal.DamageTiny;
+            }
+        }
+        return 0.0F;
+    }
+
+    public float getPoisonDamage() {
+        switch (size) {
+            case Large: {
+                return CheeseParameter.Poison.DamageLarge;
+            }
+            case Medium: {
+                return CheeseParameter.Poison.DamageMed;
+            }
+            case Small: {
+                return CheeseParameter.Poison.DamageTiny;
+            }
+            case Tiny: {
+                return CheeseParameter.Poison.DamageSmall;
+            }
+        }
+        return 0.0F;
+    }
+
+    public short getPoisonMaxCount() {
+        switch (size) {
+            case Large: {
+                return CheeseParameter.Poison.PoisonLargeCount;
+            }
+            case Medium: {
+                return CheeseParameter.Poison.PoisonMedCount;
+            }
+            case Small: {
+                return CheeseParameter.Poison.PoisonSmallCount;
+            }
+            case Tiny: {
+                return CheeseParameter.Poison.PoisonSmallCount;
+            }
+        }
+        return 0;
+    }
+
+    public float getSweatyRange() {
+        switch (size) {
+            case Large: {
+                return CheeseParameter.Sweat.RangeLarge;
+            }
+            case Medium: {
+                return CheeseParameter.Sweat.RangeMed;
+            }
+            case Small: {
+                return CheeseParameter.Sweat.RangeSmall;
+            }
+            case Tiny: {
+                return CheeseParameter.Sweat.RangeTiny;
+            }
+        }
+        return 0.0F;
+    }
+
+    public float getSweatyDamage() {
+        switch (size) {
+            case Large: {
+                return CheeseParameter.Sweat.DamageLarge;
+            }
+            case Medium: {
+                return CheeseParameter.Sweat.DamageMed;
+            }
+            case Small: {
+                return CheeseParameter.Sweat.DamageTiny;
+            }
+            case Tiny: {
+                return CheeseParameter.Sweat.DamageSmall;
+            }
+        }
+        return 0.0F;
+    }
+
+    public float getFiringDamage() {
+        switch (size) {
+            case Large: {
+                return CheeseParameter.Fire.DamageLarge;
+            }
+            case Medium: {
+                return CheeseParameter.Fire.DamageMed;
+            }
+            case Small: {
+                return CheeseParameter.Fire.DamageTiny;
+            }
+            case Tiny: {
+                return CheeseParameter.Fire.DamageSmall;
+            }
+        }
+        return 0.0F;
+    }
+
     public float getMaxEndurance() {
         return maxEndurance;
     }
@@ -268,7 +402,8 @@ public class Cheese {
     // }
 
     public void setPoisonAmount(short poisonAmount) {
-        this.poisonAmount = poisonAmount;
+        if (poisonAmount > this.poisonAmount)
+            this.poisonAmount = poisonAmount;
     }
 
     public short getPoisonAmount() {
@@ -414,7 +549,7 @@ public class Cheese {
             if (whichSide) {
                 x -= d;
                 float exceed = (x - p.getBattleBorderX(d, whichSide));
-                if(exceed < 0.0F){
+                if (exceed < 0.0F) {
                     joinBattle = false;
                     float maxPrepareD = p.getMaxPrepareD(radix);
                     prepareD = maxPrepareD + exceed;
@@ -424,7 +559,7 @@ public class Cheese {
             } else {
                 x += d;
                 float exceed = (p.getBattleBorderX(d, whichSide) - x);
-                if(exceed < 0.0F){
+                if (exceed < 0.0F) {
                     joinBattle = false;
                     float maxPrepareD = p.getMaxPrepareD(radix);
                     prepareD = maxPrepareD + exceed;

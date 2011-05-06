@@ -79,7 +79,7 @@ public class House {
         }
     }
 
-    public int getHouseMaxHP() {
+    public float getHouseMaxHP() {
         switch (prod) {
             case ForFun:
                 return HouseParameter.ForFunHP;
@@ -183,15 +183,15 @@ public class House {
     // return owner;
     // }
 
-    public void setHP(int hP) {
+    public void setHP(float hP) {
         HP = hP;
     }
 
-    public int getHP() {
+    public float getHP() {
         return HP;
     }
 
-    public void decreHP(int a) {
+    public void decreHP(float a) {
         HP -= a;
         if (HP < 0)
             HP = 0;
@@ -209,7 +209,9 @@ public class House {
     private byte prod;
     private byte qual;
     private byte HPPercent;
-    private int HP;
+    private float HP;
+    private boolean isBump;
+//    private boolean isSweat;
 
     // private boolean owner;
 
@@ -253,6 +255,22 @@ public class House {
                 return 0.0F;
         }
     }
+
+    public void setBump(boolean isBump) {
+        this.isBump = isBump;
+    }
+
+    public boolean isBump() {
+        return isBump;
+    }
+
+//    public void setSweat(boolean isSweat) {
+//        this.isSweat = isSweat;
+//    }
+//
+//    public boolean isSweat() {
+//        return isSweat;
+//    }
 
     public static HouseParameter P;
 }

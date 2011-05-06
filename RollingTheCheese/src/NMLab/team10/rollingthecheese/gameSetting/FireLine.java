@@ -5,6 +5,7 @@ import java.util.LinkedList;
 public class FireLine {// have display light type
 
     public FireLine(Cheese c, byte type, float x) {
+        ID = GlobalID++;
         this.fireCheese = c;
         this.type = type;
         this.startX = x;
@@ -22,6 +23,13 @@ public class FireLine {// have display light type
             default:
                 break;
         }
+    }
+
+    private static short GlobalID = 0;
+    private short ID;
+
+    public short getID() {
+        return ID;
     }
 
     public void refresh() {
@@ -107,10 +115,6 @@ public class FireLine {// have display light type
     // return owner;
     // }
 
-    public static short getID() {
-        return (ID++);
-    }
-
     public void setEndX(float endX) {
         this.endX = endX;
     }
@@ -140,7 +144,6 @@ public class FireLine {// have display light type
         }
     }
 
-    private static short ID = 0;
     private byte type;
     private float startX;
     private float endX;

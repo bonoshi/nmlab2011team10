@@ -2,11 +2,11 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 public class FireLineMessage {
 
-    public FireLineMessage(FireLine f, short ID) {
+    public FireLineMessage(FireLine f) {
+        ID = f.getID();
         type = f.getType();
         startX = f.getStartX();
         setEndX(f.getEndX());
-        this.ID = ID;
     }
 
     public byte getType() {// Small, Medium, Large

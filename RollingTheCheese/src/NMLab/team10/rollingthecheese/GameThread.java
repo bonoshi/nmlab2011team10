@@ -8,9 +8,12 @@ public class GameThread extends Thread {
     public GameThread(RollingCheeseActivity father) {
         this.father = father;
     }
+
+
     public void run(){
         while(true){
-           
+
         }
     }
+
 }
