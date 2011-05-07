@@ -2,7 +2,14 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 public class FireLineDisplay {
     public FireLineDisplay(FireLineMessage flm) {
-        this.fireLineMessage = flm;
+        this.setFireLineMessage(flm);
     }
-    FireLineMessage fireLineMessage;
+    public void setFireLineMessage(FireLineMessage fireLineMessage) {
+        this.fireLineMessage = fireLineMessage;
+    }
+    public FireLineMessage getFireLineMessage() {
+        return fireLineMessage;
+    }
+    private FireLineMessage fireLineMessage;
+
 }

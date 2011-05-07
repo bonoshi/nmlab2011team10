@@ -2,7 +2,13 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 public class CheeseDisplay {
     public CheeseDisplay(CheeseMessage cm) {
-        this.cheeseMessage = cm;
+        this.setCheeseMessage(cm);
     }
-    CheeseMessage cheeseMessage;
+    public void setCheeseMessage(CheeseMessage cheeseMessage) {
+        this.cheeseMessage = cheeseMessage;
+    }
+    public CheeseMessage getCheeseMessage() {
+        return cheeseMessage;
+    }
+    private CheeseMessage cheeseMessage;
 }

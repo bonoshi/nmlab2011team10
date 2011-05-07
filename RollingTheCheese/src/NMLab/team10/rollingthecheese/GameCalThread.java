@@ -17,11 +17,14 @@ public class GameCalThread extends Thread {
     private boolean pause = false;
     private boolean stop = false;
 
+    private boolean hasNewData = false;
+
     public GameCalThread(RollingCheeseActivity father, ServerGameSetting sgs) {
         this.father = father;
         this.setting = sgs;
         eventCenter = new EventQueueCenter(sgs);
         synMessageData = new SynMessageData(sgs, eventCenter, Right);
+        displayData = new DisplayData();
     }
 
     public void run() {
@@ -54,9 +57,9 @@ public class GameCalThread extends Thread {
             // Step 5: fetch event
             eventCenter.fetchEvent();
 
-            //Step 6: Time Elapsing
-            eventCenter.timeElapsing();//cheese, cow and construction time
-            setting.timeElapsing();//time++, milk++, takeAction()
+            // Step 6: Time Elapsing
+            eventCenter.timeElapsing();// cheese, cow and construction time
+            setting.timeElapsing();// time++, milk++, takeAction()
         }
     }
 
@@ -98,6 +101,16 @@ public class GameCalThread extends Thread {
 
     public DisplayData getDisplayData() {
         return displayData;
+    }
+
+    // for blue-tooth only, hasNewData() for displayData is in the displayData
+    public boolean hasNewData() {
+        return hasNewData;
+    }
+
+    // for blue-tooth only, acceptData() for displayData is in the displayData
+    public void acceptData() {
+        this.hasNewData = false;
     }
 
     public static final boolean Right = false;

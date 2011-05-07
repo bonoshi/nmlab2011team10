@@ -85,6 +85,87 @@ public class SynMessageData {
         }
     }
 
+    public int getTime() {
+        return time;
+    }
+
+    public byte getClimate() {
+        return climate;
+    }
+
+    public byte getBackground() {
+        return background;
+    }
+
+    public Projector getLeftProjector() {
+        return leftProjector;
+    }
+
+    public Projector getRightProjector() {
+        return rightProjector;
+    }
+
+    public HouseMessage getLeftHouse() {
+        return leftHouse;
+    }
+
+    public HouseMessage getRightHouse() {
+        return rightHouse;
+    }
+
+    public Farm getLeftFarm() {
+        return leftFarm;
+    }
+
+    public Farm getRightFarm() {
+        return rightFarm;
+    }
+
+    public int getLeftMilk() {
+        return leftMilk;
+    }
+
+    public int getRightMilk() {
+        return rightMilk;
+    }
+
+    public byte getLeftHouseHPPercent() {
+        return leftHouseHPPercent;
+    }
+
+    public byte getRightHouseHPPercent() {
+        return rightHouseHPPercent;
+    }
+
+    public LinkedList<CheeseMessage> getLeftCheeseList() {
+        return leftCheeseList;
+    }
+
+    public LinkedList<CheeseMessage> getRightCheeseList() {
+        return rightCheeseList;
+    }
+
+    public LinkedList<CowMessage> getLeftCowList() {
+        return leftCowList;
+    }
+
+    public LinkedList<CowMessage> getRightCowList() {
+        return rightCowList;
+    }
+
+    public LinkedList<FireLineMessage> getLeftFireList() {
+        return leftFireList;
+    }
+
+    public LinkedList<FireLineMessage> getRightFireList() {
+        return rightFireList;
+    }
+
+    public ButtonD getButtonD() {
+        return buttonD;
+    }
+
+
     public static final boolean Right = false;
     public static final boolean Left = true;
 }
