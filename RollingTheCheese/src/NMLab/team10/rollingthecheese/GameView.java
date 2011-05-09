@@ -77,7 +77,7 @@ public class GameView extends View  {
         canvas.drawBitmap(grassBitmap, newX-160,430, null);
 
 
-        canvas.drawBitmap(buttomBitmap, newX + 5, 10, null);
+        canvas.drawBitmap(buttomBitmap, 5, 10, null);
         //canvas.translate(newX, 0);
         canvas.drawBitmap(buttomBitmap, newX + 100, 200, null);
         //canvas.translate(-newX, 0);
@@ -86,11 +86,14 @@ public class GameView extends View  {
 
     }
 
+    
+    int alpha = 0;
 
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int x = (int) event.getX();
+        int y = (int) event.getY();
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             scroll.isPressing = true;
             scroll.fingerX = x;
