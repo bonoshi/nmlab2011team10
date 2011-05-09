@@ -11,11 +11,11 @@ import android.view.VelocityTracker;
 import android.view.View;
 
 public class GameView extends View  {
-    
+
     RollingCheeseActivity father;
     GameDrawThread gameDrawThread;
     ScrollThread scroll;
-    
+
     Bitmap backgroundBitmap;
     Bitmap farmBitmap;
     Bitmap grassBitmap;
@@ -23,9 +23,11 @@ public class GameView extends View  {
     Bitmap wood_slideBitmap;
     Bitmap skyBitmap;
     Bitmap buttomBitmap;
-    
-    VelocityTracker vTracker; 
-    
+
+    Bitmap testR;
+
+    VelocityTracker vTracker;
+
     public GameView(RollingCheeseActivity father) {
         super(father);
         this.father = father;
@@ -37,7 +39,7 @@ public class GameView extends View  {
         gameDrawThread.start();
         vTracker = VelocityTracker.obtain();
 
-        
+
 
     }
 
@@ -51,8 +53,9 @@ public class GameView extends View  {
         houseBitmap = BitmapFactory.decodeResource(r, R.drawable.house);
         wood_slideBitmap = BitmapFactory.decodeResource(r, R.drawable.wood_slide);
         skyBitmap = BitmapFactory.decodeResource(r, R.drawable.sky);
-        
-        
+
+        testR = BitmapFactory.decodeResource(r, R.drawable.rectangle);
+
     }
     //@Override
     /*public void onDraw(Canvas canvas){
@@ -72,14 +75,14 @@ public class GameView extends View  {
         canvas.drawBitmap(wood_slideBitmap, newX -100,275, null);
         canvas.drawBitmap(wood_slideBitmap, newX +1420,275, null);
         canvas.drawBitmap(grassBitmap, newX-160,430, null);
-        
-        
-        canvas.drawBitmap(buttomBitmap, 5, 10, null);
-        canvas.translate(newX, 0);
-        //draw cheese and cow here
-        canvas.translate(-newX, 0);
 
-        
+
+        canvas.drawBitmap(buttomBitmap, newX + 5, 10, null);
+        //canvas.translate(newX, 0);
+        canvas.drawBitmap(buttomBitmap, newX + 100, 200, null);
+        //canvas.translate(-newX, 0);
+
+
 
     }
 
@@ -99,7 +102,7 @@ public class GameView extends View  {
             scroll.fingerX = x;
             vTracker.addMovement(event);
             vTracker.computeCurrentVelocity(1);
-            scroll.V = vTracker.getXVelocity(); 
+            scroll.V = vTracker.getXVelocity();
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
             scroll.isPressing = false;
         }
