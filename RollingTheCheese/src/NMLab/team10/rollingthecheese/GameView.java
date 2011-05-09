@@ -6,6 +6,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -67,6 +69,13 @@ public class GameView extends View  {
         int newX;
 
         newX = scroll.posX;
+
+        Paint paint = new Paint();
+        paint.setColor(Color.RED);
+        paint.setTextSize(30.0F);
+
+        String scrollPosition = Integer.toString(newX);
+
         canvas.drawBitmap(skyBitmap,newX/4-40,0,null);
         canvas.drawBitmap(backgroundBitmap, newX/2-80,0,null);
         canvas.drawBitmap(farmBitmap, newX/2-80,0,null);
@@ -80,13 +89,14 @@ public class GameView extends View  {
         canvas.drawBitmap(buttomBitmap, 5, 10, null);
         //canvas.translate(newX, 0);
         canvas.drawBitmap(buttomBitmap, newX + 100, 200, null);
+        canvas.drawText(scrollPosition, 600, 10, paint);
         //canvas.translate(-newX, 0);
 
 
 
     }
 
-    
+
     int alpha = 0;
 
 
