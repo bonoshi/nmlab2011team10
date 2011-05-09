@@ -1,4 +1,6 @@
-package NMLab.team10.rollingthecheese.gameSetting;
+package NMLab.team10.rollingthecheese.displayData;
+
+import NMLab.team10.rollingthecheese.gameSetting.FireLineMessage;
 
 public class FireLineDisplay {
     public FireLineDisplay(FireLineMessage flm) {

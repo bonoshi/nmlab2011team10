@@ -38,7 +38,7 @@ class ProjectorParameter {
             endY = 0;
             angelX = 0.3825F;
             angelY = 0.9239F;
-            length = (1.414F * (endY - endX));
+            length = (1.414F * (endX - startX));
         }
 
         static float exceedAmount(float d, float radix) {

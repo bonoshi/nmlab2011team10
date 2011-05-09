@@ -509,7 +509,7 @@ public class Cheese {
         if (size == 0) {
             return false;
         } else {
-            Cheese c = list.get(size);
+            Cheese c = list.get(size-1);
             if (Cheese.distance(this, c) >= (this.getRadix() + c.getRadix()))
                 return false;
             return true;
@@ -527,7 +527,7 @@ public class Cheese {
                 y = p.getCheeseY(accumD, radix, whichSide);
             } else {
                 joinBattle = true;
-                x = p.getBattleCheeseX(accumD, radix, whichSide);
+                x = p.getBattleCheeseX(exceed, radix, whichSide);
                 y = radix;
             }
         } else {
@@ -613,16 +613,3 @@ public class Cheese {
     public static final boolean Left = true;
 }
 
-class CheeseSizeEnum {
-    public static final byte Large = 0;
-    public static final byte Medium = 1;
-    public static final byte Small = 2;
-    public static final byte Tiny = 3;
-}
-
-class CheeseEnum {
-    public static final byte Original = 0;
-    public static final byte Poison = 1;
-    public static final byte Sweaty = 2;
-    public static final byte Firing = 3;
-}

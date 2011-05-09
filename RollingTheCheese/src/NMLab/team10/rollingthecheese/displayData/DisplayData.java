@@ -1,8 +1,19 @@
-package NMLab.team10.rollingthecheese.gameSetting;
+package NMLab.team10.rollingthecheese.displayData;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
+
+import android.graphics.Canvas;
+
+import NMLab.team10.rollingthecheese.gameSetting.ButtonD;
+import NMLab.team10.rollingthecheese.gameSetting.CheeseMessage;
+import NMLab.team10.rollingthecheese.gameSetting.CowMessage;
+import NMLab.team10.rollingthecheese.gameSetting.Farm;
+import NMLab.team10.rollingthecheese.gameSetting.FireLineMessage;
+import NMLab.team10.rollingthecheese.gameSetting.HouseMessage;
+import NMLab.team10.rollingthecheese.gameSetting.Projector;
+import NMLab.team10.rollingthecheese.gameSetting.SynMessageData;
 
 public class DisplayData {
 
@@ -254,6 +265,14 @@ public class DisplayData {
 
     public ButtonD getButtonD() {
         return smd.getButtonD();
+    }
+
+    public void drawCheese(boolean whichSide, Canvas canvas){
+        LinkedList<CheeseDisplay> cList = (whichSide) ? leftCheeseList : rightCheeseList;
+        for (Iterator<CheeseDisplay> iterator = cList.iterator(); iterator.hasNext();) {
+            CheeseDisplay cheeseDisplay = (CheeseDisplay) iterator.next();
+            cheeseDisplay.draw(whichSide, canvas);
+        }
     }
 
 }

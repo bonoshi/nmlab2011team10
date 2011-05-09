@@ -27,20 +27,20 @@ public class ServerGameSetting {
     private House rightHouse = new House();
     private Farm leftFarm = new Farm();
     private Farm rightFarm = new Farm();
-    private int leftMilk = 100;
-    private int rightMilk = 100;
+    private int leftMilk = GlobalParameter.initialMilk;
+    private int rightMilk = GlobalParameter.initialMilk;
 
     // setting relating to destruction done to farm
     private DestructState leftDestruct = new DestructState();
     private DestructState rightDestruct = new DestructState();
 
     // dynamic object
-    private LinkedList<Cheese> leftCheeseList;
-    private LinkedList<Cheese> rightCheeseList;
-    private LinkedList<Cow> leftCowList;
-    private LinkedList<Cow> rightCowList;
-    private LinkedList<FireLine> leftFireList;
-    private LinkedList<FireLine> rightFireList;
+    private LinkedList<Cheese> leftCheeseList = new LinkedList<Cheese>();
+    private LinkedList<Cheese> rightCheeseList = new LinkedList<Cheese>();
+    private LinkedList<Cow> leftCowList = new LinkedList<Cow>();
+    private LinkedList<Cow> rightCowList = new LinkedList<Cow>();
+    private LinkedList<FireLine> leftFireList = new LinkedList<FireLine>();
+    private LinkedList<FireLine> rightFireList = new LinkedList<FireLine>();
 
     public int getTime() {
         return time;
@@ -189,6 +189,7 @@ public class ServerGameSetting {
     public void timeElapsing() {
         // Time++
         time += GlobalParameter.FramePeriod;
+        time %= GlobalParameter.TimePerDay;
         isNight = GlobalParameter.isNight(time);
         // Milk
         milkIncrease(1.0F, Left);
@@ -321,7 +322,7 @@ public class ServerGameSetting {
                 Cheese leftC = leftCheeseList.getFirst();
                 boolean leftJoinBattle = leftC.isJoinBattle();// for fire
                 leftC.moveByDistance(leftC.getSpeed(), Left, this.getLeftProjector());
-                if (!leftJoinBattle && leftC.isJoinBattle()) {// for fire
+                if (!leftJoinBattle && leftC.isJoinBattle() && leftC.getType()==Cheese.Firing) {// for fire
                     FireLine f = new FireLine(leftC, FireLine.getFireSFromCheese(leftC), this
                             .getLeftProjector().getBattleBorderX(leftC.getRadix(), Left));
                     leftFireList.add(f);
@@ -341,7 +342,7 @@ public class ServerGameSetting {
                 Cheese rightC = rightCheeseList.getFirst();
                 boolean rightJoinBattle = rightC.isJoinBattle();// for fire
                 rightC.moveByDistance(rightC.getSpeed(), Right, this.getRightProjector());
-                if (!rightJoinBattle && rightC.isJoinBattle()) {// for fire
+                if (!rightJoinBattle && rightC.isJoinBattle() && rightC.getType()==Cheese.Firing) {// for fire
                     FireLine f = new FireLine(rightC, FireLine.getFireSFromCheese(rightC), this
                             .getRightProjector().getBattleBorderX(rightC.getRadix(), Right));
                     rightFireList.add(f);
@@ -533,7 +534,7 @@ public class ServerGameSetting {
             }
         }
 
-        if (!joinBattle && back.isJoinBattle()) {
+        if (!joinBattle && back.isJoinBattle() && back.getType()==Cheese.Firing) {
             FireLine f = new FireLine(back, FireLine.getFireSFromCheese(back), p.getBattleBorderX(
                     back.getRadix(), whichSide));
             if (whichSide) {
@@ -557,8 +558,9 @@ public class ServerGameSetting {
     private void removeDeadFireLine(LinkedList<FireLine> list) {
         for (Iterator<FireLine> iterator = list.iterator(); iterator.hasNext();) {
             FireLine fireLine = (FireLine) iterator.next();
-            if (fireLine.isDead())
-                list.remove();
+            boolean temp = fireLine.isDead();
+            if (temp)
+                iterator.remove();
         }
     }
 
