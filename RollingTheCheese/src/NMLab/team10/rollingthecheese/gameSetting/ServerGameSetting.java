@@ -799,13 +799,6 @@ class BackGroundEnum {
     public static final byte SpringFarm = 0;
 };
 
-class ClimateEnum {
-    public static final byte Sunny = 0;
-    public static final byte Cloudy = 1;
-    public static final byte Rainy = 2;
-    public static final byte Snowy = 3;
-};
-
 class ProjectorEnum {// according to projector
     public static final byte Board = 0;
     public static final byte Slide = 1;

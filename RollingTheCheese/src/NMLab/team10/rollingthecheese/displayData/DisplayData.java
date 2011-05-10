@@ -6,7 +6,6 @@ import java.util.LinkedList;
 
 import android.graphics.Canvas;
 
-import NMLab.team10.rollingthecheese.gameSetting.ButtonD;
 import NMLab.team10.rollingthecheese.gameSetting.CheeseMessage;
 import NMLab.team10.rollingthecheese.gameSetting.CowMessage;
 import NMLab.team10.rollingthecheese.gameSetting.Farm;
@@ -263,7 +262,7 @@ public class DisplayData {
         return smd.getRightFireList();
     }
 
-    public ButtonD getButtonD() {
+    public ButtonDisplay getButtonD() {
         return smd.getButtonD();
     }
 

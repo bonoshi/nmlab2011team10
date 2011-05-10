@@ -1,10 +1,11 @@
-package NMLab.team10.rollingthecheese.gameSetting;
+package NMLab.team10.rollingthecheese.displayData;
 
 import NMLab.team10.rollingthecheese.event.EventEnum;
 import NMLab.team10.rollingthecheese.event.EventQueue;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
+import NMLab.team10.rollingthecheese.gameSetting.DestructState;
 
-public class ButtonD {
+public class ButtonDisplay {
     // Cow Button => get from cow queue
     public byte cowPercent = 100;
 
@@ -48,8 +49,8 @@ public class ButtonD {
     public boolean slowCheeseDisplay = false;
     public boolean milkDisplay = false;
 
-    public static ButtonD createButtonD(EventQueueCenter eqc, DestructState ds, boolean whichSide) {
-        ButtonD b = new ButtonD();
+    public static ButtonDisplay createButtonD(EventQueueCenter eqc, DestructState ds, boolean whichSide) {
+        ButtonDisplay b = new ButtonDisplay();
         EventQueue cowQ = null;
         EventQueue chQ = null;
         EventQueue conQ = null;

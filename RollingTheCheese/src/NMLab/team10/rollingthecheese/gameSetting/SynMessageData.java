@@ -2,6 +2,7 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 import java.util.LinkedList;
 
+import NMLab.team10.rollingthecheese.displayData.ButtonDisplay;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 
 public class SynMessageData {
@@ -28,7 +29,7 @@ public class SynMessageData {
     LinkedList<FireLineMessage> leftFireList = new LinkedList<FireLineMessage>();
     LinkedList<FireLineMessage> rightFireList = new LinkedList<FireLineMessage>();
 
-    ButtonD buttonD = new ButtonD();
+    ButtonDisplay buttonD = new ButtonDisplay();
 
     public SynMessageData(ServerGameSetting s, EventQueueCenter eqc, boolean whichSide) {
         refreshData(s, eqc, whichSide);
@@ -57,9 +58,9 @@ public class SynMessageData {
         createFireMessage(rightFireList, s.getRightFireList());
 
         if (whichSide) {
-            this.buttonD = ButtonD.createButtonD(eqc, s.getLeftDestruct(), whichSide);
+            this.buttonD = ButtonDisplay.createButtonD(eqc, s.getLeftDestruct(), whichSide);
         } else {
-            this.buttonD = ButtonD.createButtonD(eqc, s.getRightDestruct(), whichSide);
+            this.buttonD = ButtonDisplay.createButtonD(eqc, s.getRightDestruct(), whichSide);
         }
 
     }
@@ -161,7 +162,7 @@ public class SynMessageData {
         return rightFireList;
     }
 
-    public ButtonD getButtonD() {
+    public ButtonDisplay getButtonD() {
         return buttonD;
     }
 

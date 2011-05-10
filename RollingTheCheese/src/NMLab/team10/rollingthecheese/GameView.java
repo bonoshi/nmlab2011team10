@@ -1,6 +1,10 @@
 package NMLab.team10.rollingthecheese;
 
+import java.util.Date;
+
+import NMLab.team10.rollingthecheese.displayData.CloudDisplay;
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
+import NMLab.team10.rollingthecheese.displayData.Climate;
 import NMLab.team10.rollingthecheese.event.EventEnum;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 import NMLab.team10.rollingthecheese.gameSetting.Cheese;
@@ -99,8 +103,7 @@ public class GameView extends View {
     Paint paintInfo = new Paint();
     Paint paintMilk = new Paint();
 
-    float cloud_x = 0;
-    float cloud_y = 80;
+    Date timeLastFrame = new Date(System.currentTimeMillis());
 
     @Override
     public void onDraw(Canvas canvas) {
@@ -112,6 +115,11 @@ public class GameView extends View {
         String scrollPosition = Integer.toString(newX);
 
         canvas.drawBitmap(skyBitmap, newX / 4 - 40, 0, null);
+        
+        CloudDisplay.updateCloud();
+        Climate.modifyWind(displayData.getClimate());
+        CloudDisplay.draw(canvas, newX / 2 - 80);
+        
         canvas.translate(0, 50);
         canvas.drawBitmap(backgroundBitmap, newX / 2 - 80, 0, null);
         canvas.drawBitmap(farmBitmap, newX / 2 - 80, 0, null);
@@ -123,24 +131,24 @@ public class GameView extends View {
         canvas.drawBitmap(grassBitmap, newX - 160, 430, null);
 
         // below is for all dynamic objects
-        if (!displayData.hasNewData()) {
-            return;
-        } else {
-            displayData.acceptData();
-        }
+//        if (!displayData.hasNewData()) {
+//            return;
+//        } else {
+//            displayData.acceptData();
+//        }
 
-        moveCloud();
-        modifyWind();
+        Date timeCurrentFrame = new Date(System.currentTimeMillis());
+        float fps = 1000/(timeCurrentFrame.getTime() - timeLastFrame.getTime());
+        timeLastFrame = timeCurrentFrame;
 
         // for absolute coordinate system graphics
         canvas.translate(newX, 0);
         // for scene object
-        canvas.drawBitmap(clould1, cloud_x - 200, cloud_y, null);
 
         // for game object
         displayData.drawCheese(Cheese.Left, canvas);
         displayData.drawCheese(Cheese.Right, canvas);
-        
+
         // end of absolute coordinate system graphics
         canvas.translate(-newX, 0);
 
@@ -150,48 +158,12 @@ public class GameView extends View {
         canvas.drawText("(x,y)=(" + this.x + "," + this.y + ")", 570, 420, paintInfo);
         canvas.drawText(Integer.toString(displayData.getLeftMilk()), 494, 61, paintMilk);
         canvas.drawText("Time=" + gct.getDisplayData().getTime(), 570, 30, paintInfo);
+        canvas.drawText("FPS=" + fps, 570, 60, paintInfo);
 
     }
 
     int x = 0;
     int y = 0;
-    int wind = 2;
-
-    private void moveCloud() {
-        cloud_x += wind;
-        cloud_x %= 1800;
-        double rand2 = Math.random();
-        if (rand2 > 0.9) {
-            cloud_y += 1;
-        } else if (rand2 < 0.1) {
-            cloud_y -= 1;
-        }
-        if (cloud_y > 100) {
-            cloud_y -= 1;
-        } else if (cloud_y < 60) {
-            cloud_y += 1;
-        }
-    }
-
-    int windCount = 0;
-
-    private void modifyWind() {
-        windCount++;
-        windCount %= 10;
-        if (windCount == 0) {
-            double rand = Math.random();
-            if (rand > 0.95) {
-                wind += 1;
-            } else if (rand < 0.05) {
-                wind -= 1;
-            }
-            if (wind > 2) {
-                wind -= 1;
-            } else if (wind < -2) {
-                wind += 1;
-            }
-        }
-    }
 
     private static void modifyAlpah(Bitmap b, int alpha) {
         alpha &= 0xFF;
