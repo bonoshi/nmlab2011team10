@@ -1,5 +1,7 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
+import NMLab.team10.rollingthecheese.byteEnum.MilkProdEnum;
+
 public class Farm {
     public Farm() {
         this.setProd(MilkProdEnum.Grazing);

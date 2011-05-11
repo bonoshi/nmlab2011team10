@@ -30,6 +30,8 @@ public class SynMessageData {
     LinkedList<FireLineMessage> rightFireList = new LinkedList<FireLineMessage>();
 
     ButtonDisplay buttonD = new ButtonDisplay();
+    DestructStateMessage leftDSM;
+    DestructStateMessage rightDSM;
 
     public SynMessageData(ServerGameSetting s, EventQueueCenter eqc, boolean whichSide) {
         refreshData(s, eqc, whichSide);
@@ -49,6 +51,9 @@ public class SynMessageData {
         rightFarm = s.getRightFarm().clone();
         leftMilk = s.getLeftMilk();
         rightMilk = s.getRightMilk();
+        
+        leftDSM = new DestructStateMessage(s.getLeftDestruct());
+        rightDSM = new DestructStateMessage(s.getRightDestruct());
 
         createCheeseMessage(leftCheeseList, s.getLeftCheeseList());
         createCheeseMessage(rightCheeseList, s.getRightCheeseList());
@@ -165,7 +170,14 @@ public class SynMessageData {
     public ButtonDisplay getButtonD() {
         return buttonD;
     }
-
+    
+    public DestructStateMessage getLeftDSM() {
+        return leftDSM;
+    }
+    
+    public DestructStateMessage getRightDSM() {
+        return rightDSM;
+    }
 
     public static final boolean Right = false;
     public static final boolean Left = true;

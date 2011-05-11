@@ -1,5 +1,8 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
+import NMLab.team10.rollingthecheese.byteEnum.CheeseProdEnum;
+import NMLab.team10.rollingthecheese.byteEnum.CheeseQualityEnum;
+
 public class House {
     public House() {
         this.setProd(CheeseProdEnum.ForFun);

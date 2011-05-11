@@ -6,10 +6,13 @@ import java.util.LinkedList;
 
 import android.graphics.Canvas;
 
+import NMLab.team10.rollingthecheese.gameSetting.Cheese;
 import NMLab.team10.rollingthecheese.gameSetting.CheeseMessage;
 import NMLab.team10.rollingthecheese.gameSetting.CowMessage;
+import NMLab.team10.rollingthecheese.gameSetting.DestructStateMessage;
 import NMLab.team10.rollingthecheese.gameSetting.Farm;
 import NMLab.team10.rollingthecheese.gameSetting.FireLineMessage;
+import NMLab.team10.rollingthecheese.gameSetting.House;
 import NMLab.team10.rollingthecheese.gameSetting.HouseMessage;
 import NMLab.team10.rollingthecheese.gameSetting.Projector;
 import NMLab.team10.rollingthecheese.gameSetting.SynMessageData;
@@ -26,20 +29,23 @@ public class DisplayData {
 
     public void refresh(SynMessageData smd) {
         this.smd = smd;
-        //Cheese
+        // Cheese
         addAndRefreshCheese(leftCheeseList, smd.getLeftCheeseList(), leftCheeseMap);
         addAndRefreshCheese(rightCheeseList, smd.getRightCheeseList(), rightCheeseMap);
-        //Cow
+        // Cow
         addAndRefreshCow(leftCowList, smd.getLeftCowList(), leftCowMap);
         deleteCow(leftCowList, smd.getLeftCowList(), leftCowMap);
         addAndRefreshCow(rightCowList, smd.getRightCowList(), rightCowMap);
         deleteCow(rightCowList, smd.getRightCowList(), rightCowMap);
-        //FireLine
+        // FireLine
         addAndRefreshFire(leftFireList, smd.getLeftFireList(), leftFireMap);
         deleteFire(leftFireList, smd.getLeftFireList(), leftFireMap);
         addAndRefreshFire(rightFireList, smd.getRightFireList(), rightFireMap);
         deleteFire(rightFireList, smd.getRightFireList(), rightFireMap);
-        //Flag
+        // HouseDisplay
+        leftHouse.setHouse(smd.getLeftHouse());
+        rightHouse.setHouse(smd.getRightHouse());
+        // Flag
         hasNewData = true;
     }
 
@@ -64,6 +70,9 @@ public class DisplayData {
     HashMap<Short, CowDisplay> rightCowMap = new HashMap<Short, CowDisplay>();
     HashMap<Short, FireLineDisplay> leftFireMap = new HashMap<Short, FireLineDisplay>();
     HashMap<Short, FireLineDisplay> rightFireMap = new HashMap<Short, FireLineDisplay>();
+
+    HouseDisplay leftHouse = new HouseDisplay(new HouseMessage(new House()));
+    HouseDisplay rightHouse = new HouseDisplay(new HouseMessage(new House()));
 
     private void addAndRefreshCheese(LinkedList<CheeseDisplay> dList, LinkedList<CheeseMessage> mList,
             HashMap<Short, CheeseDisplay> map) {
@@ -266,7 +275,15 @@ public class DisplayData {
         return smd.getButtonD();
     }
 
-    public void drawCheese(boolean whichSide, Canvas canvas){
+    public DestructStateMessage getLeftDSM() {
+        return smd.getLeftDSM();
+    }
+
+    public DestructStateMessage getRightDSM() {
+        return smd.getRightDSM();
+    }
+
+    public void drawCheese(boolean whichSide, Canvas canvas) {
         LinkedList<CheeseDisplay> cList = (whichSide) ? leftCheeseList : rightCheeseList;
         for (Iterator<CheeseDisplay> iterator = cList.iterator(); iterator.hasNext();) {
             CheeseDisplay cheeseDisplay = (CheeseDisplay) iterator.next();
@@ -274,4 +291,8 @@ public class DisplayData {
         }
     }
 
+    public void drawHouse(Canvas canvas){
+        leftHouse.draw(Cheese.Left, canvas);
+        rightHouse.draw(Cheese.Right, canvas);
+    }
 }

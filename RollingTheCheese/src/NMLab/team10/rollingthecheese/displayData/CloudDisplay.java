@@ -1,11 +1,11 @@
 package NMLab.team10.rollingthecheese.displayData;
 
 import java.util.Iterator;
+import NMLab.team10.rollingthecheese.byteEnum.ClimateEnum;
 import java.util.LinkedList;
 
 import NMLab.team10.rollingthecheese.GameView;
 import NMLab.team10.rollingthecheese.R;
-import NMLab.team10.rollingthecheese.gameSetting.ClimateEnum;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;

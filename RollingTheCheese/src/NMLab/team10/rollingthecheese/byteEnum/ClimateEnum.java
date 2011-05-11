@@ -1,4 +1,4 @@
-package NMLab.team10.rollingthecheese.gameSetting;
+package NMLab.team10.rollingthecheese.byteEnum;
 
 public class ClimateEnum {
     public static final byte Sunny = 0;

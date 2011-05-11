@@ -3,6 +3,10 @@ package NMLab.team10.rollingthecheese.gameSetting;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import NMLab.team10.rollingthecheese.byteEnum.BackGroundEnum;
+import NMLab.team10.rollingthecheese.byteEnum.ClimateEnum;
+import NMLab.team10.rollingthecheese.byteEnum.MilkProdEnum;
+
 public class ServerGameSetting {
 
     public ServerGameSetting() {
@@ -783,7 +787,7 @@ public class ServerGameSetting {
     }
 
     public static final byte Grazing = MilkProdEnum.Grazing;
-    public static final byte Husbandry = MilkProdEnum.Husbandry;
+   public static final byte Husbandry = MilkProdEnum.Husbandry;
     public static final byte Mechanization = MilkProdEnum.Mechanization;
     public static final byte Hormone = MilkProdEnum.Hormone;
 
@@ -794,38 +798,6 @@ public class ServerGameSetting {
     public static final float FollowOffset = GlobalParameter.FollowOffset;
 
 }
-
-class BackGroundEnum {
-    public static final byte SpringFarm = 0;
-};
-
-class ProjectorEnum {// according to projector
-    public static final byte Board = 0;
-    public static final byte Slide = 1;
-    public static final byte Cannon = 2;
-    public static final byte Rocket = 3;
-};
-
-class CheeseProdEnum {// according to house
-    public static final byte ForFun = 0;
-    public static final byte AfterHours = 1;
-    public static final byte Bakery = 2;
-    public static final byte FoodFactory = 3;
-};
-
-class CheeseQualityEnum {// according to house
-    public static final byte Handmade = 0;
-    public static final byte CheeseMold = 1;
-    public static final byte FoodChemisty = 2;
-    public static final byte GMO = 3;
-};
-
-class MilkProdEnum {// according to farm
-    public static final byte Grazing = 0;
-    public static final byte Husbandry = 1;
-    public static final byte Mechanization = 2;
-    public static final byte Hormone = 3;
-};
 
 class HeadCase {
     public static final byte NoBumpHappen = 0;

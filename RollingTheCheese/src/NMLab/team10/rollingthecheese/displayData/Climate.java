@@ -1,6 +1,7 @@
 package NMLab.team10.rollingthecheese.displayData;
 
-import NMLab.team10.rollingthecheese.gameSetting.ClimateEnum;
+import NMLab.team10.rollingthecheese.byteEnum.ClimateEnum;
+
 
 public class Climate {
 

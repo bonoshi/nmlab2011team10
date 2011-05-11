@@ -2,6 +2,10 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 import java.util.LinkedList;
 
+import NMLab.team10.rollingthecheese.byteEnum.CheeseProdEnum;
+import NMLab.team10.rollingthecheese.byteEnum.CheeseQualityEnum;
+import NMLab.team10.rollingthecheese.byteEnum.ProjectorEnum;
+
 public class Cheese {
 
     // Cheese a = new Cheese(Cheese.Normal, Cheese.Large, Cheese.Left);

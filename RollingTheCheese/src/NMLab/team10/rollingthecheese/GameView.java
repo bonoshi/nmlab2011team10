@@ -33,7 +33,6 @@ public class GameView extends View {
     private static Bitmap backgroundBitmap;
     private static Bitmap farmBitmap;
     private static Bitmap grassBitmap;
-    private static Bitmap houseBitmap;
     private static Bitmap wood_slideBitmap;
     private static Bitmap wood_slideBitmap_m;
     private static Bitmap skyBitmap;
@@ -75,7 +74,6 @@ public class GameView extends View {
         buttomBitmap = BitmapFactory.decodeResource(r, R.drawable.buttom);
         farmBitmap = BitmapFactory.decodeResource(r, R.drawable.farm);
         grassBitmap = BitmapFactory.decodeResource(r, R.drawable.grass);
-        houseBitmap = BitmapFactory.decodeResource(r, R.drawable.house);
         wood_slideBitmap = BitmapFactory.decodeResource(r, R.drawable.wood_slide);
         wood_slideBitmap_m = BitmapFactory.decodeResource(r, R.drawable.wood_slide_mirror);
         skyBitmap = BitmapFactory.decodeResource(r, R.drawable.sky);
@@ -115,30 +113,28 @@ public class GameView extends View {
         String scrollPosition = Integer.toString(newX);
 
         canvas.drawBitmap(skyBitmap, newX / 4 - 40, 0, null);
-        
+
         CloudDisplay.updateCloud();
         Climate.modifyWind(displayData.getClimate());
         CloudDisplay.draw(canvas, newX / 2 - 80);
-        
+
         canvas.translate(0, 50);
         canvas.drawBitmap(backgroundBitmap, newX / 2 - 80, 0, null);
         canvas.drawBitmap(farmBitmap, newX / 2 - 80, 0, null);
         canvas.translate(0, -50);
-        canvas.drawBitmap(houseBitmap, newX - 100, 200, null);
-        canvas.drawBitmap(houseBitmap, newX + 1420, 200, null);
         canvas.drawBitmap(wood_slideBitmap, newX - 150, 275, null);
         canvas.drawBitmap(wood_slideBitmap_m, newX + 1470, 275, null);
         canvas.drawBitmap(grassBitmap, newX - 160, 430, null);
 
         // below is for all dynamic objects
-//        if (!displayData.hasNewData()) {
-//            return;
-//        } else {
-//            displayData.acceptData();
-//        }
+        if (!displayData.hasNewData()) {
+            return;
+        } else {
+            displayData.acceptData();
+        }
 
         Date timeCurrentFrame = new Date(System.currentTimeMillis());
-        float fps = 1000/(timeCurrentFrame.getTime() - timeLastFrame.getTime());
+        float fps = 1000 / (timeCurrentFrame.getTime() - timeLastFrame.getTime());
         timeLastFrame = timeCurrentFrame;
 
         // for absolute coordinate system graphics
@@ -148,6 +144,7 @@ public class GameView extends View {
         // for game object
         displayData.drawCheese(Cheese.Left, canvas);
         displayData.drawCheese(Cheese.Right, canvas);
+        displayData.drawHouse(canvas);
 
         // end of absolute coordinate system graphics
         canvas.translate(-newX, 0);

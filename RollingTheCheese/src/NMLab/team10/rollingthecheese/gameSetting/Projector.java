@@ -1,5 +1,7 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
+import NMLab.team10.rollingthecheese.byteEnum.ProjectorEnum;
+
 public class Projector {
     public Projector() {
         this.setType(Board);

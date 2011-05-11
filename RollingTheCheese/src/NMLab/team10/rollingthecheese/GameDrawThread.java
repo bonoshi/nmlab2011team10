@@ -4,7 +4,7 @@ public class GameDrawThread extends Thread {
     public boolean isRunning;
     GameView father;
     GameCalThread gtc;
-    int sleepSpan = 20;
+    int sleepSpan = 10;
 
     public GameDrawThread(GameView father, GameCalThread gct) {
         this.father = father;
