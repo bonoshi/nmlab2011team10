@@ -333,8 +333,8 @@ public class ServerGameSetting {
 
                 }
                 // fix if already bump into the enemy's house
-                if (leftC.x > this.getRightHouse().getBoader(Right) - leftC.getRadix() + BumpOffset) {
-                    leftC.x = this.getRightHouse().getBoader(Right) - leftC.getRadix() + BumpOffset;
+                if (leftC.x > this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix() + BumpOffset) {
+                    leftC.x = this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix() + BumpOffset;
                     leftC.setBump(true);
                     headCase = HeadCase.LeftBumpHouse;
                     rightHouse.setBump(true);
@@ -351,8 +351,8 @@ public class ServerGameSetting {
                             .getRightProjector().getBattleBorderX(rightC.getRadix(), Right));
                     rightFireList.add(f);
                 }
-                if (rightC.x < this.getLeftHouse().getBoader(Left) + rightC.getRadix() - BumpOffset) {
-                    rightC.x = this.getLeftHouse().getBoader(Left) + rightC.getRadix() - BumpOffset;
+                if (rightC.x < this.getLeftHouse().getBoader(Left, rightC.getRadix()) + rightC.getRadix() - BumpOffset) {
+                    rightC.x = this.getLeftHouse().getBoader(Left, rightC.getRadix()) + rightC.getRadix() - BumpOffset;
                     rightC.setBump(true);
                     headCase = HeadCase.RightBumpHouse;
                     leftHouse.setBump(true);
@@ -385,7 +385,7 @@ public class ServerGameSetting {
                 }
 
                 // when left is destroying the house on the right
-                if (leftC.x > this.getRightHouse().getBoader(Right) - leftC.getRadix()) {
+                if (leftC.x > this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix()) {
                     leftC.setBump(true);
                     if (distance > rightMoveAmount) {
                         rightC.moveByDistance(rightMoveAmount, Right, this.getRightProjector());
@@ -398,7 +398,7 @@ public class ServerGameSetting {
                         leftMoveAmount = 0;
                     }
                     // when right is destroying the house on the right
-                } else if (rightC.x < this.getLeftHouse().getBoader(Left) + rightC.getRadix()) {
+                } else if (rightC.x < this.getLeftHouse().getBoader(Left, rightC.getRadix()) + rightC.getRadix()) {
                     rightC.setBump(true);
                     if (distance > leftMoveAmount) {
                         leftC.moveByDistance(leftMoveAmount, Left, this.getLeftProjector());
@@ -424,8 +424,8 @@ public class ServerGameSetting {
                         rightC.moveByDistance(rightMoveAmount, Right, this.getRightProjector());
 
                         // fix if already bump into the enemy's house
-                        if (leftC.x >= this.getRightHouse().getBoader(Right) - leftC.getRadix() + BumpOffset) {
-                            leftC.x = this.getRightHouse().getBoader(Right) - leftC.getRadix() + BumpOffset;
+                        if (leftC.x >= this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix() + BumpOffset) {
+                            leftC.x = this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix() + BumpOffset;
                             // leftMoveAmount = leftC.x -
                             // (this.getRightHouse().getBoader(Right) +
                             // BumpOffset);
@@ -452,12 +452,12 @@ public class ServerGameSetting {
                         leftC.setBump(true);
                         rightC.setBump(true);
                         // fix if already bump into the enemy's house
-                        if (leftC.x >= this.getRightHouse().getBoader(Right) - leftC.getRadix() + BumpOffset) {
-                            leftC.x = this.getRightHouse().getBoader(Right) - leftC.getRadix() + BumpOffset;
+                        if (leftC.x >= this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix() + BumpOffset) {
+                            leftC.x = this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix() + BumpOffset;
                             leftMoveAmount = 0;
                         }
-                        if (rightC.x <= this.getLeftHouse().getBoader(Left) + rightC.getRadix() - BumpOffset) {
-                            rightC.x = this.getLeftHouse().getBoader(Left) + rightC.getRadix() - BumpOffset;
+                        if (rightC.x <= this.getLeftHouse().getBoader(Left, rightC.getRadix()) + rightC.getRadix() - BumpOffset) {
+                            rightC.x = this.getLeftHouse().getBoader(Left, rightC.getRadix()) + rightC.getRadix() - BumpOffset;
                             rightMoveAmount = 0;
                         }
                     }
@@ -654,7 +654,7 @@ public class ServerGameSetting {
                         rightCheeseList.get(j).decreEndurance(damage);
                         toBreak = false;
                     }
-                    if (rightHouse.getBoader(Right) - c.x < range) {
+                    if (rightHouse.getBoader(Right, c.getRadix()) - c.x < range) {
                         rightHouse.decreHP(damage);
                         toBreak = false;
                     }
@@ -674,7 +674,7 @@ public class ServerGameSetting {
                         leftCheeseList.get(j).decreEndurance(damage);
                         toBreak = false;
                     }
-                    if (c.x - leftHouse.getBoader(Left) < range) {
+                    if (c.x - leftHouse.getBoader(Left, c.getRadix()) < range) {
                         leftHouse.decreHP(damage);
                         toBreak = false;
                     }

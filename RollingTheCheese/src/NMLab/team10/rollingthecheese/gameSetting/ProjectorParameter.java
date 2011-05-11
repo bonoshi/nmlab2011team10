@@ -59,31 +59,33 @@ class ProjectorParameter {
             return y;
         }
 
-//        static float getBattleCheeseX(float d, float radix, boolean whichSide) {
-//            float maxD = (length - radix * 0.414F);
-//            float exceed = (float) (d - maxD);
-//            float x = getCheeseX(maxD, radix, whichSide);
-//            x += exceed;
-//            if (!whichSide) {// right
-//                x = GlobalParameter.MapWidth - x;
-//            }
-//            return x;
-//        }
+        // static float getBattleCheeseX(float d, float radix, boolean
+        // whichSide) {
+        // float maxD = (length - radix * 0.414F);
+        // float exceed = (float) (d - maxD);
+        // float x = getCheeseX(maxD, radix, whichSide);
+        // x += exceed;
+        // if (!whichSide) {// right
+        // x = GlobalParameter.MapWidth - x;
+        // }
+        // return x;
+        // }
 
         static float getBattleCheeseX(float exceed, float radix, boolean whichSide) {
             float x = getCheeseX(getMaxPrepareD(radix), radix, whichSide);
-            x += exceed;
-            if (!whichSide) {// right
-                x = GlobalParameter.MapWidth - x;
+            if (whichSide) {
+                x += exceed;
+            } else {
+                x -= exceed;
             }
             return x;
         }
 
-        static float getMaxPrepareD(float radix){
+        static float getMaxPrepareD(float radix) {
             return (length - radix * 0.414F);
         }
 
-        static float getBattleBorderX(float radix, boolean whichSide){
+        static float getBattleBorderX(float radix, boolean whichSide) {
             float x = getCheeseX(getMaxPrepareD(radix), radix, whichSide);
             if (!whichSide) {// right
                 x = GlobalParameter.MapWidth - x;
@@ -91,10 +93,11 @@ class ProjectorParameter {
             return x;
         }
 
-        //no need since it is equal to radix
-//        static float getBattleCheeseY(float d, float radix, boolean whichSide) {
-//            float y = startY - d / 1.414F + radix / 1.414F;
-//            return y;
-//        }
+        // no need since it is equal to radix
+        // static float getBattleCheeseY(float d, float radix, boolean
+        // whichSide) {
+        // float y = startY - d / 1.414F + radix / 1.414F;
+        // return y;
+        // }
     }
 }

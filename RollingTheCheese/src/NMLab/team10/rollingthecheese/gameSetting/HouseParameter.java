@@ -22,7 +22,7 @@ class HouseParameter {
     //for cheese setting
     public static final float ForFun = 1.5F;
     public static final float ForFunHP = 500;
-    public static final float ForFunBorder = 131;
+    public static final float ForFunBorder = 127;
 
     public static final float AfterHours = 1.0F;
     public static final float AfterHoursHP = 650;

@@ -285,13 +285,15 @@ public class DisplayData {
 
     public void drawCheese(boolean whichSide, Canvas canvas) {
         LinkedList<CheeseDisplay> cList = (whichSide) ? leftCheeseList : rightCheeseList;
-        for (Iterator<CheeseDisplay> iterator = cList.iterator(); iterator.hasNext();) {
-            CheeseDisplay cheeseDisplay = (CheeseDisplay) iterator.next();
-            cheeseDisplay.draw(whichSide, canvas);
+        synchronized (cList) {
+            for (Iterator<CheeseDisplay> iterator = cList.iterator(); iterator.hasNext();) {
+                CheeseDisplay cheeseDisplay = (CheeseDisplay) iterator.next();
+                cheeseDisplay.draw(whichSide, canvas);
+            }
         }
     }
 
-    public void drawHouse(Canvas canvas){
+    public void drawHouse(Canvas canvas) {
         leftHouse.draw(Cheese.Left, canvas);
         rightHouse.draw(Cheese.Right, canvas);
     }

@@ -264,6 +264,7 @@ public class House {
             case ForFun:
                 if (whichSide) {
                     return HouseParameter.ForFunBorder + 0.25679F * radix;
+                    //return HouseParameter.ForFunBorder + 0.257F * radix;
                 } else {
                     return (GlobalParameter.MapWidth - (HouseParameter.ForFunBorder + 0.25679F * radix));
                 }

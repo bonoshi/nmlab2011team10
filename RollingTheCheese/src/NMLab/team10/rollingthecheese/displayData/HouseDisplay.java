@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import NMLab.team10.rollingthecheese.GameView;
 import NMLab.team10.rollingthecheese.R;
 import NMLab.team10.rollingthecheese.byteEnum.CheeseProdEnum;
 import NMLab.team10.rollingthecheese.byteEnum.CheeseQualityEnum;
@@ -11,11 +12,13 @@ import NMLab.team10.rollingthecheese.gameSetting.HouseMessage;
 
 public class HouseDisplay {
 
-    public static Resources r;
+    static Resources r = GameView.r;
     private static Bitmap houseBitmap;
+    private static Bitmap houseBitmap_m;
 
     static {
         houseBitmap = BitmapFactory.decodeResource(r, R.drawable.house);
+        houseBitmap_m = BitmapFactory.decodeResource(r, R.drawable.house_mirror);
     }
 
     public HouseDisplay(HouseMessage h) {
@@ -41,12 +44,13 @@ public class HouseDisplay {
     }
 
     public void draw(boolean whichSide, Canvas canvas) {
-        switch (house.getProd()) {
+        HouseMessage tempHouse = this.house;
+        switch (tempHouse.getProd()) {
             case ForFun:
                 if (whichSide) {
-                    canvas.drawBitmap(houseBitmap, -100, 200, null);
+                    canvas.drawBitmap(houseBitmap, -97, 200, null);
                 } else {
-                    canvas.drawBitmap(houseBitmap, 1420, 200, null);
+                    canvas.drawBitmap(houseBitmap_m, 1420, 200, null);
                 }
                 break;
             case AfterHours:
@@ -58,7 +62,7 @@ public class HouseDisplay {
             default:// no use
                 break;
         }
-        switch (house.getQual()) {
+        switch (tempHouse.getQual()) {
             case Handmade:
                 break;
             case CheeseMold:
@@ -85,4 +89,6 @@ public class HouseDisplay {
     private HouseMessage house;
 
     private int animation = 0;
+
+
 }

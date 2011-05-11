@@ -122,6 +122,9 @@ public class GameView extends View {
         canvas.drawBitmap(backgroundBitmap, newX / 2 - 80, 0, null);
         canvas.drawBitmap(farmBitmap, newX / 2 - 80, 0, null);
         canvas.translate(0, -50);
+        canvas.translate(newX, 0);
+        displayData.drawHouse(canvas);
+        canvas.translate(-newX, 0);
         canvas.drawBitmap(wood_slideBitmap, newX - 150, 275, null);
         canvas.drawBitmap(wood_slideBitmap_m, newX + 1470, 275, null);
         canvas.drawBitmap(grassBitmap, newX - 160, 430, null);
@@ -144,7 +147,6 @@ public class GameView extends View {
         // for game object
         displayData.drawCheese(Cheese.Left, canvas);
         displayData.drawCheese(Cheese.Right, canvas);
-        displayData.drawHouse(canvas);
 
         // end of absolute coordinate system graphics
         canvas.translate(-newX, 0);
@@ -205,7 +207,26 @@ public class GameView extends View {
                 if (x < 100) {
                     eqc.addEvent(EventEnum.OriginalCheeseSmall, Cheese.Left);
                     touchScreen = true;
+                } else if (x < 200) {
+                    eqc.addEvent(EventEnum.OriginalCheeseMed, Cheese.Left);
+                    touchScreen = true;
+
+                } else if (x < 300) {
+                    eqc.addEvent(EventEnum.OriginalCheeseLarge, Cheese.Left);
+                    touchScreen = true;
                 }
+                if (x > 700) {
+                    eqc.addEvent(EventEnum.OriginalCheeseSmall, Cheese.Right);
+                    touchScreen = true;
+                } else if (x > 600) {
+                    eqc.addEvent(EventEnum.OriginalCheeseMed, Cheese.Right);
+                    touchScreen = true;
+
+                } else if (x > 500) {
+                    eqc.addEvent(EventEnum.OriginalCheeseLarge, Cheese.Right);
+                    touchScreen = true;
+                }
+
             }
             scroll.isPressing = true;
             scroll.fingerX = x;
