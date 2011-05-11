@@ -214,7 +214,7 @@ public class House {
     private byte HPPercent;
     private float HP;
     private boolean isBump;
-//    private boolean isSweat;
+    // private boolean isSweat;
 
     // private boolean owner;
 
@@ -259,6 +259,37 @@ public class House {
         }
     }
 
+    public float getBoader(boolean whichSide, float radix) {
+        switch (prod) {
+            case ForFun:
+                if (whichSide) {
+                    return HouseParameter.ForFunBorder + 0.25679F * radix;
+                } else {
+                    return (GlobalParameter.MapWidth - (HouseParameter.ForFunBorder + 0.25679F * radix));
+                }
+            case AfterHours:
+                if (whichSide) {
+                    return HouseParameter.AfterHoursBorder;
+                } else {
+                    return (GlobalParameter.MapWidth - HouseParameter.AfterHoursBorder);
+                }
+            case Bakery:
+                if (whichSide) {
+                    return HouseParameter.BakeryBorder;
+                } else {
+                    return (GlobalParameter.MapWidth - HouseParameter.BakeryBorder);
+                }
+            case FoodFactory:
+                if (whichSide) {
+                    return HouseParameter.FoodFactoryBorder;
+                } else {
+                    return (GlobalParameter.MapWidth - HouseParameter.FoodFactoryBorder);
+                }
+            default:// no use
+                return 0.0F;
+        }
+    }
+
     public void setBump(boolean isBump) {
         this.isBump = isBump;
     }
@@ -267,13 +298,13 @@ public class House {
         return isBump;
     }
 
-//    public void setSweat(boolean isSweat) {
-//        this.isSweat = isSweat;
-//    }
-//
-//    public boolean isSweat() {
-//        return isSweat;
-//    }
+    // public void setSweat(boolean isSweat) {
+    // this.isSweat = isSweat;
+    // }
+    //
+    // public boolean isSweat() {
+    // return isSweat;
+    // }
 
     public static HouseParameter P;
 }
