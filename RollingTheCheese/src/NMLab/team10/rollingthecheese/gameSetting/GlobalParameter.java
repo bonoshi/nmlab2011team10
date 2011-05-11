@@ -18,5 +18,29 @@ public class GlobalParameter {
     public static final boolean isNight(int time){
         return (time%TimePerDay > TimeHalfDay);
     }
+
+    public static byte getTimePeriod(int time){
+        if(time>30000){
+            if(time>35000){
+                return Night;
+            }else{
+                return Dusk;
+            }
+        }else{
+            if(time>20000){
+                return Morning;
+            }else if(time>10000){
+                return Noon;
+            }
+            else{
+                return Morning;
+            }
+        }
+    }
+    
+    public static final byte Morning = 0;
+    public static final byte Noon = 1;
+    public static final byte Dusk = 2;
+    public static final byte Night = 3;
 }
 

@@ -23,18 +23,27 @@ class HouseParameter {
     public static final float ForFun = 1.5F;
     public static final float ForFunHP = 500;
     public static final float ForFunBorder = 127;
+    public static final float ForFunSmokeX = 113;
+    //public static final float ForFunSmokeX = 100;
+    public static final float ForFunSmokeY = GlobalParameter.MapHeight - 265;
 
     public static final float AfterHours = 1.0F;
     public static final float AfterHoursHP = 650;
     public static final float AfterHoursBorder = 200;
+    public static final float AfterHoursSmokeX = 200;
+    public static final float AfterHoursSmokeY = GlobalParameter.MapHeight - 200;
 
     public static final float Bakery = 0.6F;
     public static final float BakeryHP = 1000;
     public static final float BakeryBorder = 200;
+    public static final float BakerySmokeX = 200;
+    public static final float BakerySmokeY = GlobalParameter.MapHeight - 200;
 
     public static final float FoodFactory = 0.2F;
     public static final float FoodFactoryHP = 2000;
     public static final float FoodFactoryBorder = 200;
+    public static final float FoodFactorySmokeX = 200;
+    public static final float FoodFactorySmokeY = GlobalParameter.MapHeight - 200;
 
     public static final float Handmade = 1.0F;
     public static final float CheeseMold = 1.2F;

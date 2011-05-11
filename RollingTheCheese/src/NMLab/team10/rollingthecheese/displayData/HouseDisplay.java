@@ -1,5 +1,8 @@
 package NMLab.team10.rollingthecheese.displayData;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -43,6 +46,11 @@ public class HouseDisplay {
         return animation;
     }
 
+    public static final int addSmokeT = 20;
+
+    int addSmokeCounter = 0;
+    byte smokeType = 0;
+
     public void draw(boolean whichSide, Canvas canvas) {
         HouseMessage tempHouse = this.house;
         switch (tempHouse.getProd()) {
@@ -74,6 +82,30 @@ public class HouseDisplay {
             default:// no use
                 break;
         }
+
+        drawSmoke(canvas, whichSide);
+
+        if (++addSmokeCounter > addSmokeT) {
+            if (Math.random() > 0.95) {
+                addSmokeCounter = 0;
+                smokeList.add(new SmokeDisplay(whichSide, smokeType));
+                smokeType++;
+                smokeType %= 4;
+            }
+        }
+        
+        for (Iterator<SmokeDisplay> iterator = smokeList.iterator(); iterator.hasNext();) {
+            SmokeDisplay type = (SmokeDisplay) iterator.next();
+            if(type.isDead)
+                iterator.remove();
+        }
+    }
+
+    private void drawSmoke(Canvas canvas, boolean whichSide) {
+        for (Iterator<SmokeDisplay> iterator = smokeList.iterator(); iterator.hasNext();) {
+            SmokeDisplay temp = (SmokeDisplay) iterator.next();
+            temp.draw(canvas, whichSide);
+        }
     }
 
     public static final byte ForFun = CheeseProdEnum.ForFun;
@@ -87,8 +119,8 @@ public class HouseDisplay {
     public static final byte GMO = CheeseQualityEnum.GMO;
 
     private HouseMessage house;
+    private LinkedList<SmokeDisplay> smokeList = new LinkedList<SmokeDisplay>();
 
     private int animation = 0;
-
 
 }

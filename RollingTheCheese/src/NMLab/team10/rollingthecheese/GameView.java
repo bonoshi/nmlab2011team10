@@ -5,9 +5,12 @@ import java.util.Date;
 import NMLab.team10.rollingthecheese.displayData.CloudDisplay;
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
 import NMLab.team10.rollingthecheese.displayData.Climate;
+import NMLab.team10.rollingthecheese.displayData.SkyDisplay;
+import NMLab.team10.rollingthecheese.displayData.SmokeDisplay;
 import NMLab.team10.rollingthecheese.event.EventEnum;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 import NMLab.team10.rollingthecheese.gameSetting.Cheese;
+import NMLab.team10.rollingthecheese.gameSetting.GlobalParameter;
 import NMLab.team10.rollingthecheese.gameSetting.ServerGameSetting;
 import android.content.Context;
 import android.content.res.Resources;
@@ -27,7 +30,7 @@ public class GameView extends View {
     ScrollThread scroll;
 
     private GameCalThread gct = null;
-    DisplayData displayData = null;
+    public static DisplayData displayData = null;
     EventQueueCenter eqc = null;
 
     private static Bitmap backgroundBitmap;
@@ -35,10 +38,7 @@ public class GameView extends View {
     private static Bitmap grassBitmap;
     private static Bitmap wood_slideBitmap;
     private static Bitmap wood_slideBitmap_m;
-    private static Bitmap skyBitmap;
     private static Bitmap buttomBitmap;
-
-    private static Bitmap clould1;
 
     VelocityTracker vTracker;
 
@@ -76,11 +76,16 @@ public class GameView extends View {
         grassBitmap = BitmapFactory.decodeResource(r, R.drawable.grass);
         wood_slideBitmap = BitmapFactory.decodeResource(r, R.drawable.wood_slide);
         wood_slideBitmap_m = BitmapFactory.decodeResource(r, R.drawable.wood_slide_mirror);
-        skyBitmap = BitmapFactory.decodeResource(r, R.drawable.sky);
 
-        clould1 = BitmapFactory.decodeResource(r, R.drawable.clould).copy(Bitmap.Config.ARGB_8888, true);
+        // clould1 = BitmapFactory.decodeResource(r,
+        // R.drawable.clould).copy(Bitmap.Config.ARGB_8888, true);
         // alpha value = 255 => ¤£³z©ú//
-        modifyAlpah(clould1, 80);
+        // modifyAlpah(clould1, 80);
+
+        SkyDisplay.initial();
+        SkyDisplay.Star.initial();
+        SmokeDisplay.initial();
+        CloudDisplay.Cloud.initial();
     }
 
     private void initPaint() {
@@ -110,9 +115,15 @@ public class GameView extends View {
 
         newX = scroll.posX;
 
-        String scrollPosition = Integer.toString(newX);
+        if (newX < -860) {
+            newX = -860;
+        }
+        if (newX > 60) {
+            newX = 60;
+        }
 
-        canvas.drawBitmap(skyBitmap, newX / 4 - 40, 0, null);
+        String scrollPosition = Integer.toString(newX);
+        SkyDisplay.draw(canvas, newX / 2 - 80);
 
         CloudDisplay.updateCloud();
         Climate.modifyWind(displayData.getClimate());
@@ -164,7 +175,7 @@ public class GameView extends View {
     int x = 0;
     int y = 0;
 
-    private static void modifyAlpah(Bitmap b, int alpha) {
+    static public void modifyAlpah(Bitmap b, int alpha) {
         alpha &= 0xFF;
         for (int i = 0; i < b.getWidth(); i++) {
             for (int j = 0; j < b.getHeight(); j++) {
@@ -178,8 +189,7 @@ public class GameView extends View {
         }
     }
 
-    @SuppressWarnings("unused")
-    private void modifyAlpahByRatio(Bitmap b, float r) {
+    static public void modifyAlpahByRatio(Bitmap b, float r) {
         for (int i = 0; i < b.getWidth(); i++) {
             for (int j = 0; j < b.getHeight(); j++) {
                 int pixel = b.getPixel(i, j);
@@ -191,6 +201,92 @@ public class GameView extends View {
                     alpha = 255;
                 pixel &= 0x00FFFFFF;
                 pixel |= (alpha << 24);
+                b.setPixel(i, j, pixel);
+            }
+        }
+    }
+
+    static public void modifyBlueByRatio(Bitmap b, float r) {
+        for (int i = 0; i < b.getWidth(); i++) {
+            for (int j = 0; j < b.getHeight(); j++) {
+                int pixel = b.getPixel(i, j);
+                if (pixel == 0x00000000)
+                    continue;
+                int blue = pixel & 0x000000FF;
+                blue = (int) (blue * r);
+                if (blue > 255)
+                    blue = 255;
+                pixel &= 0xFFFFFF00;
+                pixel |= (blue << 0);
+                b.setPixel(i, j, pixel);
+            }
+        }
+    }
+
+    static public void modifyRedByRatio(Bitmap b, float r) {
+        for (int i = 0; i < b.getWidth(); i++) {
+            for (int j = 0; j < b.getHeight(); j++) {
+                int pixel = b.getPixel(i, j);
+                if (pixel == 0x00000000)
+                    continue;
+                int red = (pixel & 0x00FF0000) >> 16;
+                red = (int) (red * r);
+                if (red > 255)
+                    red = 255;
+                pixel &= 0xFF00FFFF;
+                pixel |= (red << 16);
+                b.setPixel(i, j, pixel);
+            }
+        }
+    }
+
+    static public void modifyGreenByRatio(Bitmap b, float r) {
+        for (int i = 0; i < b.getWidth(); i++) {
+            for (int j = 0; j < b.getHeight(); j++) {
+                int pixel = b.getPixel(i, j);
+                if (pixel == 0x00000000)
+                    continue;
+
+                int green = (pixel & 0x0000FF00) >> 8;
+                green = (int) (green * r);
+                if (green > 255)
+                    green = 255;
+                pixel &= 0xFFFF00FF;
+                pixel |= (green << 8);
+
+                b.setPixel(i, j, pixel);
+            }
+        }
+    }
+
+    static public void modifyRGBByRatio(Bitmap b, float r) {
+        for (int i = 0; i < b.getWidth(); i++) {
+            for (int j = 0; j < b.getHeight(); j++) {
+                int pixel = b.getPixel(i, j);
+                if (pixel == 0x00000000)
+                    continue;
+
+                int red = (pixel & 0x00FF0000) >> 16;
+                red = (int) (red * r);
+                if (red > 255)
+                    red = 255;
+                pixel &= 0xFF00FFFF;
+                pixel |= (red << 16);
+
+                int green = (pixel & 0x0000FF00) >> 8;
+                green = (int) (green * r);
+                if (green > 255)
+                    green = 255;
+                pixel &= 0xFFFF00FF;
+                pixel |= (green << 8);
+
+                int blue = pixel & 0x000000FF;
+                blue = (int) (blue * r);
+                if (blue > 255)
+                    blue = 255;
+                pixel &= 0xFFFFFF00;
+                pixel |= (blue << 0);
+
                 b.setPixel(i, j, pixel);
             }
         }
@@ -255,5 +351,10 @@ public class GameView extends View {
     public GameCalThread getGct() {
         return gct;
     }
+
+    public static final byte Morning = GlobalParameter.Morning;
+    public static final byte Noon = GlobalParameter.Noon;
+    public static final byte Dusk = GlobalParameter.Dusk;
+    public static final byte Night = GlobalParameter.Night;
 
 }

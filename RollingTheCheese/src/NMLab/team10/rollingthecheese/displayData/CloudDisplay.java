@@ -96,10 +96,24 @@ public class CloudDisplay {
         }
     }
 
-    static class Cloud {
+    public static class Cloud {
 
         static Resources r = GameView.r;
-        static Bitmap cloud = BitmapFactory.decodeResource(r, R.drawable.cloud_white2).copy(Config.ARGB_8888, true);
+        static Bitmap dusk;
+        static Bitmap noon;
+        static Bitmap morning;
+        static Bitmap night;
+
+        static public void initial() {
+            dusk = BitmapFactory.decodeResource(r, R.drawable.cloud).copy(Config.ARGB_8888, true);
+            noon = BitmapFactory.decodeResource(r, R.drawable.cloud);
+            morning = BitmapFactory.decodeResource(r, R.drawable.cloud).copy(Config.ARGB_8888, true);
+            night = BitmapFactory.decodeResource(r, R.drawable.cloud).copy(Config.ARGB_8888, true);
+            GameView.modifyGreenByRatio(dusk, 0.65F);
+            GameView.modifyBlueByRatio(dusk, 0.2F);
+            GameView.modifyRGBByRatio(morning, 0.85F);
+            GameView.modifyRGBByRatio(night, 0.2F);
+        }
 
         public Cloud(boolean init) {
             cloud_x = (float) (1560 * Math.random()) - 200;
@@ -152,14 +166,14 @@ public class CloudDisplay {
             double rand = Math.random();
             switch (CloudDisplay.climate) {
                 case ClimateEnum.Sunny: {
-                    if (rand > 0.998) {
+                    if (rand > 0.99) {
                         if ((System.currentTimeMillis() - lastChangeTime) < 5000) {
                             return;
                         }
                         lastChangeTime = System.currentTimeMillis();
-                        if (rand > 0.999 && frame < 11) {
+                        if (rand > 0.997 && frame < 11) {
                             frame++;
-                        } else if (rand < 0.999 && frame > -1) {
+                        } else if (rand < 0.997 && frame > -1) {
                             frame--;
                             if (frame == -1)
                                 isDead = true;
@@ -170,19 +184,19 @@ public class CloudDisplay {
                     break;
                 }
                 case ClimateEnum.Cloudy: {
-                    if (rand > 0.998) {
+                    if (rand > 0.99) {
                         if ((System.currentTimeMillis() - lastChangeTime) < 5000) {
                             return;
                         }
                         lastChangeTime = System.currentTimeMillis();
-                        if (rand > 0.9985 && frame < 11) {
+                        if (rand > 0.993 && frame < 11) {
                             frame++;
-                        } else if (rand < 0.9985 && frame > -1) {
+                        } else if (rand < 0.993 && frame > -1) {
                             frame--;
-                            if (frame == 0)
+                            if (frame == -1)
                                 isDead = true;
                         }
-                        sRectangle = new Rect(CloudWidth * frame, 0, CloudWidth * frame + CloudWidth,
+                        sRectangle = new Rect(CloudInterval * frame, 0, CloudInterval * frame + CloudWidth,
                                 CloudHeight);
                     }
                     break;
@@ -202,11 +216,26 @@ public class CloudDisplay {
         public void draw(Canvas canvas, float offSet) {
             RectF dest = new RectF(cloud_x + offSet, cloud_y, cloud_x + CloudWidth + offSet, cloud_y
                     + CloudHeight);
-            canvas.drawBitmap(cloud, sRectangle, dest, null);
+            int time = GameView.displayData.getTime();
+            if (time > 30000) {
+                if (time > 35000) {
+                    canvas.drawBitmap(night, sRectangle, dest, null);
+                } else {
+                    canvas.drawBitmap(dusk, sRectangle, dest, null);
+                }
+            } else {
+                if (time > 20000) {
+                    canvas.drawBitmap(morning, sRectangle, dest, null);
+                } else if (time > 10000) {
+                    canvas.drawBitmap(noon, sRectangle, dest, null);
+                } else {
+                    canvas.drawBitmap(morning, sRectangle, dest, null);
+                }
+            }
         }
 
         public static void changeCloud(Bitmap b) {
-            cloud = b;
+            dusk = b;
         }
     }
 
