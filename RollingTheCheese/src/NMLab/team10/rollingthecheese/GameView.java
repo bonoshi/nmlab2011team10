@@ -82,7 +82,7 @@ public class GameView extends View {
 
         // clould1 = BitmapFactory.decodeResource(r,
         // R.drawable.clould).copy(Bitmap.Config.ARGB_8888, true);
-        // alpha value = 255 => ¤£³z©ú//
+        // alpha value = 255 => ï¿½ï¿½ï¿½zï¿½ï¿½//
         // modifyAlpah(clould1, 80);
 
         SkyDisplay.initial();
@@ -302,9 +302,9 @@ public class GameView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         int x = (int) event.getX();
         int y = (int) event.getY();
-        if(buttomBar.onTouch(event)){
-            return true;
-        }
+        buttomBar.onTouch(event);
+        if(buttomBar.isTouch)return true;    
+        
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             /*if (y < 100 && !touchScreen) {
                 if (x < 100) {
@@ -340,17 +340,11 @@ public class GameView extends View {
             scroll.recover_a = 0;
             scroll.V = 0;
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            if(buttomBar.isTouch){
-                return true;
-            }
             scroll.fingerX = x;
             vTracker.addMovement(event);
             vTracker.computeCurrentVelocity(1);
             scroll.V = vTracker.getXVelocity();
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
-            if(buttomBar.isTouch){
-                return true;
-            }
             scroll.isPressing = false;
             touchScreen = false;
         }

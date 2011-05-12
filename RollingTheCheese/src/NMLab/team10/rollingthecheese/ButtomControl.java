@@ -54,7 +54,7 @@ public class ButtomControl {
     public boolean onTouch(MotionEvent event){
         int x = (int)event.getX();
         int y = (int)event.getY();
-        if(event.getAction()!=MotionEvent.ACTION_DOWN)return false;
+
         if(dest.contains(x, y)){
             frame =0;
             isMoving = true;

@@ -12,10 +12,6 @@ import android.view.MotionEvent;
 public class ButtomBar {
 
     public boolean isTouch;
-    private static final int buttomW = 110;
-    private static final int buttomH = 85;
-
-
 
     private RollingCheeseActivity activity;
 
@@ -33,7 +29,6 @@ public class ButtomBar {
         ButtomBar.initBitmap(activity);
         normalList = new ButtomListControl(0,normalButtomList);
         normalB = new ButtomControl(0,normalButtom);
-
     }
 
     public static Resources r;
@@ -54,19 +49,17 @@ public class ButtomBar {
     }
 
 
-    public boolean onTouch(MotionEvent event){
+    public void onTouch(MotionEvent event){
         if(event.getAction() == MotionEvent.ACTION_UP){
             isTouch = false;
         }
+        if(event.getAction()!=MotionEvent.ACTION_DOWN)return;
         if(normalB.onTouch(event)){
             normalList.buttomPress();
             isTouch = true;
-            return true;
         }
-        if(normalList.onTouch(event)){
-            return true;
-        }
-        return false;
+        normalList.onTouch(event);
+        return;
     }
 
 }
