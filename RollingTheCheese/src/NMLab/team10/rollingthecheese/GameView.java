@@ -38,7 +38,7 @@ public class GameView extends View {
     private static Bitmap grassBitmap;
     private static Bitmap wood_slideBitmap;
     private static Bitmap wood_slideBitmap_m;
-    private static Bitmap buttomBitmap;
+
 
     private ButtomBar buttomBar;
 
@@ -50,7 +50,7 @@ public class GameView extends View {
         this.father = father;
         GameView.initBitmap(father);
         initPaint();
-        buttomBar = new ButtomBar(father);
+
         scroll = new ScrollThread();
         scroll.start();
 
@@ -60,6 +60,8 @@ public class GameView extends View {
         displayData = game.getDisplayData();
         eqc = game.getEventCenter();
 
+
+        buttomBar = new ButtomBar(father,eqc);
         gameDrawThread = new GameDrawThread(this, game);
         gameDrawThread.isRunning = true;
         gameDrawThread.start();
@@ -74,7 +76,6 @@ public class GameView extends View {
         GameView.context = context;
         GameView.r = context.getResources();
         backgroundBitmap = BitmapFactory.decodeResource(r, R.drawable.background);
-        buttomBitmap = BitmapFactory.decodeResource(r, R.drawable.buttom);
         farmBitmap = BitmapFactory.decodeResource(r, R.drawable.farm);
         grassBitmap = BitmapFactory.decodeResource(r, R.drawable.grass);
         wood_slideBitmap = BitmapFactory.decodeResource(r, R.drawable.wood_slide);
@@ -303,8 +304,8 @@ public class GameView extends View {
         int x = (int) event.getX();
         int y = (int) event.getY();
         buttomBar.onTouch(event);
-        if(buttomBar.isTouch)return true;    
-        
+        if(buttomBar.isTouch)return true;
+
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             /*if (y < 100 && !touchScreen) {
                 if (x < 100) {

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import NMLab.team10.rollingthecheese.event.EventEnum;
+import NMLab.team10.rollingthecheese.event.EventQueueCenter;
+import NMLab.team10.rollingthecheese.gameSetting.Cheese;
 import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -25,15 +27,15 @@ public class ButtomListControl {
     private Rect dest;
     private int startX;
     private ArrayList<Rect> buttoms;
-    private HashMap<Rect,EventEnum> buttom_funcion;
-    
+    private HashMap<Rect,Byte> buttom_function;
+
     private static final int buttomListW = 130;
     private static final int buttomListH = 300;
     private static final int buttomH = 85;
     private static final int animationEnd = 10;
+    private EventQueueCenter eqc;
 
-
-    public ButtomListControl(int startX, Bitmap listBitmap){
+    public ButtomListControl(int startX, Bitmap listBitmap,EventQueueCenter eqc){
         status = CLOSE;
         statusQueue = CLOSE;
         frame = 0;
@@ -41,13 +43,14 @@ public class ButtomListControl {
         this .dest =  new Rect(startX, 0, startX + buttomListW, buttomListH);
         this.buttomListBitmap = listBitmap;
         buttoms = new ArrayList<Rect>();
-        buttom_funcion = new HashMap<Rect, EventEnum>();
+        buttom_function = new HashMap<Rect, Byte>();
+        this.eqc = eqc;
     }
 
-    public void addButtomArea(int y1,int y2,EventEnum e){
+    public void addButtomArea(int y1,int y2,Byte event){
         Rect rect = new Rect(startX,y1,startX+buttomListW,y2);
         buttoms.add(rect);
-        buttom_funcion.put(rect, e);
+        buttom_function.put(rect, event);
     }
     public void buttomPress(){
         switch(status){
@@ -118,21 +121,19 @@ public class ButtomListControl {
         Rect touchArea = new Rect(startX,buttomH,startX + buttomListW, buttomListH);
         Rect buttomArea = new Rect(startX,0,startX + buttomListW,buttomH);
         if(buttomArea.contains(x,y))return false;
-        
+
         if(touchArea.contains(x, y)){
             if(status == OPEN){
                 for (Rect r : buttoms) {
                     if(r.contains(x,y)){
-                        
+                        eqc.addEvent(buttom_function.get(r), Cheese.Left);
+                        status = OPEN_TO_CLOSE;
+                        frame = 0;
+                        return true;
                     }
                 }
-                
-                status = OPEN_TO_CLOSE;
-                frame = 0;
             }
-            if(status == OPEN_TO_CLOSE){
-                statusQueue = CLOSE_TO_OPEN;
-            }
+
         }else{
             if(status == CLOSE_TO_OPEN){
                 statusQueue = OPEN_TO_CLOSE;
