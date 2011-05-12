@@ -2,6 +2,7 @@ package NMLab.team10.rollingthecheese.displayData;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 
 import android.graphics.Canvas;
 import NMLab.team10.rollingthecheese.GameView;
@@ -13,13 +14,28 @@ import NMLab.team10.rollingthecheese.gameSetting.CheeseSizeEnum;
 import NMLab.team10.rollingthecheese.gameSetting.GlobalParameter;
 
 public class CheeseDisplay {
+ 
+    static Bitmap cheeseOL;
+    static Bitmap cheeseOM;
+    static Bitmap cheeseOS;
+    static Bitmap cheeseOT;
 
-    static Resources r = GameView.r;
-    static Bitmap cheeseOL = BitmapFactory.decodeResource(r, R.drawable.cheese_ol);
-    static Bitmap cheeseOM = BitmapFactory.decodeResource(r, R.drawable.cheese_om);
-    static Bitmap cheeseOS = BitmapFactory.decodeResource(r, R.drawable.cheese_os);
-    static Bitmap cheeseOT = BitmapFactory.decodeResource(r, R.drawable.cheese_ot);
-
+    public static void initBitmap(){
+        Resources r = GameView.r;
+        Matrix matrix = new Matrix();
+        Bitmap cheeseO = BitmapFactory.decodeResource(r, R.drawable.cheese_original);
+        matrix.postScale(0.8f, 0.8f);
+        cheeseOL = Bitmap.createBitmap(cheeseO,0,0,cheeseOL.getWidth(),cheeseOL.getWidth(),matrix,false);
+        matrix.postRotate(30);
+        matrix.postScale(0.8f, 0.8f);
+        cheeseOM = Bitmap.createBitmap(cheeseO,0,0,cheeseOL.getWidth(),cheeseOL.getWidth(),matrix,false);
+        matrix.postScale(0.8f, 0.8f);
+        cheeseOS = Bitmap.createBitmap(cheeseO,0,0,cheeseOL.getWidth(),cheeseOL.getWidth(),matrix,false);
+        matrix.postScale(0.8f, 0.8f);
+        cheeseOT = Bitmap.createBitmap(cheeseO,0,0,cheeseOL.getWidth(),cheeseOL.getWidth(),matrix,false);
+        
+        
+    }
     public CheeseDisplay(CheeseMessage cm) {
         this.setCheeseMessage(cm);
     }

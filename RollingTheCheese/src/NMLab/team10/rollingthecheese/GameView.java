@@ -2,6 +2,7 @@ package NMLab.team10.rollingthecheese;
 
 import java.util.Date;
 
+import NMLab.team10.rollingthecheese.displayData.CheeseDisplay;
 import NMLab.team10.rollingthecheese.displayData.CloudDisplay;
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
 import NMLab.team10.rollingthecheese.displayData.Climate;
@@ -66,6 +67,7 @@ public class GameView extends View {
         gameDrawThread.isRunning = true;
         gameDrawThread.start();
         vTracker = VelocityTracker.obtain();
+        
 
     }
 
@@ -75,6 +77,7 @@ public class GameView extends View {
     static public void initBitmap(Context context) {
         GameView.context = context;
         GameView.r = context.getResources();
+        CheeseDisplay.initBitmap();
         backgroundBitmap = BitmapFactory.decodeResource(r, R.drawable.background);
         farmBitmap = BitmapFactory.decodeResource(r, R.drawable.farm);
         grassBitmap = BitmapFactory.decodeResource(r, R.drawable.grass);

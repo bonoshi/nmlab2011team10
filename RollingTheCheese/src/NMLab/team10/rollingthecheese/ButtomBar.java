@@ -18,34 +18,36 @@ public class ButtomBar {
     private RollingCheeseActivity activity;
 
     private static Bitmap buttomBar;
-    private static Bitmap normalBitmap;
-    private static Bitmap blueBitmap;
-    private static Bitmap softBitmap;
-    private static Bitmap spicyBitmap;
-    private static Bitmap constructBitmap;
-    private static Bitmap destructBitmap;
-    private static Bitmap normalButtomListBitmap;
-    private static Bitmap blueButtomListBitmap;
-    private static Bitmap softButtomListBitmap;
-    private static Bitmap spicyButtomListBitmap;
-    private static Bitmap constructButtomListBitmap;
-    private static Bitmap destructButtomListBitmap;
+    private static Bitmap buttomNBitmap;
+    private static Bitmap buttomCBitmap;
+    private static Bitmap buttomSBitmap;
+    private static Bitmap buttomFBitmap;
+    private static Bitmap buttomConBitmap;
+    private static Bitmap buttomDeBitmap;
+    
+    
+    private static Bitmap listNBitmap;
+    private static Bitmap listCBitmap;
+    private static Bitmap listSBitmap;
+    private static Bitmap listFBitmap;
+    private static Bitmap listConBitmap;
+    private static Bitmap listDeBitmap;
     
 
-    private ButtomListControl normalListControl;
-    private ButtomListControl blueListControl;
-    private ButtomListControl softListControl;
-    private ButtomListControl spicyListControl;
-    private ButtomListControl constructListControl;
-    private ButtomListControl destructListControl;
+    private ButtomListControl listControlN;
+    private ButtomListControl listControlC;
+    private ButtomListControl listControlS;
+    private ButtomListControl listControlF;
+    private ButtomListControl listControlCon;
+    private ButtomListControl listControlDe;
     
-    private ButtomControl normalButtomControl;
-    private ButtomControl blueButtomControl;
-    private ButtomControl softButtomControl;
-    private ButtomControl spicyButtomControl;
-    private ButtomControl constructButtomControl;
-    private ButtomControl destructButtomControl;
-    private ButtomControl cancelButtomControl;
+    private ButtomControl butContN;
+    private ButtomControl butContC;
+    private ButtomControl butContS;
+    private ButtomControl butContF;
+    private ButtomControl butContCon;
+    private ButtomControl butContDe;
+    private ButtomControl ButContCan;
     
     private EventQueueCenter eqc;
 
@@ -56,26 +58,26 @@ public class ButtomBar {
         ButtomBar.initBitmap(activity);
         this.eqc = eqc;
         
-        normalListControl = new ButtomListControl(0,normalButtomListBitmap,eqc);
-        normalListControl.addButtomArea(100,160,EventEnum.OriginalCheeseSmall);
-        normalListControl.addButtomArea(190,290,EventEnum.OriginalCheeseLarge);
-        blueListControl = new ButtomListControl(110,blueButtomListBitmap,eqc);
-        blueListControl.addButtomArea(100,160,EventEnum.OriginalCheeseSmall);
-        blueListControl.addButtomArea(190,290,EventEnum.OriginalCheeseLarge);
-        softListControl = new ButtomListControl(220,softButtomListBitmap,eqc);
-        softListControl.addButtomArea(100,160,EventEnum.OriginalCheeseSmall);
-        softListControl.addButtomArea(190,290,EventEnum.OriginalCheeseLarge);
-        spicyListControl = new ButtomListControl(330,spicyButtomListBitmap,eqc);
-        spicyListControl.addButtomArea(100,160,EventEnum.OriginalCheeseSmall);
-        spicyListControl.addButtomArea(190,290,EventEnum.OriginalCheeseLarge);
+        listControlN = new ButtomListControl(0,listNBitmap,eqc);
+        listControlN.addButtomArea(100,160,EventEnum.OriginalCheeseSmall);
+        listControlN.addButtomArea(190,290,EventEnum.OriginalCheeseLarge);
+        listControlC = new ButtomListControl(110,listCBitmap,eqc);
+        listControlC.addButtomArea(100,160,EventEnum.OriginalCheeseSmall);
+        listControlC.addButtomArea(190,290,EventEnum.OriginalCheeseLarge);
+        listControlS = new ButtomListControl(220,listSBitmap,eqc);
+        listControlS.addButtomArea(100,160,EventEnum.OriginalCheeseSmall);
+        listControlS.addButtomArea(190,290,EventEnum.OriginalCheeseLarge);
+        listControlF = new ButtomListControl(330,listFBitmap,eqc);
+        listControlF.addButtomArea(100,160,EventEnum.OriginalCheeseSmall);
+        listControlF.addButtomArea(190,290,EventEnum.OriginalCheeseLarge);
 
                 
-        normalButtomControl = new ButtomControl(0,normalBitmap);
-        blueButtomControl = new ButtomControl(110,blueBitmap);
-        softButtomControl = new ButtomControl(220,softBitmap);
-        spicyButtomControl = new ButtomControl(330,spicyBitmap);
-        constructButtomControl = new ButtomControl(440,constructBitmap);
-        destructButtomControl = new ButtomControl(550,destructBitmap);
+        butContN = new ButtomControl(0,buttomNBitmap);
+        butContC = new ButtomControl(110,buttomCBitmap);
+        butContS = new ButtomControl(220,buttomSBitmap);
+        butContF = new ButtomControl(330,buttomFBitmap);
+        butContCon = new ButtomControl(440,buttomConBitmap);
+        butContDe = new ButtomControl(550,buttomDeBitmap);
 
     }
 
@@ -85,34 +87,34 @@ public class ButtomBar {
         ButtomBar.context = context;
         ButtomBar.r = context.getResources();
         buttomBar = BitmapFactory.decodeResource(r, R.drawable.buttombar);
-        normalBitmap = BitmapFactory.decodeResource(r, R.drawable.normalcheesebuttomani);
-        blueBitmap = BitmapFactory.decodeResource(r, R.drawable.bluebuttomani);
-        softBitmap = BitmapFactory.decodeResource(r, R.drawable.softbuttomani);
-        spicyBitmap = BitmapFactory.decodeResource(r, R.drawable.spicybuttomani);
-        constructBitmap = BitmapFactory.decodeResource(r, R.drawable.constructbuttomani);
-        destructBitmap = BitmapFactory.decodeResource(r, R.drawable.destructbuttomani);
+        buttomNBitmap = BitmapFactory.decodeResource(r, R.drawable.buttom_normal);
+        buttomCBitmap = BitmapFactory.decodeResource(r, R.drawable.buttom_casumarzu);
+        buttomSBitmap = BitmapFactory.decodeResource(r, R.drawable.buttom_sweaty);
+        buttomFBitmap = BitmapFactory.decodeResource(r, R.drawable.buttom_firing);
+        buttomConBitmap = BitmapFactory.decodeResource(r, R.drawable.buttom_construct);
+        buttomDeBitmap = BitmapFactory.decodeResource(r, R.drawable.buttom_destruct);
         
-        normalButtomListBitmap = BitmapFactory.decodeResource(r, R.drawable.normalbuttomlistani);
-        blueButtomListBitmap = BitmapFactory.decodeResource(r, R.drawable.bluelistani);
-        softButtomListBitmap = BitmapFactory.decodeResource(r, R.drawable.softlistani);
-        spicyButtomListBitmap = BitmapFactory.decodeResource(r, R.drawable.spicylistani);
+        listNBitmap = BitmapFactory.decodeResource(r, R.drawable.list_original);
+        listCBitmap = BitmapFactory.decodeResource(r, R.drawable.list_casumarzu);
+        listSBitmap = BitmapFactory.decodeResource(r, R.drawable.list_sweaty);
+        listFBitmap = BitmapFactory.decodeResource(r, R.drawable.list_firing);
         
     }
 
     public void draw(Canvas canvas){
-        normalListControl.draw(canvas);
-        blueListControl.draw(canvas);
-        softListControl.draw(canvas);
-        spicyListControl.draw(canvas);
+        listControlN.draw(canvas);
+        listControlC.draw(canvas);
+        listControlS.draw(canvas);
+        listControlF.draw(canvas);
         
         canvas.drawBitmap(buttomBar, 0,0, null);
         
-        normalButtomControl.draw(canvas);
-        blueButtomControl.draw(canvas);
-        softButtomControl.draw(canvas);
-        spicyButtomControl.draw(canvas);
-        constructButtomControl.draw(canvas);
-        destructButtomControl.draw(canvas);
+        butContN.draw(canvas);
+        butContC.draw(canvas);
+        butContS.draw(canvas);
+        butContF.draw(canvas);
+        butContCon.draw(canvas);
+        butContDe.draw(canvas);
     }
 
 
@@ -121,35 +123,35 @@ public class ButtomBar {
             isTouch = false;
         }
         if(event.getAction()!=MotionEvent.ACTION_DOWN)return;
-        if(normalButtomControl.onTouch(event)){
-            normalListControl.buttomPress();
+        if(butContN.onTouch(event)){
+            listControlN.buttomPress();
             isTouch = true;
         }
-        if(blueButtomControl.onTouch(event)){
-            blueListControl.buttomPress();
+        if(butContC.onTouch(event)){
+            listControlC.buttomPress();
             isTouch = true;
         }
-        if(softButtomControl.onTouch(event)){
-            softListControl.buttomPress();
+        if(butContS.onTouch(event)){
+            listControlS.buttomPress();
             isTouch = true;
         }
-        if(spicyButtomControl.onTouch(event)){
-            spicyListControl.buttomPress();
+        if(butContF.onTouch(event)){
+            listControlF.buttomPress();
             isTouch = true;
         }
-        if(constructButtomControl.onTouch(event)){
+        if(butContCon.onTouch(event)){
             //normalListControl.buttomPress();
             isTouch = true;
         }
-        if(destructButtomControl.onTouch(event)){
+        if(butContDe.onTouch(event)){
             //normalListControl.buttomPress();
             isTouch = true;
         }
         
-        normalListControl.onTouch(event);
-        blueListControl.onTouch(event);
-        softListControl.onTouch(event);
-        spicyListControl.onTouch(event);
+        listControlN.onTouch(event);
+        listControlC.onTouch(event);
+        listControlS.onTouch(event);
+        listControlF.onTouch(event);
         return;
     }
 
