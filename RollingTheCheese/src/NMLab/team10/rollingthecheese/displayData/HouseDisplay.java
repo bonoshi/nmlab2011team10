@@ -18,8 +18,9 @@ public class HouseDisplay {
     static Resources r = GameView.r;
     private static Bitmap houseBitmap;
     private static Bitmap houseBitmap_m;
-
-    static {
+    
+    static public void initial(){
+        r = GameView.r;
         houseBitmap = BitmapFactory.decodeResource(r, R.drawable.house);
         houseBitmap_m = BitmapFactory.decodeResource(r, R.drawable.house_mirror);
     }

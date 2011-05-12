@@ -16,6 +16,7 @@ public class WelcomeView extends SurfaceView implements SurfaceHolder.Callback{
     WelcomeDrawThread welcomeDrawThread;
     Rect connectToOtheRect;
     Rect waitingConnectRect;
+    Rect titleRect;
     RollingCheeseActivity father;
     Bitmap titleBitmap;
     Bitmap connectBitmap;
@@ -39,6 +40,7 @@ public class WelcomeView extends SurfaceView implements SurfaceHolder.Callback{
     }
 
     public void initRect(){
+        titleRect = new Rect(200,230,600,280);
         connectToOtheRect = new Rect(215,340,375,390);
         waitingConnectRect = new Rect(425,340,585,390);
 
@@ -81,10 +83,12 @@ public class WelcomeView extends SurfaceView implements SurfaceHolder.Callback{
             int x = (int)event.getX();
             int y = (int)event.getY();
             if(connectToOtheRect.contains(x, y)){
-                father.myHandler.sendEmptyMessage(InterThreadMsg.startGameView);
+                father.myHandler.sendEmptyMessage(InterThreadMsg.scan);
             }else if(waitingConnectRect.contains(x, y)){
-                father.myHandler.sendEmptyMessage(InterThreadMsg.startGameView);
+                father.myHandler.sendEmptyMessage(InterThreadMsg.discoverable);
 
+            }else if(titleRect.contains(x,y)){
+                father.myHandler.sendEmptyMessage(InterThreadMsg.startGameView);
             }
         }
         return true;

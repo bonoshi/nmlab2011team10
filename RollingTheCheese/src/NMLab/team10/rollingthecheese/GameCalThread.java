@@ -1,5 +1,6 @@
 package NMLab.team10.rollingthecheese;
 
+import java.io.IOException;
 import java.util.Date;
 
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
@@ -20,20 +21,27 @@ public class GameCalThread extends Thread {
     private boolean stop = false;
 
     private boolean hasNewData = false;
+    private boolean isTwoPlayer = false;
 
-    public GameCalThread(RollingCheeseActivity father, ServerGameSetting sgs) {
+    public GameCalThread(RollingCheeseActivity father, ServerGameSetting sgs,
+            boolean isTwoPlayer) {
         this.father = father;
         this.setting = sgs;
-        eventCenter = new EventQueueCenter(sgs);
+        this.isTwoPlayer = isTwoPlayer;
+        eventCenter = new EventQueueCenter(sgs,father);
         synMessageData = new SynMessageData(sgs, eventCenter, Right);
         displayData = new DisplayData();
+        father.displayData = displayData;
     }
-
+    
     Date timeLast = null;
 
     public void run() {
         while (!stop) {
             while (pause) {
+                if(stop){
+                    return;
+                }
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
@@ -49,10 +57,23 @@ public class GameCalThread extends Thread {
             eventCenter.fetchCow();
             eventCenter.fetchCheese();
 
-            // Step 2: (1)refresh local game display (2)prepare data for server
+            // Step 2: (1)refresh local game display
+            // (2)prepare data for server
+            // (3)send to client
             // local game display
             synMessageData = new SynMessageData(setting, eventCenter, Right);
             displayData.refresh(synMessageData);
+            if (isTwoPlayer) {
+                try {
+                    father.sendObject(synMessageData);
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                    this.pauseGameCal();
+                    father.myHandler.obtainMessage(
+                            InterThreadMsg.LinkingErrorInGame).sendToTarget();
+                }
+            }
 
             // Step 3: fetch construction event
             eventCenter.fetchCons();
@@ -68,17 +89,17 @@ public class GameCalThread extends Thread {
             // Step 6: Time Elapsing
             eventCenter.timeElapsing();// cheese, cow and construction time
             setting.timeElapsing();// time++, milk++, takeAction()
-            while(true){
+            while (true) {
                 Date timeNow = new Date(System.currentTimeMillis());
-                long interval = timeNow.getTime()-timeLast.getTime();
-                if(interval<30){
+                long interval = timeNow.getTime() - timeLast.getTime();
+                if (interval < 30) {
                     try {
                         sleep(1);
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                }else{
+                } else {
                     break;
                 }
             }

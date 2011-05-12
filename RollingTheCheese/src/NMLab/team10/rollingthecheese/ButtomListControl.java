@@ -3,14 +3,10 @@ package NMLab.team10.rollingthecheese;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import NMLab.team10.rollingthecheese.event.EventEnum;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
-import NMLab.team10.rollingthecheese.gameSetting.Cheese;
-import android.R.integer;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.graphics.RectF;
 import android.view.MotionEvent;
 
 public class ButtomListControl {
@@ -126,7 +122,7 @@ public class ButtomListControl {
             if(status == OPEN){
                 for (Rect r : buttoms) {
                     if(r.contains(x,y)){
-                        eqc.addEvent(buttom_function.get(r), Cheese.Left);
+                        eqc.addEvent(buttom_function.get(r));
                         status = OPEN_TO_CLOSE;
                         frame = 0;
                         return true;

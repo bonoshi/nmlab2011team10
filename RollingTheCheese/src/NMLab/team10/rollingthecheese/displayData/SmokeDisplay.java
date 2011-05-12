@@ -16,10 +16,11 @@ public class SmokeDisplay {
     static Bitmap smokeWR;
 
     public static void initial() {
+        r = GameView.r;
         smokeWL = BitmapFactory.decodeResource(r, R.drawable.house_smoke_w_l).copy(Config.ARGB_8888, true);
         smokeWR = BitmapFactory.decodeResource(r, R.drawable.house_smoke_w_r).copy(Config.ARGB_8888, true);
         //for black at day
-        GameView.modifyRGBByRatio(smokeWL, 0.2F);
+        //GameView.modifyRGBByRatio(smokeWL, 0.2F);
         //for black at night
 //        GameView.modifyRedByRatio(smokeWR, 0.7F);
 //        GameView.modifyGreenByRatio(smokeWR, 0.7F);

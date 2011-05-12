@@ -25,14 +25,14 @@ public class CheeseDisplay {
         Matrix matrix = new Matrix();
         Bitmap cheeseO = BitmapFactory.decodeResource(r, R.drawable.cheese_original);
         matrix.postScale(0.8f, 0.8f);
-        cheeseOL = Bitmap.createBitmap(cheeseO,0,0,cheeseOL.getWidth(),cheeseOL.getWidth(),matrix,false);
+        cheeseOL = Bitmap.createBitmap(cheeseO,0,0,cheeseO.getWidth(),cheeseO.getWidth(),matrix,false);
         matrix.postRotate(30);
         matrix.postScale(0.8f, 0.8f);
-        cheeseOM = Bitmap.createBitmap(cheeseO,0,0,cheeseOL.getWidth(),cheeseOL.getWidth(),matrix,false);
+        cheeseOM = Bitmap.createBitmap(cheeseO,0,0,cheeseO.getWidth(),cheeseO.getWidth(),matrix,false);
         matrix.postScale(0.8f, 0.8f);
-        cheeseOS = Bitmap.createBitmap(cheeseO,0,0,cheeseOL.getWidth(),cheeseOL.getWidth(),matrix,false);
+        cheeseOS = Bitmap.createBitmap(cheeseO,0,0,cheeseO.getWidth(),cheeseO.getWidth(),matrix,false);
         matrix.postScale(0.8f, 0.8f);
-        cheeseOT = Bitmap.createBitmap(cheeseO,0,0,cheeseOL.getWidth(),cheeseOL.getWidth(),matrix,false);
+        cheeseOT = Bitmap.createBitmap(cheeseO,0,0,cheeseO.getWidth(),cheeseO.getWidth(),matrix,false);
         
         
     }

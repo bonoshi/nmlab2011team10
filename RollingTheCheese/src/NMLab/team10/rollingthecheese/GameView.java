@@ -6,13 +6,11 @@ import NMLab.team10.rollingthecheese.displayData.CheeseDisplay;
 import NMLab.team10.rollingthecheese.displayData.CloudDisplay;
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
 import NMLab.team10.rollingthecheese.displayData.Climate;
+import NMLab.team10.rollingthecheese.displayData.HouseDisplay;
 import NMLab.team10.rollingthecheese.displayData.SkyDisplay;
 import NMLab.team10.rollingthecheese.displayData.SmokeDisplay;
-import NMLab.team10.rollingthecheese.event.EventEnum;
-import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 import NMLab.team10.rollingthecheese.gameSetting.Cheese;
 import NMLab.team10.rollingthecheese.gameSetting.GlobalParameter;
-import NMLab.team10.rollingthecheese.gameSetting.ServerGameSetting;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -30,9 +28,7 @@ public class GameView extends View {
     GameDrawThread gameDrawThread;
     ScrollThread scroll;
 
-    private GameCalThread gct = null;
     public static DisplayData displayData = null;
-    EventQueueCenter eqc = null;
 
     private static Bitmap backgroundBitmap;
     private static Bitmap farmBitmap;
@@ -40,8 +36,9 @@ public class GameView extends View {
     private static Bitmap wood_slideBitmap;
     private static Bitmap wood_slideBitmap_m;
 
-
     private ButtomBar buttomBar;
+    
+    private boolean hasBeenInit = true;
 
     VelocityTracker vTracker;
 
@@ -55,20 +52,23 @@ public class GameView extends View {
         scroll = new ScrollThread();
         scroll.start();
 
-        // for game calculation center
-        ServerGameSetting sgs = new ServerGameSetting();
-        GameCalThread game = new GameCalThread(father, sgs);
-        displayData = game.getDisplayData();
-        eqc = game.getEventCenter();
-
-
-        buttomBar = new ButtomBar(father,eqc);
-        gameDrawThread = new GameDrawThread(this, game);
+        gameDrawThread = new GameDrawThread(this);
         gameDrawThread.isRunning = true;
         gameDrawThread.start();
         vTracker = VelocityTracker.obtain();
-        
 
+    }
+
+    public void initialServerGameView() {
+        buttomBar = new ButtomBar(father, father.gameCalThread.getEventCenter());
+        displayData = father.displayData;
+        hasBeenInit = true;
+    }
+
+    public void initialClientGameView() {
+        buttomBar = new ButtomBar(father, father.clientEventQueue);
+        displayData = father.displayData;
+        hasBeenInit = true;
     }
 
     public static Resources r;
@@ -78,11 +78,14 @@ public class GameView extends View {
         GameView.context = context;
         GameView.r = context.getResources();
         CheeseDisplay.initBitmap();
-        backgroundBitmap = BitmapFactory.decodeResource(r, R.drawable.background);
+        backgroundBitmap = BitmapFactory.decodeResource(r,
+                R.drawable.background);
         farmBitmap = BitmapFactory.decodeResource(r, R.drawable.farm);
         grassBitmap = BitmapFactory.decodeResource(r, R.drawable.grass);
-        wood_slideBitmap = BitmapFactory.decodeResource(r, R.drawable.wood_slide);
-        wood_slideBitmap_m = BitmapFactory.decodeResource(r, R.drawable.wood_slide_mirror);
+        wood_slideBitmap = BitmapFactory.decodeResource(r,
+                R.drawable.wood_slide);
+        wood_slideBitmap_m = BitmapFactory.decodeResource(r,
+                R.drawable.wood_slide_mirror);
 
         // clould1 = BitmapFactory.decodeResource(r,
         // R.drawable.clould).copy(Bitmap.Config.ARGB_8888, true);
@@ -93,6 +96,8 @@ public class GameView extends View {
         SkyDisplay.Star.initial();
         SmokeDisplay.initial();
         CloudDisplay.Cloud.initial();
+        HouseDisplay.initial();
+
     }
 
     private void initPaint() {
@@ -114,10 +119,19 @@ public class GameView extends View {
     Paint paintMilk = new Paint();
 
     Date timeLastFrame = new Date(System.currentTimeMillis());
+    
+
 
     @Override
     public void onDraw(Canvas canvas) {
-
+       
+        if(hasBeenInit){
+            if(displayData.hasNewData()){
+                hasBeenInit = false;
+            }
+            return;
+        }
+        
         int newX;
 
         newX = scroll.posX;
@@ -141,11 +155,12 @@ public class GameView extends View {
         canvas.drawBitmap(farmBitmap, newX / 2 - 80, 0, null);
         canvas.translate(0, -50);
         canvas.translate(newX, 0);
-        displayData.drawHouse(canvas);
+        if (displayData.hasNewData()) {
+            displayData.drawHouse(canvas);
+        }
         canvas.translate(-newX, 0);
         canvas.drawBitmap(wood_slideBitmap, newX - 150, 275, null);
         canvas.drawBitmap(wood_slideBitmap_m, newX + 1470, 275, null);
-
 
         // below is for all dynamic objects
         if (!displayData.hasNewData()) {
@@ -155,7 +170,8 @@ public class GameView extends View {
         }
 
         Date timeCurrentFrame = new Date(System.currentTimeMillis());
-        float fps = 1000 / (timeCurrentFrame.getTime() - timeLastFrame.getTime());
+        float fps = 1000 / (timeCurrentFrame.getTime() - timeLastFrame
+                .getTime());
         timeLastFrame = timeCurrentFrame;
 
         // for absolute coordinate system graphics
@@ -173,9 +189,11 @@ public class GameView extends View {
 
         // for floating text
         canvas.drawText("Scroll Pos: " + scrollPosition, 570, 450, paintInfo);
-        canvas.drawText("(x,y)=(" + this.x + "," + this.y + ")", 570, 420, paintInfo);
-        canvas.drawText(Integer.toString(displayData.getLeftMilk()), 494, 61, paintMilk);
-        canvas.drawText("Time=" + gct.getDisplayData().getTime(), 570, 30, paintInfo);
+        canvas.drawText("(x,y)=(" + this.x + "," + this.y + ")", 570, 420,
+                paintInfo);
+        canvas.drawText(Integer.toString(displayData.getLeftMilk()), 494, 61,
+                paintMilk);
+        canvas.drawText("Time=" + displayData.getTime(), 570, 30, paintInfo);
         canvas.drawText("FPS=" + fps, 570, 60, paintInfo);
 
     }
@@ -307,36 +325,10 @@ public class GameView extends View {
         int x = (int) event.getX();
         int y = (int) event.getY();
         buttomBar.onTouch(event);
-        if(buttomBar.isTouch)return true;
+        if (buttomBar.isTouch)
+            return true;
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            /*if (y < 100 && !touchScreen) {
-                if (x < 100) {
-                    eqc.addEvent(EventEnum.OriginalCheeseSmall, Cheese.Left);
-                    touchScreen = true;
-                    buttomBar.test(event);
-                } else if (x < 200) {
-                    eqc.addEvent(EventEnum.OriginalCheeseMed, Cheese.Left);
-                    touchScreen = true;
-
-                } else if (x < 300) {
-                    eqc.addEvent(EventEnum.OriginalCheeseLarge, Cheese.Left);
-                    touchScreen = true;
-                }
-                if (x > 700) {
-                    eqc.addEvent(EventEnum.OriginalCheeseSmall, Cheese.Right);
-                    touchScreen = true;
-                } else if (x > 600) {
-                    eqc.addEvent(EventEnum.OriginalCheeseMed, Cheese.Right);
-                    touchScreen = true;
-
-                } else if (x > 500) {
-                    eqc.addEvent(EventEnum.OriginalCheeseLarge, Cheese.Right);
-                    touchScreen = true;
-                }
-
-            }*/
-
             scroll.isPressing = true;
             scroll.fingerX = x;
             scroll.prev_fingerX = x;
@@ -357,12 +349,12 @@ public class GameView extends View {
         return true;
     }
 
-    public void setGct(GameCalThread gct) {
-        this.gct = gct;
+    public void setHasBeenInit(boolean hasBeenInit) {
+        this.hasBeenInit = hasBeenInit;
     }
 
-    public GameCalThread getGct() {
-        return gct;
+    public boolean isHasBeenInit() {
+        return hasBeenInit;
     }
 
     public static final byte Morning = GlobalParameter.Morning;

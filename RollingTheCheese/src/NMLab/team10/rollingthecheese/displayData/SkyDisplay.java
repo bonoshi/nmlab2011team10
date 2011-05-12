@@ -23,6 +23,7 @@ public class SkyDisplay {
     // static boolean initNight = false;
 
     static public void initial() {
+        r = GameView.r;
         morning = BitmapFactory.decodeResource(r, R.drawable.sky_morning);
         noon = BitmapFactory.decodeResource(r, R.drawable.sky_noon);
         dusk = BitmapFactory.decodeResource(r, R.drawable.sky_dusk);

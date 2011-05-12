@@ -105,14 +105,15 @@ public class CloudDisplay {
         static Bitmap night;
 
         static public void initial() {
+            r = GameView.r;
             dusk = BitmapFactory.decodeResource(r, R.drawable.cloud).copy(Config.ARGB_8888, true);
             noon = BitmapFactory.decodeResource(r, R.drawable.cloud);
             morning = BitmapFactory.decodeResource(r, R.drawable.cloud).copy(Config.ARGB_8888, true);
             night = BitmapFactory.decodeResource(r, R.drawable.cloud).copy(Config.ARGB_8888, true);
-            GameView.modifyGreenByRatio(dusk, 0.65F);
-            GameView.modifyBlueByRatio(dusk, 0.2F);
-            GameView.modifyRGBByRatio(morning, 0.85F);
-            GameView.modifyRGBByRatio(night, 0.2F);
+            //GameView.modifyGreenByRatio(dusk, 0.65F);
+            //GameView.modifyBlueByRatio(dusk, 0.2F);
+            //GameView.modifyRGBByRatio(morning, 0.85F);
+            //GameView.modifyRGBByRatio(night, 0.2F);
         }
 
         public Cloud(boolean init) {
