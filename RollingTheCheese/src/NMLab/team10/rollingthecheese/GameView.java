@@ -40,6 +40,8 @@ public class GameView extends View {
     private static Bitmap wood_slideBitmap_m;
     private static Bitmap buttomBitmap;
 
+    private ButtomBar buttomBar;
+
     VelocityTracker vTracker;
 
     public GameView(RollingCheeseActivity father) {
@@ -48,6 +50,7 @@ public class GameView extends View {
         this.father = father;
         GameView.initBitmap(father);
         initPaint();
+        buttomBar = new ButtomBar(father);
         scroll = new ScrollThread();
         scroll.start();
 
@@ -138,7 +141,7 @@ public class GameView extends View {
         canvas.translate(-newX, 0);
         canvas.drawBitmap(wood_slideBitmap, newX - 150, 275, null);
         canvas.drawBitmap(wood_slideBitmap_m, newX + 1470, 275, null);
-        canvas.drawBitmap(grassBitmap, newX - 160, 430, null);
+
 
         // below is for all dynamic objects
         if (!displayData.hasNewData()) {
@@ -161,9 +164,10 @@ public class GameView extends View {
 
         // end of absolute coordinate system graphics
         canvas.translate(-newX, 0);
+        canvas.drawBitmap(grassBitmap, newX - 160, 460, null);
+        buttomBar.draw(canvas);
 
         // for floating text
-        canvas.drawBitmap(buttomBitmap, 5, 10, null);
         canvas.drawText("Scroll Pos: " + scrollPosition, 570, 450, paintInfo);
         canvas.drawText("(x,y)=(" + this.x + "," + this.y + ")", 570, 420, paintInfo);
         canvas.drawText(Integer.toString(displayData.getLeftMilk()), 494, 61, paintMilk);
@@ -298,11 +302,15 @@ public class GameView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         int x = (int) event.getX();
         int y = (int) event.getY();
+        if(buttomBar.onTouch(event)){
+            return true;
+        }
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (y < 100 && !touchScreen) {
+            /*if (y < 100 && !touchScreen) {
                 if (x < 100) {
                     eqc.addEvent(EventEnum.OriginalCheeseSmall, Cheese.Left);
                     touchScreen = true;
+                    buttomBar.test(event);
                 } else if (x < 200) {
                     eqc.addEvent(EventEnum.OriginalCheeseMed, Cheese.Left);
                     touchScreen = true;
@@ -323,7 +331,8 @@ public class GameView extends View {
                     touchScreen = true;
                 }
 
-            }
+            }*/
+
             scroll.isPressing = true;
             scroll.fingerX = x;
             scroll.prev_fingerX = x;
@@ -331,11 +340,17 @@ public class GameView extends View {
             scroll.recover_a = 0;
             scroll.V = 0;
         } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            if(buttomBar.isTouch){
+                return true;
+            }
             scroll.fingerX = x;
             vTracker.addMovement(event);
             vTracker.computeCurrentVelocity(1);
             scroll.V = vTracker.getXVelocity();
         } else if (event.getAction() == MotionEvent.ACTION_UP) {
+            if(buttomBar.isTouch){
+                return true;
+            }
             scroll.isPressing = false;
             touchScreen = false;
         }
