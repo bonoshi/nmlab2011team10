@@ -29,9 +29,7 @@ public class CheeseDisplay {
 
 
 
-    static Bitmap cheeseOM[];
-    static Bitmap cheeseOS[];
-    static Bitmap cheeseOT[];
+
     static final int HEALTHY = 0;
     static final int LITTLE_DAMAGED = 1;
     static final int SERIOUS_DAMAGED = 2;
@@ -46,11 +44,20 @@ public class CheeseDisplay {
         Resources r = GameView.r;
 
         Bitmap cheeseOtmp = BitmapFactory.decodeResource(r,R.drawable.cheese_original);
+        Matrix matrix = new Matrix();
+        matrix.postScale(0.8f, 0.8f);
+        
         cheeseO = new Bitmap[4][4];
         cheeseO[LARGE][HEALTHY] = Bitmap.createBitmap(cheeseOtmp,0,0,cheesePictureSize,cheesePictureSize);//,matrix,true);
         cheeseO[LARGE][LITTLE_DAMAGED] = Bitmap.createBitmap(cheeseOtmp,cheesePictureStep,0,cheesePictureSize,cheesePictureSize);//,matrix,true);
         cheeseO[LARGE][SERIOUS_DAMAGED] = Bitmap.createBitmap(cheeseOtmp,cheesePictureStep*2,0,cheesePictureSize,cheesePictureSize);
         cheeseO[LARGE][DEAD]=Bitmap.createBitmap(cheeseOtmp,cheesePictureStep*3,0,cheesePictureSize,cheesePictureSize);
+        
+        
+        cheeseO[MIDDLE][HEALTHY] = Bitmap.createBitmap(cheeseO[LARGE][HEALTHY],0,0,cheesePictureSize,cheesePictureSize,matrix,false);
+        /* TO BE CONTINUE */
+        
+        
 
     }
     public CheeseDisplay(CheeseMessage cm) {
