@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
@@ -24,7 +25,7 @@ public class ListContTwoButtom {
     private Rect dest;
     private int startX;
     private ArrayList<Rect> buttoms;
-    private HashMap<Rect,Byte> buttom_function;
+    private HashMap<Rect, Byte> buttom_function;
 
     private static final int buttomListW = 130;
     private static final int buttomListH = 300;
@@ -36,32 +37,39 @@ public class ListContTwoButtom {
     private static final int buttom2y2 = 290;
     private EventQueueCenter eqc;
 
+
     public ListContTwoButtom(int startX, Bitmap listBitmap,EventQueueCenter eqc,Byte event1,Byte event2){
         //initial state
+
         status = CLOSE;
         statusQueue = CLOSE;
         frame = 0;
-        
+
+
         //initial data members
         this.startX = startX;
         this.dest =  new Rect(startX, 0, startX + buttomListW, buttomListH);
         this.buttomListBitmap = listBitmap;
         this.eqc = eqc;
-        
+
         //initial buttoms
         buttoms = new ArrayList<Rect>();
         buttom_function = new HashMap<Rect, Byte>();
+
         Rect rect = new Rect(startX,buttom1y1,startX+buttomListW,buttom1y2);
         buttoms.add(rect);
         buttom_function.put(rect, event1);
         rect = new Rect(startX, buttom2y1,startX+buttomListW,buttom2y2);
+
         buttoms.add(rect);
         buttom_function.put(rect, event2);
     }
 
-    
+
+
     public void buttomPress(){
         switch(status){
+
             case CLOSE:
                 frame = 0;
                 status = CLOSE_TO_OPEN;
@@ -78,78 +86,80 @@ public class ListContTwoButtom {
         }
     }
 
-    public void draw(Canvas canvas){
-        Rect src = new Rect(0,0,1,1);
+    public void draw(Canvas canvas) {
+        Rect src = new Rect(0, 0, 1, 1);
 
-        if(status == CLOSE){
-            if(statusQueue == CLOSE)return;
-            if(statusQueue == CLOSE_TO_OPEN){
-                frame=0;
-                src = new Rect(frame*buttomListW,0,(frame+1)*buttomListW,buttomListH);
+        if (status == CLOSE) {
+            if (statusQueue == CLOSE)
+                return;
+            if (statusQueue == CLOSE_TO_OPEN) {
+                frame = 0;
+                src = new Rect(frame * buttomListW, 0, (frame + 1) * buttomListW, buttomListH);
                 status = CLOSE_TO_OPEN;
                 statusQueue = CLOSE;
             }
         }
-        if(status == OPEN){
-            src = new Rect(animationEnd*buttomListW,0,(animationEnd+1)*buttomListW,buttomListH);
+        if (status == OPEN) {
+            src = new Rect(animationEnd * buttomListW, 0, (animationEnd + 1) * buttomListW, buttomListH);
         }
-        if(status == CLOSE_TO_OPEN){
-            src = new Rect(frame*buttomListW,0,(frame+1)*buttomListW,buttomListH);
-            if(frame==animationEnd){
-                if(statusQueue == OPEN_TO_CLOSE){
+        if (status == CLOSE_TO_OPEN) {
+            src = new Rect(frame * buttomListW, 0, (frame + 1) * buttomListW, buttomListH);
+            if (frame == animationEnd) {
+                if (statusQueue == OPEN_TO_CLOSE) {
                     status = OPEN_TO_CLOSE;
                     statusQueue = CLOSE;
                     frame = 0;
-                }else{
+                } else {
                     status = OPEN;
                 }
-            }else{
+            } else {
                 frame++;
             }
         }
-        if(status == OPEN_TO_CLOSE){
-            src = new Rect(frame*buttomListW,buttomListH,(frame+1)*buttomListW,buttomListH*2);
-            if(frame==animationEnd){
-                if(statusQueue == CLOSE_TO_OPEN){
+        if (status == OPEN_TO_CLOSE) {
+            src = new Rect(frame * buttomListW, buttomListH, (frame + 1) * buttomListW, buttomListH * 2);
+            if (frame == animationEnd) {
+                if (statusQueue == CLOSE_TO_OPEN) {
                     status = CLOSE_TO_OPEN;
                     statusQueue = CLOSE;
                     frame = 0;
-                }else{
+                } else {
                     status = CLOSE;
                 }
-            }else{
+            } else {
                 frame++;
             }
         }
-        canvas.drawBitmap(buttomListBitmap,src,dest,null);
+        canvas.drawBitmap(buttomListBitmap, src, dest, null);
     }
+
 
 
     public boolean onTouch(MotionEvent event){
         int x = (int)event.getX();
         int y = (int)event.getY();
         Rect touchArea = new Rect(startX,buttomH,startX + buttomListW, buttomListH);
-        Rect buttomArea = new Rect(startX,0,startX+buttomListW,buttomH);       
+        Rect buttomArea = new Rect(startX,0,startX+buttomListW,buttomH);
         if(buttomArea.contains(x,y))return false;
         if(touchArea.contains(x, y)){
             if(status == OPEN){
+
                 for (Rect r : buttoms) {
-                    if(r.contains(x,y)){
+                    if (r.contains(x, y)) {
                         eqc.addEvent(buttom_function.get(r));
                         return true;
                     }
                 }
             }
-
-        }else{
-            if(status == CLOSE_TO_OPEN){
+        } else {
+            if (status == CLOSE_TO_OPEN) {
                 statusQueue = OPEN_TO_CLOSE;
             }
-            if(status == OPEN){
+            if (status == OPEN) {
                 status = OPEN_TO_CLOSE;
                 frame = 0;
             }
         }
         return true;
-    } 
-} 
+    }
+}

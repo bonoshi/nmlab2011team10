@@ -9,6 +9,7 @@ import NMLab.team10.rollingthecheese.displayData.Climate;
 import NMLab.team10.rollingthecheese.displayData.HouseDisplay;
 import NMLab.team10.rollingthecheese.displayData.SkyDisplay;
 import NMLab.team10.rollingthecheese.displayData.SmokeDisplay;
+
 import NMLab.team10.rollingthecheese.gameSetting.Cheese;
 import NMLab.team10.rollingthecheese.gameSetting.GlobalParameter;
 import android.content.Context;
@@ -37,7 +38,7 @@ public class GameView extends View {
     private static Bitmap wood_slideBitmap_m;
 
     private ButtomBar buttomBar;
-    
+
     private boolean hasBeenInit = true;
 
     VelocityTracker vTracker;
@@ -51,6 +52,17 @@ public class GameView extends View {
 
         scroll = new ScrollThread();
         scroll.start();
+/*
+<<<<<<< .mine
+        // for game calculation center
+        ServerGameSetting sgs = new ServerGameSetting();
+        GameCalThread game = new GameCalThread(father, sgs);
+        displayData = game.getDisplayData();
+        eqc = game.getEventCenter();
+
+        buttomBar = new ButtomBar(father, eqc);
+        gameDrawThread = new GameDrawThread(this, game);
+*/
 
         gameDrawThread = new GameDrawThread(this);
         gameDrawThread.isRunning = true;
@@ -119,19 +131,19 @@ public class GameView extends View {
     Paint paintMilk = new Paint();
 
     Date timeLastFrame = new Date(System.currentTimeMillis());
-    
+
 
 
     @Override
     public void onDraw(Canvas canvas) {
-       
+
         if(hasBeenInit){
             if(displayData.hasNewData()){
                 hasBeenInit = false;
             }
             return;
         }
-        
+
         int newX;
 
         newX = scroll.posX;

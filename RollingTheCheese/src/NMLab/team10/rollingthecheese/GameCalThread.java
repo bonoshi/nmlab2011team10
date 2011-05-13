@@ -33,7 +33,7 @@ public class GameCalThread extends Thread {
         displayData = new DisplayData();
         father.displayData = displayData;
     }
-    
+
     Date timeLast = null;
 
     public void run() {
@@ -105,6 +105,12 @@ public class GameCalThread extends Thread {
             }
         }
     }
+
+    public void refreshDisplayData(SynMessageData smd){//refresh by client blue-tooth
+        displayData.refresh(smd);
+    }
+
+    //public void
 
     public void stopGameCal() {
         this.stop = true;

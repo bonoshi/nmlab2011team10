@@ -71,7 +71,7 @@ public class CloudDisplay {
         double rand = Math.random();
         switch (CloudDisplay.climate) {
             case ClimateEnum.Sunny: {
-                if (rand > 0.99 && list.size() < 11) {
+                if (rand > 0.99 && list.size() < 7) {
                     list.add(new Cloud(false));
                     lastAddCloudTime = System.currentTimeMillis();
                 }
@@ -141,11 +141,11 @@ public class CloudDisplay {
         public void updateCloud() {
             cloud_x += Climate.getWind();
             double rand = Math.random();
-            if (rand > 0.98) {
-                if (rand > 0.99) {
-                    cloud_y += 0.5;
+            if (rand > 0.975) {
+                if (rand > 0.9875) {
+                    cloud_y += 0.8;
                 } else {
-                    cloud_y -= 0.5;
+                    cloud_y -= 0.8;
                 }
             }
             if (cloud_x > 1360 && cloud_x < -200) {
@@ -157,9 +157,9 @@ public class CloudDisplay {
 
         private void fixCloud() {
             if (cloud_y > 100) {
-                cloud_y -= 1;
+                cloud_y -= 0.8;
             } else if (cloud_y < -50) {
-                cloud_y += 1;
+                cloud_y += 0.8;
             }
         }
 
@@ -172,7 +172,7 @@ public class CloudDisplay {
                             return;
                         }
                         lastChangeTime = System.currentTimeMillis();
-                        if (rand > 0.997 && frame < 11) {
+                        if (rand > 0.997 && frame < 9) {
                             frame++;
                         } else if (rand < 0.997 && frame > -1) {
                             frame--;
@@ -190,13 +190,31 @@ public class CloudDisplay {
                             return;
                         }
                         lastChangeTime = System.currentTimeMillis();
-                        if (rand > 0.993 && frame < 11) {
-                            frame++;
-                        } else if (rand < 0.993 && frame > -1) {
-                            frame--;
-                            if (frame == -1)
-                                isDead = true;
+                        if (frame >= 0 && frame <= 5) {
+                            if (rand > 0.993) {
+                                frame++;
+                            } else if (rand < 0.993) {
+                                if (--frame == -1)
+                                    isDead = true;
+                            }
+                        } else if (frame <= 7) {
+                            if (rand > 0.994) {
+                                frame++;
+                            } else if (rand < 0.994) {
+                                frame--;
+                            }
+                        } else if (frame == 8) {
+                            if (rand > 0.996) {
+                                frame++;
+                            } else if (rand < 0.996) {
+                                frame--;
+                            }
+                        } else if (frame == 9) {
+                            if (rand < 0.996) {
+                                frame--;
+                            }
                         }
+
                         sRectangle = new Rect(CloudInterval * frame, 0, CloudInterval * frame + CloudWidth,
                                 CloudHeight);
                     }
