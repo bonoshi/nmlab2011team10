@@ -1,10 +1,12 @@
 package NMLab.team10.rollingthecheese.displayData;
+import android.R.integer;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 
 import android.graphics.Canvas;
+import android.text.StaticLayout;
 import NMLab.team10.rollingthecheese.GameView;
 import NMLab.team10.rollingthecheese.R;
 import NMLab.team10.rollingthecheese.gameSetting.CheeseEnum;
@@ -15,26 +17,35 @@ import NMLab.team10.rollingthecheese.gameSetting.GlobalParameter;
 
 public class CheeseDisplay {
  
-    static Bitmap cheeseOL;
+    static Bitmap cheeseOL[];
+    static Bitmap cheeseOM[];
+    static Bitmap cheeseOS[];
+    static Bitmap cheeseOT[];
+    static final int HEALTHY = 0;
+    static final int LITTLE_DAMAGED = 1;
+    static final int SERIOUS_DAMAGED = 2;
+    static final int DEAD = 3;
+    static final int cheesePictureStep = 120;
+    static final int cheesePictureSize = 110;
     
-    static Bitmap cheeseOM;
-    static Bitmap cheeseOS;
-    static Bitmap cheeseOT;
-
+    float w;
+    float angle;
+    public CheeseDisplay() {
+        // TODO Auto-generated constructor stub
+        w = 12f;
+        angle = 0;
+    }
+    
+    
     public static void initBitmap(){
         Resources r = GameView.r;
-        Matrix matrix = new Matrix();
-        Bitmap cheeseO = BitmapFactory.decodeResource(r, R.drawable.cheese_original);
-        matrix.postScale(0.8f, 0.8f);
-        cheeseOL = Bitmap.createBitmap(cheeseO,0,0,cheeseO.getWidth(),cheeseO.getWidth(),matrix,false);
-        matrix.postRotate(30);
-        matrix.postScale(0.8f, 0.8f);
-        cheeseOM = Bitmap.createBitmap(cheeseO,0,0,cheeseO.getWidth(),cheeseO.getWidth(),matrix,false);
-        matrix.postScale(0.8f, 0.8f);
-        cheeseOS = Bitmap.createBitmap(cheeseO,0,0,cheeseO.getWidth(),cheeseO.getWidth(),matrix,false);
-        matrix.postScale(0.8f, 0.8f);
-        cheeseOT = Bitmap.createBitmap(cheeseO,0,0,cheeseO.getWidth(),cheeseO.getWidth(),matrix,false);
         
+        cheeseOL = new Bitmap[4];
+        Bitmap tmp = BitmapFactory.decodeResource(r, R.drawable.cheese_original);
+        cheeseOL[HEALTHY] = Bitmap.createBitmap(tmp,0,0,cheesePictureSize,cheesePictureSize);
+        cheeseOL[LITTLE_DAMAGED] = Bitmap.createBitmap(tmp,cheesePictureStep,0,cheesePictureSize,cheesePictureSize);
+        cheeseOL[SERIOUS_DAMAGED] = Bitmap.createBitmap(tmp,cheesePictureStep*2,0,cheesePictureSize,cheesePictureSize);
+        cheeseOL[DEAD]=Bitmap.createBitmap(tmp,cheesePictureStep*3,0,cheesePictureSize,cheesePictureSize);
         
     }
     public CheeseDisplay(CheeseMessage cm) {
@@ -70,16 +81,20 @@ public class CheeseDisplay {
             case Original: {
                 switch (getSize()) {
                     case Large:
-                        canvas.drawBitmap(cheeseOL, getX()-CheeseParameter.Normal.RadixLarge ,getY()-CheeseParameter.Normal.RadixLarge , null);
+                        Matrix matrix = new Matrix();
+                        matrix.postRotate(angle);
+                        Bitmap picture = Bitmap.createBitmap(cheeseOL[HEALTHY],0,0,cheeseOL[HEALTHY].getWidth(),cheeseOL[HEALTHY].getHeight(),matrix,false);
+                        canvas.drawBitmap(picture, getX()-CheeseParameter.Normal.RadixLarge ,getY()-CheeseParameter.Normal.RadixLarge , null);
+                        angle-=w;
                         break;
                     case Medium:
-                        canvas.drawBitmap(cheeseOM, getX()-CheeseParameter.Normal.RadixMed ,getY()-CheeseParameter.Normal.RadixMed , null);
+        //                canvas.drawBitmap(cheeseOM, getX()-CheeseParameter.Normal.RadixMed ,getY()-CheeseParameter.Normal.RadixMed , null);
                         break;
                     case Small:
-                        canvas.drawBitmap(cheeseOS, getX()-CheeseParameter.Normal.RadixSmall ,getY()-CheeseParameter.Normal.RadixSmall , null);
+        //                canvas.drawBitmap(cheeseOS, getX()-CheeseParameter.Normal.RadixSmall ,getY()-CheeseParameter.Normal.RadixSmall , null);
                         break;
                     case Tiny:
-                        canvas.drawBitmap(cheeseOT, getX()-CheeseParameter.Normal.RadixTiny ,getY()-CheeseParameter.Normal.RadixTiny , null);
+        //                canvas.drawBitmap(cheeseOT, getX()-CheeseParameter.Normal.RadixTiny ,getY()-CheeseParameter.Normal.RadixTiny , null);
                         break;
                 }
                 break;
