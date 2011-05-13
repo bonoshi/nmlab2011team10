@@ -97,7 +97,7 @@ public class ListContFourButtom {
         }
         if(status == OPEN_TO_CLOSE){
             if(frame<4){
-                src = new Rect(frame+1*buttomListW,buttomListH*2,(frame+2)*buttomListW,buttomListH*3);
+                src = new Rect((frame+1)*buttomListW,buttomListH*2,(frame+2)*buttomListW,buttomListH*3);
                 frame++;
             }else if(frame <9){
                 src = new Rect((frame-4)*buttomListW,buttomListH*3,(frame-4+1)*buttomListW,buttomListH*4);
@@ -142,8 +142,8 @@ public class ListContFourButtom {
         int x = (int)event.getX();
         int y = (int)event.getY();
         Rect touchArea = new Rect(startX+10,buttomH,startX+290, buttomListH);
-               
-               
+        Rect buttomArea = new Rect(startX+150-55,0,startX+150+55,buttomH);       
+        if(buttomArea.contains(x,y))return false;       
         if(touchArea.contains(x, y)){
             if(status == OPEN){
                 for (Rect r : buttoms) {

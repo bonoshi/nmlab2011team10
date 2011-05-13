@@ -129,7 +129,8 @@ public class ListContTwoButtom {
         int x = (int)event.getX();
         int y = (int)event.getY();
         Rect touchArea = new Rect(startX,buttomH,startX + buttomListW, buttomListH);
-        
+        Rect buttomArea = new Rect(startX,0,startX+buttomListW,buttomH);       
+        if(buttomArea.contains(x,y))return false;
         if(touchArea.contains(x, y)){
             if(status == OPEN){
                 for (Rect r : buttoms) {
