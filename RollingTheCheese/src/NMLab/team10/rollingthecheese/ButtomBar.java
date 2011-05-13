@@ -15,7 +15,7 @@ public class ButtomBar {
 
     public boolean isTouch;
 
-    private RollingCheeseActivity activity;
+    //private RollingCheeseActivity activity;
 
     private static Bitmap buttomBar;
     private static Bitmap buttomNBitmap;
@@ -24,7 +24,7 @@ public class ButtomBar {
     private static Bitmap buttomFBitmap;
     private static Bitmap buttomConBitmap;
     private static Bitmap buttomDeBitmap;
-    
+    private static Bitmap buttomCanBitmap;
     
     private static Bitmap listNBitmap;
     private static Bitmap listCBitmap;
@@ -33,13 +33,13 @@ public class ButtomBar {
     private static Bitmap listConBitmap;
     private static Bitmap listDeBitmap;
     
-
-    private ButtomListControl listControlN;
-    private ButtomListControl listControlC;
-    private ButtomListControl listControlS;
-    private ButtomListControl listControlF;
-    private ButtomListControl listControlCon;
-    private ButtomListControl listControlDe;
+    
+    private ListContTwoButtom listControlN;
+    private ListContTwoButtom listControlC;
+    private ListContTwoButtom listControlS;
+    private ListContTwoButtom listControlF;
+    private ListContFourButtom listControlCon;
+    private ListContFourButtom listControlDe;
     
     private ButtomControl butContN;
     private ButtomControl butContC;
@@ -52,25 +52,25 @@ public class ButtomBar {
     private EventQueueCenter eqc;
 
     public ButtomBar(RollingCheeseActivity activity, EventQueueCenter eqc){
-        this.activity = activity;
+        //this.activity = activity;
         this.isTouch = false;
         
         ButtomBar.initBitmap(activity);
         this.eqc = eqc;
         
-        listControlN = new ButtomListControl(0,listNBitmap,eqc);
-        listControlN.addButtomArea(100,160,EventEnum.OriginalCheeseSmall);
-        listControlN.addButtomArea(190,290,EventEnum.OriginalCheeseLarge);
-        listControlC = new ButtomListControl(110,listCBitmap,eqc);
-        listControlC.addButtomArea(100,160,EventEnum.OriginalCheeseSmall);
-        listControlC.addButtomArea(190,290,EventEnum.OriginalCheeseLarge);
-        listControlS = new ButtomListControl(220,listSBitmap,eqc);
-        listControlS.addButtomArea(100,160,EventEnum.OriginalCheeseSmall);
-        listControlS.addButtomArea(190,290,EventEnum.OriginalCheeseLarge);
-        listControlF = new ButtomListControl(330,listFBitmap,eqc);
-        listControlF.addButtomArea(100,160,EventEnum.OriginalCheeseSmall);
-        listControlF.addButtomArea(190,290,EventEnum.OriginalCheeseLarge);
-
+        listControlN = new ListContTwoButtom(0,listNBitmap,eqc,EventEnum.OriginalCheeseSmall,EventEnum.OriginalCheeseLarge);
+        listControlC = new ListContTwoButtom(110,listCBitmap,eqc,EventEnum.OriginalCheeseSmall,EventEnum.OriginalCheeseLarge);
+        listControlS = new ListContTwoButtom(220,listSBitmap,eqc,EventEnum.OriginalCheeseSmall,EventEnum.OriginalCheeseLarge);
+        listControlF = new ListContTwoButtom(330,listFBitmap,eqc,EventEnum.OriginalCheeseSmall,EventEnum.OriginalCheeseLarge);
+        
+        listControlCon = new ListContFourButtom(345, listConBitmap, eqc, EventEnum.OriginalCheeseSmall, 
+                                                                        EventEnum.OriginalCheeseMed,
+                                                                        EventEnum.OriginalCheeseMed,
+                                                                        EventEnum.OriginalCheeseLarge);
+        listControlDe = new ListContFourButtom(455, listDeBitmap, eqc, EventEnum.OriginalCheeseSmall, 
+                                                                        EventEnum.OriginalCheeseMed,
+                                                                        EventEnum.OriginalCheeseMed,
+                                                                        EventEnum.OriginalCheeseLarge);
                 
         butContN = new ButtomControl(0,buttomNBitmap);
         butContC = new ButtomControl(110,buttomCBitmap);
@@ -78,6 +78,7 @@ public class ButtomBar {
         butContF = new ButtomControl(330,buttomFBitmap);
         butContCon = new ButtomControl(440,buttomConBitmap);
         butContDe = new ButtomControl(550,buttomDeBitmap);
+        ButContCan = new ButtomControl(660, buttomCanBitmap);
 
     }
 
@@ -93,11 +94,14 @@ public class ButtomBar {
         buttomFBitmap = BitmapFactory.decodeResource(r, R.drawable.buttom_firing);
         buttomConBitmap = BitmapFactory.decodeResource(r, R.drawable.buttom_construct);
         buttomDeBitmap = BitmapFactory.decodeResource(r, R.drawable.buttom_destruct);
+        buttomCanBitmap = BitmapFactory.decodeResource(r, R.drawable.buttom_cancel);
         
         listNBitmap = BitmapFactory.decodeResource(r, R.drawable.list_original);
         listCBitmap = BitmapFactory.decodeResource(r, R.drawable.list_casumarzu);
         listSBitmap = BitmapFactory.decodeResource(r, R.drawable.list_sweaty);
         listFBitmap = BitmapFactory.decodeResource(r, R.drawable.list_firing);
+        listConBitmap = BitmapFactory.decodeResource(r, R.drawable.list_construct);
+        listDeBitmap = BitmapFactory.decodeResource(r, R.drawable.list_destruct);
         
     }
 
@@ -106,6 +110,8 @@ public class ButtomBar {
         listControlC.draw(canvas);
         listControlS.draw(canvas);
         listControlF.draw(canvas);
+        listControlCon.draw(canvas);
+        listControlDe.draw(canvas);
         
         canvas.drawBitmap(buttomBar, 0,0, null);
         
@@ -115,6 +121,7 @@ public class ButtomBar {
         butContF.draw(canvas);
         butContCon.draw(canvas);
         butContDe.draw(canvas);
+        ButContCan.draw(canvas);
     }
 
 
@@ -140,11 +147,15 @@ public class ButtomBar {
             isTouch = true;
         }
         if(butContCon.onTouch(event)){
-            //normalListControl.buttomPress();
+            listControlCon.buttomPress();
             isTouch = true;
         }
         if(butContDe.onTouch(event)){
-            //normalListControl.buttomPress();
+            listControlDe.buttomPress();
+            isTouch = true;
+        }
+        if(ButContCan.onTouch(event)){
+            eqc.addEvent(EventEnum.CancelCheese);
             isTouch = true;
         }
         
@@ -152,6 +163,8 @@ public class ButtomBar {
         listControlC.onTouch(event);
         listControlS.onTouch(event);
         listControlF.onTouch(event);
+        listControlCon.onTouch(event);
+        listControlDe.onTouch(event);
         return;
     }
 

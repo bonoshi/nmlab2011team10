@@ -16,6 +16,7 @@ import NMLab.team10.rollingthecheese.gameSetting.GlobalParameter;
 public class CheeseDisplay {
  
     static Bitmap cheeseOL;
+    
     static Bitmap cheeseOM;
     static Bitmap cheeseOS;
     static Bitmap cheeseOT;

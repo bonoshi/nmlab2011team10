@@ -10,7 +10,6 @@ public class ButtomControl {
     private int frame;
     private Bitmap buttomBitmap;
     private Rect dest;
-    private int startX;
 
     private static final int buttomW = 110;
     private static final int buttomH = 85;
@@ -22,7 +21,6 @@ public class ButtomControl {
     public ButtomControl(int startX, Bitmap buttomBitmap){
         isMoving = false;
         frame = 0;
-        this .startX = startX;
         this .dest =  new Rect(startX, 0, startX + buttomW, buttomH);
         this.buttomBitmap = buttomBitmap;
 
