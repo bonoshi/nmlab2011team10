@@ -6,7 +6,7 @@ public class CheeseMessage {
         type = c.getType();
         size = c.getSize();
         HPPercent = (byte) Math.ceil(100.0 * c.getEndurance() / c.getMaxEndurance());
-        //spinAngle = c.getSpinAngle();
+        spinAngle = c.getSpinAngle();
         x = c.x;
         y = c.y;
         this.setFire(c.getFireState());
@@ -27,6 +27,9 @@ public class CheeseMessage {
     }
     public float getY() {
         return y;
+    }
+    public short getSpinAngle(){
+        return spinAngle;
     }
 
     public void setID(short iD) {
@@ -59,7 +62,7 @@ public class CheeseMessage {
     private byte type;
     private byte size;
     private byte HPPercent;
-    //private short spinAngle;
+    private short spinAngle;
     private float x;// x for drawing
     private float y;
     //private byte animation;//poison, on fire, dying animation, each has four picture

@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.text.StaticLayout;
 import NMLab.team10.rollingthecheese.GameView;
 import NMLab.team10.rollingthecheese.R;
+import NMLab.team10.rollingthecheese.gameSetting.Cheese;
 import NMLab.team10.rollingthecheese.gameSetting.CheeseEnum;
 import NMLab.team10.rollingthecheese.gameSetting.CheeseMessage;
 import NMLab.team10.rollingthecheese.gameSetting.CheeseParameter;
@@ -28,13 +29,7 @@ public class CheeseDisplay {
     static final int cheesePictureStep = 120;
     static final int cheesePictureSize = 110;
     
-    float w;
-    float angle;
-    public CheeseDisplay() {
-        // TODO Auto-generated constructor stub
-        w = 12f;
-        angle = 0;
-    }
+
     
     
     public static void initBitmap(){
@@ -75,6 +70,9 @@ public class CheeseDisplay {
     public float getY() {
         return GlobalParameter.MapHeight-cheeseMessage.getY();
     }
+    public short getSpinAngle(){
+        return cheeseMessage.getSpinAngle();
+    }
 
     public void draw(boolean whichSide, Canvas canvas){
         switch (getType()) {
@@ -82,10 +80,20 @@ public class CheeseDisplay {
                 switch (getSize()) {
                     case Large:
                         Matrix matrix = new Matrix();
-                        matrix.postRotate(angle);
-                        Bitmap picture = Bitmap.createBitmap(cheeseOL[HEALTHY],0,0,cheeseOL[HEALTHY].getWidth(),cheeseOL[HEALTHY].getHeight(),matrix,false);
+                        if(whichSide == Cheese.Left)
+                            matrix.postRotate(-getSpinAngle());
+                        else 
+                            matrix.postRotate(getSpinAngle());    
+                    
+                        int status;
+                        if(getHPPercent()==100)status = HEALTHY;
+                        else{
+                            status = 3-getHPPercent()/33;
+                        }
+                        
+                        Bitmap picture = Bitmap.createBitmap(cheeseOL[status],0,0,cheeseOL[status].getWidth(),cheeseOL[status].getHeight(),matrix,false);
                         canvas.drawBitmap(picture, getX()-CheeseParameter.Normal.RadixLarge ,getY()-CheeseParameter.Normal.RadixLarge , null);
-                        angle-=w;
+
                         break;
                     case Medium:
         //                canvas.drawBitmap(cheeseOM, getX()-CheeseParameter.Normal.RadixMed ,getY()-CheeseParameter.Normal.RadixMed , null);
