@@ -21,6 +21,7 @@ public class DisplayData {
 
     public DisplayData() {
         hasNewData = false;
+        this.smd = new SynMessageData();
     }
 
     public boolean hasNewData() {
@@ -288,7 +289,11 @@ public class DisplayData {
         synchronized (cList) {
             for (Iterator<CheeseDisplay> iterator = cList.iterator(); iterator.hasNext();) {
                 CheeseDisplay cheeseDisplay = (CheeseDisplay) iterator.next();
-                cheeseDisplay.draw(whichSide, canvas);
+                if (cheeseDisplay.removeDead()) {
+                    iterator.remove();
+                } else {
+                    cheeseDisplay.draw(whichSide, canvas);
+                }
             }
         }
     }

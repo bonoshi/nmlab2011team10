@@ -1,6 +1,10 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-public class CheeseMessage {
+import java.io.Serializable;
+
+public class CheeseMessage implements Serializable{
+    private static final long serialVersionUID = 879432701639638072L;
+    
     public CheeseMessage(Cheese c) {
         ID = c.getID();
         type = c.getType();

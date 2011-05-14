@@ -1,8 +1,16 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
+import java.io.Serializable;
+
 import NMLab.team10.rollingthecheese.byteEnum.ProjectorEnum;
 
-public class Projector {
+public class Projector implements Serializable{
+
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1161120424944559472L;
+
     public Projector() {
         this.setType(Board);
     }

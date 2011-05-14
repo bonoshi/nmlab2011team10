@@ -1,11 +1,18 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
+import NMLab.team10.rollingthecheese.byteEnum.BackGroundEnum;
+import NMLab.team10.rollingthecheese.byteEnum.ClimateEnum;
 import NMLab.team10.rollingthecheese.displayData.ButtonDisplay;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 
-public class SynMessageData {
+public class SynMessageData implements Serializable {
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -7296263958207475486L;
 
     int time;// current time of a day
     byte climate;
@@ -37,6 +44,20 @@ public class SynMessageData {
         refreshData(s, eqc, whichSide);
     }
 
+    public SynMessageData() {
+        time = 0;
+        climate = ClimateEnum.Cloudy;
+        background = BackGroundEnum.SpringFarm;
+        leftProjector = new Projector();
+        rightProjector = new Projector();
+//        leftHouse = new House();
+//        rightHouse = new House();
+        leftFarm = new Farm();
+        rightFarm = new Farm();
+        leftMilk = GlobalParameter.initialMilk;
+        rightMilk = GlobalParameter.initialMilk;
+    }
+
     private void refreshData(ServerGameSetting s, EventQueueCenter eqc, boolean whichSide) {
 
         time = s.getTime();
@@ -51,7 +72,7 @@ public class SynMessageData {
         rightFarm = s.getRightFarm().clone();
         leftMilk = s.getLeftMilk();
         rightMilk = s.getRightMilk();
-        
+
         leftDSM = new DestructStateMessage(s.getLeftDestruct());
         rightDSM = new DestructStateMessage(s.getRightDestruct());
 
@@ -170,11 +191,11 @@ public class SynMessageData {
     public ButtonDisplay getButtonD() {
         return buttonD;
     }
-    
+
     public DestructStateMessage getLeftDSM() {
         return leftDSM;
     }
-    
+
     public DestructStateMessage getRightDSM() {
         return rightDSM;
     }

@@ -1,11 +1,15 @@
 package NMLab.team10.rollingthecheese.displayData;
 
+import java.io.Serializable;
+
 import NMLab.team10.rollingthecheese.event.EventEnum;
 import NMLab.team10.rollingthecheese.event.EventQueue;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 import NMLab.team10.rollingthecheese.gameSetting.DestructState;
 
-public class ButtonDisplay {
+public class ButtonDisplay implements Serializable{
+    private static final long serialVersionUID = 2259682729590011387L;
+
     // Cow Button => get from cow queue
     public byte cowPercent = 100;
 

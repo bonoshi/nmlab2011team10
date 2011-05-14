@@ -31,7 +31,6 @@ public class GameCalThread extends Thread {
         eventCenter = new EventQueueCenter(sgs,father);
         synMessageData = new SynMessageData(sgs, eventCenter, Right);
         displayData = new DisplayData();
-        father.displayData = displayData;
     }
 
     Date timeLast = null;
@@ -66,6 +65,7 @@ public class GameCalThread extends Thread {
             if (isTwoPlayer) {
                 try {
                     father.sendObject(synMessageData);
+                    GameView.refreshPPS(true);
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
                     e1.printStackTrace();
@@ -92,7 +92,7 @@ public class GameCalThread extends Thread {
             while (true) {
                 Date timeNow = new Date(System.currentTimeMillis());
                 long interval = timeNow.getTime() - timeLast.getTime();
-                if (interval < 30) {
+                if (interval < 50) {
                     try {
                         sleep(1);
                     } catch (InterruptedException e) {

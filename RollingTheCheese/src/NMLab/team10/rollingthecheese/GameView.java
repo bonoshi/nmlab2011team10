@@ -132,17 +132,30 @@ public class GameView extends View {
 
     Date timeLastFrame = new Date(System.currentTimeMillis());
 
-
+    static public float PacketPerSec = 0;
+    static public String pssString = "";
+    static public long lastUpPTime = System.currentTimeMillis();
+    static public void refreshPPS(boolean isServer){
+        PacketPerSec = 1000/(System.currentTimeMillis()-lastUpPTime);
+        if(PacketPerSec<0.1F)
+            PacketPerSec = 0.1F;
+        pssString = Float.toString(PacketPerSec);
+        if(isServer){
+            pssString = "S:" + pssString;
+        }else{
+            pssString = "C:" + pssString;
+        }
+    }
 
     @Override
     public void onDraw(Canvas canvas) {
 
-        if(hasBeenInit){
-            if(displayData.hasNewData()){
-                hasBeenInit = false;
-            }
-            return;
-        }
+//        if(hasBeenInit){
+//            if(displayData.hasNewData()){
+//                hasBeenInit = false;
+//            }
+//            return;
+//        }
 
         int newX;
 
@@ -175,11 +188,11 @@ public class GameView extends View {
         canvas.drawBitmap(wood_slideBitmap_m, newX + 1470, 275, null);
 
         // below is for all dynamic objects
-        if (!displayData.hasNewData()) {
-            return;
-        } else {
-            displayData.acceptData();
-        }
+//        if (!displayData.hasNewData()) {
+//            return;
+//        } else {
+//            displayData.acceptData();
+//        }
 
         Date timeCurrentFrame = new Date(System.currentTimeMillis());
         float fps = 1000 / (timeCurrentFrame.getTime() - timeLastFrame
@@ -207,6 +220,7 @@ public class GameView extends View {
                 paintMilk);
         canvas.drawText("Time=" + displayData.getTime(), 570, 30, paintInfo);
         canvas.drawText("FPS=" + fps, 570, 60, paintInfo);
+        canvas.drawText("P/sec=" + pssString ,570, 90, paintInfo); 
 
     }
 

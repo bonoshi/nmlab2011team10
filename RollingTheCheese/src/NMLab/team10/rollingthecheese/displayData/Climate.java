@@ -24,9 +24,9 @@ public class Climate {
         switch (Climate.climate) {
             case ClimateEnum.Sunny: {
                 if (rand > 0.99) {
-                    wind += 0.02;
-                } else if (rand < 0.05) {
-                    wind -= 0.02;
+                    wind += 0.25;
+                } else if (rand < 0.01) {
+                    wind -= 0.25;
                 }
                 if (wind > 0.6) {
                     wind -= 0.25;
@@ -36,6 +36,16 @@ public class Climate {
                 break;
             }
             case ClimateEnum.Cloudy: {
+                if (rand > 0.99) {
+                    wind += 0.25;
+                } else if (rand < 0.01) {
+                    wind -= 0.25;
+                }
+                if (wind > 0.6) {
+                    wind -= 0.25;
+                } else if (wind < -0.6) {
+                    wind += 0.25;
+                }
                 break;
             }
             case ClimateEnum.Rainy: {

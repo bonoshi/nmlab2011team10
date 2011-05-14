@@ -59,9 +59,9 @@ public class ButtomBar {
         this.eqc = eqc;
         
         listControlN = new ListContTwoButtom(0,listNBitmap,eqc,EventEnum.OriginalCheeseSmall,EventEnum.OriginalCheeseLarge);
-        listControlC = new ListContTwoButtom(110,listCBitmap,eqc,EventEnum.OriginalCheeseSmall,EventEnum.OriginalCheeseLarge);
-        listControlS = new ListContTwoButtom(220,listSBitmap,eqc,EventEnum.OriginalCheeseSmall,EventEnum.OriginalCheeseLarge);
-        listControlF = new ListContTwoButtom(330,listFBitmap,eqc,EventEnum.OriginalCheeseSmall,EventEnum.OriginalCheeseLarge);
+        listControlC = new ListContTwoButtom(110,listCBitmap,eqc,EventEnum.CasuMarzuSmall,EventEnum.CasuMarzuLarge);
+        listControlS = new ListContTwoButtom(220,listSBitmap,eqc,EventEnum.SweatyCheeseSmall,EventEnum.SweatyCheeseLarge);
+        listControlF = new ListContTwoButtom(330,listFBitmap,eqc,EventEnum.FiringCheeseSmall,EventEnum.FiringCheeseLarge);
         
         listControlCon = new ListContFourButtom(345, listConBitmap, eqc, EventEnum.OriginalCheeseSmall, 
                                                                         EventEnum.OriginalCheeseMed,

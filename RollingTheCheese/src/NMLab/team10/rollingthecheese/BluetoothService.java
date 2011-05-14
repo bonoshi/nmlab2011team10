@@ -17,9 +17,6 @@ package NMLab.team10.rollingthecheese;
  */
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -30,9 +27,6 @@ import java.util.UUID;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.apache.http.entity.SerializableEntity;
-
-import android.R.integer;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
@@ -51,15 +45,15 @@ import android.util.Log;
  */
 
 public class BluetoothService {
-    
-    
+
+
     private static final String TAG = "BluetoothChatService";
     private static final String NAME = "RollingTheCheese";
     private static final boolean D = true;
     private static final UUID MY_UUID = UUID.fromString("76e43080-7b6e-11e0-819a-0800200c9a66");
     public static final int IAMSERVER = 0;
     public static final int IAMCLIENT = 1;
-    
+
     // Member fields
     private final BluetoothAdapter mAdapter;
     private final Handler mHandler;
@@ -189,7 +183,7 @@ public class BluetoothService {
     /**
      * Write to the ConnectedThread in an unsynchronized manner
      * @param out The bytes to write
-     * @throws IOException 
+     * @throws IOException
      * @see ConnectedThread#write(byte[])
      */
     public void write(Object out) throws IOException {
@@ -248,7 +242,7 @@ public class BluetoothService {
             try {
                 tmp = mAdapter.listenUsingRfcommWithServiceRecord(NAME, MY_UUID);
             } catch (IOException e) {
-                Log.e(TAG, "listen() failed", e);
+                Log.e(TAG, e.toString() + " listen() failed", e);
             }
             mmServerSocket = tmp;
         }
@@ -332,7 +326,7 @@ public class BluetoothService {
             Log.i(TAG, "BEGIN mConnectThread");
             setName("ConnectThread");
             mAdapter.cancelDiscovery();
-            
+
             try {
                 mmSocket.connect();
             } catch (IOException e) {
@@ -368,19 +362,19 @@ public class BluetoothService {
         private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
-        
+
         private ObjectOutputStream oos;
-        private ObjectInputStream ois;  
+        private ObjectInputStream ois;
         private GZIPOutputStream gos;
         private GZIPInputStream gis;
-        
-        
+
+
         public ConnectedThread(BluetoothSocket socket) {
             Log.d(TAG, "create ConnectedThread");
             mmSocket = socket;
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
-            
+
             try {
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
@@ -390,7 +384,7 @@ public class BluetoothService {
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
-            
+
             try {
                 gos = new GZIPOutputStream(mmOutStream);
                 oos = new ObjectOutputStream(gos);
@@ -402,22 +396,22 @@ public class BluetoothService {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            
+
         }
 
         public void run() {
             Log.i(TAG, "BEGIN mConnectedThread");
             while (true) {
                 try {
-                    gis = new GZIPInputStream(mmInStream);
-                    ois = new ObjectInputStream(gis);
-                    Object o = null;                    
-                    try {                        
-                        o = ois.readObject(); 
+                    //gis = new GZIPInputStream(mmInStream);
+                    //ois = new ObjectInputStream(gis);
+                    Object o = null;
+                    try {
+                        o = ois.readObject();
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
-                    
+
                     mHandler.obtainMessage(InterThreadMsg.MESSAGE_READ, -1, -1, o)
                             .sendToTarget();
                 } catch (IOException e) {
@@ -431,20 +425,20 @@ public class BluetoothService {
         /**
          * Write to the connected OutStream.
          * @param buffer  The bytes to write
-         * @throws IOException 
+         * @throws IOException
          */
-        
+
         public void write(Object o) throws IOException {
-                
-                gos = new GZIPOutputStream(mmOutStream);
-                oos = new ObjectOutputStream(gos);
+
+//                gos = new GZIPOutputStream(mmOutStream);
+//                oos = new ObjectOutputStream(gos);
                 oos.flush();
                 gos.flush();
                 oos.writeObject((Serializable)o);
                 oos.flush();
                 gos.flush();
                 gos.finish();
-                
+
                 // Share the sent message back to the UI Activity
                 mHandler.obtainMessage(InterThreadMsg.MESSAGE_WRITE, -1, -1, o)
                         .sendToTarget();

@@ -1,7 +1,10 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-public class DestructStateMessage {
+import java.io.Serializable;
 
+public class DestructStateMessage implements Serializable{
+    private static final long serialVersionUID = 3774329768372521699L;
+    
     public DestructStateMessage(DestructState ds) {
         this.fense = ds.fense;
         this.power = ds.power;

@@ -1,8 +1,16 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
+import java.io.Serializable;
+
 import NMLab.team10.rollingthecheese.byteEnum.MilkProdEnum;
 
-public class Farm {
+public class Farm implements Serializable{
+    
+    /**
+     * 
+     */
+    private static final long serialVersionUID = -1675786272926054905L;
+
     public Farm() {
         this.setProd(MilkProdEnum.Grazing);
     }

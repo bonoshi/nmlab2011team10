@@ -1,6 +1,9 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-public class CowMessage {
+import java.io.Serializable;
+
+public class CowMessage implements Serializable{
+    private static final long serialVersionUID = 3245038001729360189L;
 
     public CowMessage(Cow c) {
         ID = c.getID();

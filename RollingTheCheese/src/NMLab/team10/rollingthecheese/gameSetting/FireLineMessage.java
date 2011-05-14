@@ -1,7 +1,10 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
-public class FireLineMessage {
+import java.io.Serializable;
 
+public class FireLineMessage implements Serializable{
+    private static final long serialVersionUID = -7131570211375105138L;
+    
     public FireLineMessage(FireLine f) {
         ID = f.getID();
         type = f.getType();

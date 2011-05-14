@@ -1,9 +1,17 @@
 package NMLab.team10.rollingthecheese.gameSetting;
 
+
+import java.io.Serializable;
+
 import NMLab.team10.rollingthecheese.byteEnum.CheeseProdEnum;
 import NMLab.team10.rollingthecheese.byteEnum.CheeseQualityEnum;
 
-public class HouseMessage {
+public class HouseMessage implements Serializable{
+    /**
+     *
+     */
+    private static final long serialVersionUID = 8451845294245848891L;
+    
     public HouseMessage(House h) {
         prod = h.getProd();
         qual = h.getQual();

@@ -13,4 +13,5 @@ public class InterThreadMsg {
     static public final int scan = 7;
     static public final int discoverable = 8;
     static public final int LinkingErrorInGame = 9;
+    static public final int serverStartGameView = 10;
 }

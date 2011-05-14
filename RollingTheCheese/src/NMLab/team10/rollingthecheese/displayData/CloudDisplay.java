@@ -197,23 +197,24 @@ public class CloudDisplay {
                                 if (--frame == -1)
                                     isDead = true;
                             }
-                        } else if (frame <= 7) {
-                            if (rand > 0.994) {
+                        } else if (frame <= 9) {
+                            if (rand > 0.997) {
                                 frame++;
-                            } else if (rand < 0.994) {
-                                frame--;
-                            }
-                        } else if (frame == 8) {
-                            if (rand > 0.996) {
-                                frame++;
-                            } else if (rand < 0.996) {
-                                frame--;
-                            }
-                        } else if (frame == 9) {
-                            if (rand < 0.996) {
+                            } else if (rand < 0.997) {
                                 frame--;
                             }
                         }
+//                        } else if (frame == 8) {
+//                            if (rand > 0.996) {
+//                                frame++;
+//                            } else if (rand < 0.996) {
+//                                frame--;
+//                            }
+//                        } else if (frame == 9) {
+//                            if (rand < 0.996) {
+//                                frame--;
+//                            }
+//                        }
 
                         sRectangle = new Rect(CloudInterval * frame, 0, CloudInterval * frame + CloudWidth,
                                 CloudHeight);
