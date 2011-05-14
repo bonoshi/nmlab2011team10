@@ -71,4 +71,6 @@ public class EventEnum {
     public static final byte Quit = 23;
     public static final byte Pause = 24;
     public static final byte Surrender = 25;
+    public static final byte Start = 26;
+    public static final byte Data = 27;
 }
