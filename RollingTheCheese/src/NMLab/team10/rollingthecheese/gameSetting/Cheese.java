@@ -446,10 +446,10 @@ public class Cheese {
 
     // public void refreshAngle(float d) {
     public void refreshAngle() {
-        // angleChangePerSec = 2pi/360 * X * radix =
+        // distancePerSec = 2pi/360 * anglePerSec * radix =
         // CheeseParameter.Normal.DistancePerSec;
-        // float delta = (d / radix) / 57.296F;
-        float delta = (speed / radix) / 57.296F;
+        // float delta = (d / radix) * 57.296F;
+        float delta = speed * 57.296F / radix;
         spinAngle += ((short) Math.round(delta));
         spinAngle %= 360;
     }
