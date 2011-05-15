@@ -380,4 +380,9 @@ public class DisplayData {
         leftHouse.draw(Cheese.Left, canvas);
         rightHouse.draw(Cheese.Right, canvas);
     }
+    
+    public void drawPorj(Canvas canvas){
+        smd.getLeftProjector().draw(true,canvas);
+        smd.getRightProjector().draw(false,canvas);
+    }
 }

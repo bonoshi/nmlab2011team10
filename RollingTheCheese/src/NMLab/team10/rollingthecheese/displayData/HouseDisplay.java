@@ -22,23 +22,38 @@ import NMLab.team10.rollingthecheese.gameSetting.HouseMessage;
 public class HouseDisplay {
 
     static Resources r = GameView.r;
-    private static Bitmap houseBitmap[];
-    private static Bitmap houseBitmap_m[];
+    private static Bitmap houseBitmap[][];
+    private static Bitmap houseBitmap_m[][];
     private static Bitmap onWorkingBitmap;
     private static Bitmap onWorkingBitmap_m;
     private static byte HEALTH=0;
     private static byte DAMAGED=1;
     private static byte SERIOUS_DAMAGED=2;
+    private static byte NORMAL=0;
+    private static byte UPGRADE1 = 1;
     
     
     static public void initial(){
         r = GameView.r;
-        houseBitmap = new Bitmap[3];
-        houseBitmap_m = new Bitmap[3];
+        houseBitmap = new Bitmap[2][];
+        houseBitmap_m = new Bitmap[2][];
+        
+        houseBitmap[NORMAL] = new Bitmap[3];
+        houseBitmap_m[NORMAL] = new Bitmap[3];
         Bitmap tmp = BitmapFactory.decodeResource(r, R.drawable.house_n);
-        houseBitmap[HEALTH] = Bitmap.createBitmap(tmp,0,0,280,280);
-        houseBitmap[DAMAGED] = Bitmap.createBitmap(tmp,280,0,280,280);
-        houseBitmap[SERIOUS_DAMAGED] = Bitmap.createBitmap(tmp,560,0,280,280);
+        houseBitmap[NORMAL][HEALTH] = Bitmap.createBitmap(tmp,0,0,280,280);
+        houseBitmap[NORMAL][DAMAGED] = Bitmap.createBitmap(tmp,280,0,280,280);
+        houseBitmap[NORMAL][SERIOUS_DAMAGED] = Bitmap.createBitmap(tmp,560,0,280,280);
+        
+        
+        
+        houseBitmap[UPGRADE1] = new Bitmap[3];
+        houseBitmap_m[UPGRADE1] = new Bitmap[3];
+        Bitmap tmp2 = BitmapFactory.decodeResource(r, R.drawable.house_2);
+        houseBitmap[UPGRADE1][HEALTH] = Bitmap.createBitmap(tmp2,0,0,280,280);
+        houseBitmap[UPGRADE1][DAMAGED] = Bitmap.createBitmap(tmp2,280,0,280,280);
+        houseBitmap[UPGRADE1][SERIOUS_DAMAGED] = Bitmap.createBitmap(tmp2,560,0,280,280);
+        
         
         float[] mirrorX = { -1,0,0,
                             0,1,0,
@@ -46,9 +61,12 @@ public class HouseDisplay {
                             };
         Matrix matrix = new Matrix();
         matrix.setValues(mirrorX);      
-        houseBitmap_m[HEALTH] = Bitmap.createBitmap(houseBitmap[HEALTH],0,0,houseBitmap[HEALTH].getWidth(),houseBitmap[HEALTH].getHeight(),matrix,false);
-        houseBitmap_m[DAMAGED] = Bitmap.createBitmap(houseBitmap[DAMAGED],0,0,houseBitmap[DAMAGED].getWidth(),houseBitmap[DAMAGED].getHeight(),matrix,false);
-        houseBitmap_m[SERIOUS_DAMAGED] = Bitmap.createBitmap(houseBitmap[SERIOUS_DAMAGED],0,0,houseBitmap[SERIOUS_DAMAGED].getWidth(),houseBitmap[SERIOUS_DAMAGED].getHeight(),matrix,false);
+        houseBitmap_m[NORMAL][HEALTH] = Bitmap.createBitmap(houseBitmap[NORMAL][HEALTH],0,0,houseBitmap[NORMAL][HEALTH].getWidth(),houseBitmap[NORMAL][HEALTH].getHeight(),matrix,false);
+        houseBitmap_m[NORMAL][DAMAGED] = Bitmap.createBitmap(houseBitmap[NORMAL][DAMAGED],0,0,houseBitmap[NORMAL][DAMAGED].getWidth(),houseBitmap[NORMAL][DAMAGED].getHeight(),matrix,false);
+        houseBitmap_m[NORMAL][SERIOUS_DAMAGED] = Bitmap.createBitmap(houseBitmap[NORMAL][SERIOUS_DAMAGED],0,0,houseBitmap[NORMAL][SERIOUS_DAMAGED].getWidth(),houseBitmap[NORMAL][SERIOUS_DAMAGED].getHeight(),matrix,false);
+        houseBitmap_m[UPGRADE1][HEALTH] = Bitmap.createBitmap(houseBitmap[UPGRADE1][HEALTH],0,0,houseBitmap[UPGRADE1][HEALTH].getWidth(),houseBitmap[UPGRADE1][HEALTH].getHeight(),matrix,false);
+        houseBitmap_m[UPGRADE1][DAMAGED] = Bitmap.createBitmap(houseBitmap[UPGRADE1][DAMAGED],0,0,houseBitmap[UPGRADE1][DAMAGED].getWidth(),houseBitmap[UPGRADE1][DAMAGED].getHeight(),matrix,false);
+        houseBitmap_m[UPGRADE1][SERIOUS_DAMAGED] = Bitmap.createBitmap(houseBitmap[UPGRADE1][SERIOUS_DAMAGED],0,0,houseBitmap[UPGRADE1][SERIOUS_DAMAGED].getWidth(),houseBitmap[UPGRADE1][SERIOUS_DAMAGED].getHeight(),matrix,false);
         onWorkingBitmap = BitmapFactory.decodeResource(r, R.drawable.onworking);
         onWorkingBitmap_m = Bitmap.createBitmap(onWorkingBitmap,0,0,onWorkingBitmap.getWidth(),onWorkingBitmap.getHeight(),matrix,false);
         
@@ -99,9 +117,24 @@ public class HouseDisplay {
         Paint paint = new Paint();
         paint.setTextSize(15);
         paint.setColor(Color.DKGRAY);
+        if(whichSide){
+            if(getHouse().getQual()==HouseMessage.Handmade){
+                canvas.drawBitmap(houseBitmap[NORMAL][state], -97, 200, null);
+            }else{
+                canvas.drawBitmap(houseBitmap[UPGRADE1][state], -97, 200, null);
+            }
+        }else{
+            if(getHouse().getQual()==HouseMessage.Handmade){
+                canvas.drawBitmap(houseBitmap_m[NORMAL][state], 1420, 200, null);
+            }else{
+                canvas.drawBitmap(houseBitmap_m[UPGRADE1][state], 1420, 200, null);
+            }
+            
+        }
         
-        if (whichSide) {
-            canvas.drawBitmap(houseBitmap[state], -97, 200, null);
+        
+        if (GameView.displayData.isLeft&&whichSide) {
+            
             if(NL>0&&NL<100){
                 canvas.drawBitmap(onWorkingBitmap, 120, 200,null);
                 canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260,260, null);
@@ -114,50 +147,80 @@ public class HouseDisplay {
             }
             if(PL>0&&PL<100){
                 canvas.drawBitmap(onWorkingBitmap, 120, 200,null);
-                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260,260, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseC[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260,260, null);
                 canvas.drawText(Integer.toString(PL)+"%", 270, 330, paint);
             }
             if(PS>0&&PS<100){
                 canvas.drawBitmap(onWorkingBitmap, 120, 200,null);
-                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260,260, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseC[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260,260, null);
                 canvas.drawText(Integer.toString(PS)+"%", 270, 330, paint);
             }
             if(SL>0&&SL<100){
                 canvas.drawBitmap(onWorkingBitmap, 120, 200,null);
-                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260,260, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseS[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260,260, null);
                 canvas.drawText(Integer.toString(SL)+"%", 270, 330, paint);
             }
             if(SS>0&&SS<100){
                 canvas.drawBitmap(onWorkingBitmap, 120, 200,null);
-                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260,260, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseS[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260,260, null);
                 canvas.drawText(Integer.toString(SS)+"%", 270, 330, paint);
             }
             if(FL>0&&FL<100){
                 canvas.drawBitmap(onWorkingBitmap, 120, 200,null);
-                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260,260, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseF[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260,260, null);
                 canvas.drawText(Integer.toString(FL)+"%", 270, 330, paint);
             }
             if(FS>0&&FS<100){
                 canvas.drawBitmap(onWorkingBitmap, 120, 200,null);
-                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260,260, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseF[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260,260, null);
                 canvas.drawText(Integer.toString(FS)+"%", 270, 330, paint);
             }
-          } else {
-            canvas.drawBitmap(houseBitmap_m[state], 1420, 200, null);
-        }
-        
-        
-
-        
-        
-        
-        
-        
-        
-        switch (tempHouse.getProd()) {
+          } else if(!GameView.displayData.isLeft&&!whichSide){
             
-
+            if(NL>0&&NL<100){
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200,null);
+                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,260, null);
+                canvas.drawText(Integer.toString(NL)+"%", 1360, 330, paint);
+            }
+            if(NS>0&&NS<100){
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200,null);
+                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,260, null);
+                canvas.drawText(Integer.toString(NS)+"%", 1360, 330, paint);
+            }
+            if(PL>0&&PL<100){
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200,null);
+                canvas.drawBitmap(CheeseDisplay.cheeseC[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,260, null);
+                canvas.drawText(Integer.toString(PL)+"%", 1360, 330, paint);
+            }
+            if(PS>0&&PS<100){
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200,null);
+                canvas.drawBitmap(CheeseDisplay.cheeseC[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,260, null);
+                canvas.drawText(Integer.toString(PS)+"%", 1360, 330, paint);
+            }
+            if(SL>0&&SL<100){
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200,null);
+                canvas.drawBitmap(CheeseDisplay.cheeseS[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,260, null);
+                canvas.drawText(Integer.toString(SL)+"%", 1360, 330, paint);
+            }
+            if(SS>0&&SS<100){
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200,null);
+                canvas.drawBitmap(CheeseDisplay.cheeseS[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,260, null);
+                canvas.drawText(Integer.toString(SS)+"%", 1360, 330, paint);
+            }
+            if(FL>0&&FL<100){
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200,null);
+                canvas.drawBitmap(CheeseDisplay.cheeseF[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,260, null);
+                canvas.drawText(Integer.toString(FL)+"%", 1360, 330, paint);
+            }
+            if(FS>0&&FS<100){
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200,null);
+                canvas.drawBitmap(CheeseDisplay.cheeseF[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,260, null);
+                canvas.drawText(Integer.toString(FS)+"%", 1360, 330, paint);
+            }
         }
+        
+        
+
         switch (tempHouse.getQual()) {
             case Handmade:
                 break;

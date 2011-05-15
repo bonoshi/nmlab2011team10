@@ -2,6 +2,7 @@ package NMLab.team10.rollingthecheese;
 
 import java.util.Date;
 
+import NMLab.team10.rollingthecheese.byteEnum.ProjectorEnum;
 import NMLab.team10.rollingthecheese.displayData.CheeseDisplay;
 import NMLab.team10.rollingthecheese.displayData.CloudDisplay;
 import NMLab.team10.rollingthecheese.displayData.CowDisplay;
@@ -14,12 +15,14 @@ import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 
 import NMLab.team10.rollingthecheese.gameSetting.Cheese;
 import NMLab.team10.rollingthecheese.gameSetting.GlobalParameter;
+import NMLab.team10.rollingthecheese.gameSetting.Projector;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -39,6 +42,8 @@ public class GameView extends View {
     private static Bitmap grassBitmap;
     private static Bitmap wood_slideBitmap;
     private static Bitmap wood_slideBitmap_m;
+    private static Bitmap metal_slideBitmap;
+    private static Bitmap metal_slideBitmap_m;
 
     private ButtomBar buttomBar;
 
@@ -96,6 +101,15 @@ public class GameView extends View {
         wood_slideBitmap_m = BitmapFactory.decodeResource(r,
                 R.drawable.wood_slide_mirror);
 
+        float[] mirrorX = { -1,0,0,
+                0,1,0,
+                0,0,1
+                };
+        Matrix matrix = new Matrix();
+        matrix.setValues(mirrorX);    
+        metal_slideBitmap = BitmapFactory.decodeResource(r, R.drawable.slider_2);
+        metal_slideBitmap_m = Bitmap.createBitmap(metal_slideBitmap,0,0,metal_slideBitmap.getWidth(),metal_slideBitmap.getHeight(),matrix,false);
+        
         // clould1 = BitmapFactory.decodeResource(r,
         // R.drawable.clould).copy(Bitmap.Config.ARGB_8888, true);
         // alpha value = 255 => ���z��//
@@ -107,6 +121,7 @@ public class GameView extends View {
         CloudDisplay.Cloud.initial();
         HouseDisplay.initial();
         CowDisplay.initial();
+        Projector.initBitmap();
     }
 
     private void initPaint() {
@@ -149,6 +164,7 @@ public class GameView extends View {
 //            return;
 //        }
 
+        
         int newX;
 
         newX = scroll.posX;
@@ -159,8 +175,10 @@ public class GameView extends View {
         if (newX > 60) {
             newX = 60;
         }
-
+        
         String scrollPosition = Integer.toString(newX);
+        if( !displayData.getDSM(!displayData.isLeft).power){
+        
         SkyDisplay.draw(canvas, newX / 2 - 80);
 
         CloudDisplay.updateCloud();
@@ -168,17 +186,19 @@ public class GameView extends View {
         CloudDisplay.draw(canvas, newX / 2 - 80);
 
         canvas.translate(0, 50);
-        canvas.drawBitmap(backgroundBitmap, newX / 2 - 80, 0, null);
-        canvas.drawBitmap(farmBitmap, newX / 2 - 80, 0, null);
+        if(displayData.getTime()<35000){
+            canvas.drawBitmap(backgroundBitmap, newX / 2 - 80, 0, null);
+            canvas.drawBitmap(farmBitmap, newX / 2 - 80, 0, null);
 
-        CowDisplay.draw(canvas,newX);
+            CowDisplay.draw(canvas,newX);
+        }
 
         canvas.translate(0, -50);
         canvas.translate(newX, 0);
         displayData.drawHouse(canvas);
-        canvas.translate(-newX, 0);
-        canvas.drawBitmap(wood_slideBitmap, newX - 150, 275, null);
-        canvas.drawBitmap(wood_slideBitmap_m, newX + 1470, 275, null);
+        
+        
+        displayData.drawPorj(canvas);
 
         // below is for all dynamic objects
 //        if (!displayData.hasNewData()) {
@@ -186,7 +206,7 @@ public class GameView extends View {
 //        } else {
 //            displayData.acceptData();
 //        }
-
+        canvas.translate(-newX, 0);
         Date timeCurrentFrame = new Date(System.currentTimeMillis());
         float fps = 1000 / (timeCurrentFrame.getTime() - timeLastFrame
                 .getTime());
@@ -203,18 +223,19 @@ public class GameView extends View {
         // end of absolute coordinate system graphics
         canvas.translate(-newX, 0);
         canvas.drawBitmap(grassBitmap, newX - 160, 460, null);
+        }
         buttomBar.draw(canvas);
 
         // for floating text
-        canvas.drawText("Scroll Pos: " + scrollPosition, 570, 450, paintInfo);
-        canvas.drawText("(x,y)=(" + this.x + "," + this.y + ")", 570, 420,
+       // canvas.drawText("Scroll Pos: " + scrollPosition, 570, 450, paintInfo);
+        //canvas.drawText("(x,y)=(" + this.x + "," + this.y + ")", 570, 420,
+        //        paintInfo);
+        canvas.drawText("$"+Integer.toString(displayData.getMilk()), 670, 460,
                 paintInfo);
-        canvas.drawText(Integer.toString(displayData.getMilk()), 494, 61,
-                paintMilk);
-        canvas.drawText("Time=" + displayData.getTime(), 570, 30, paintInfo);
-        canvas.drawText("FPS=" + fps, 570, 60, paintInfo);
-        canvas.drawText("P/sec=" + pssString ,570, 90, paintInfo);
-        canvas.drawText("Cow Num=" + displayData.getCowList().size() ,570, 120, paintInfo);
+        //canvas.drawText("Time=" + displayData.getTime(), 570, 30, paintInfo);
+        //canvas.drawText("FPS=" + fps, 570, 60, paintInfo);
+        //canvas.drawText("P/sec=" + pssString ,570, 90, paintInfo);
+        //canvas.drawText("Cow Num=" + displayData.getCowList().size() ,570, 120, paintInfo);
 
     }
 

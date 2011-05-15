@@ -177,12 +177,12 @@ public class ButtomBar {
         }
         
         if(listControlCon.isOpen()){
-            String farmMoney = displayData.getFarm().getUpProdMilkText();
-            String houseMoney = displayData.getHouse().getUpProdMilkText();
+            String farmMoney = displayData.getHouse().getUpProdMilkText();
+            String houseMoney = displayData.getHouse().getUpQualMilkText();
             String projMoney = displayData.getProjector().getUpMilkText();
             String CowMoney = CowParameter.getPriceText(displayData.getCowList().size());
-            String farmP = Integer.toString(displayData.getButtonD().MilkProdPercent);
-            String houseP = Integer.toString(displayData.getButtonD().cheeseProdPercent);
+            String farmP = Integer.toString(displayData.getButtonD().cheeseProdPercent);
+            String houseP = Integer.toString(displayData.getButtonD().cheeseQualPercent);
             String projP = Integer.toString(displayData.getButtonD().projectorPercent);
             String CowP = Integer.toString(displayData.getButtonD().cowPercent);
                      
@@ -191,9 +191,9 @@ public class ButtomBar {
             canvas.drawText("$"+farmMoney,500,130,otherMoney);
             canvas.drawText("$"+projMoney, 400, 235, otherMoney);
             canvas.drawText("$"+houseMoney, 500, 230, otherMoney);
-            if(displayData.getButtonD().MilkProdPercent!=0&&displayData.getButtonD().MilkProdPercent!=100)
+            if(displayData.getButtonD().MilkProdPercent!=0&&displayData.getButtonD().cheeseProdPercent!=100)
                 canvas.drawText(farmP+"%",550,130,otherMoney);
-            if(displayData.getButtonD().cheeseProdPercent!=0&&displayData.getButtonD().cheeseProdPercent!=100)
+            if(displayData.getButtonD().cheeseProdPercent!=0&&displayData.getButtonD().cheeseQualPercent!=100)
                 canvas.drawText(houseP+"%", 550, 230, otherMoney);
             if(displayData.getButtonD().cowPercent!=0&&displayData.getButtonD().cowPercent!=100)
                 canvas.drawText(CowP+"%",450,125,otherMoney);
@@ -230,8 +230,8 @@ public class ButtomBar {
                 
             canvas.drawText(poisonM,510,125,otherMoney);
             canvas.drawText(smallM,610,130,otherMoney);
-            canvas.drawText(fenceM, 510, 235, otherMoney);
-            canvas.drawText(powerM, 610, 230, otherMoney);
+            canvas.drawText(fenceM, 610, 235, otherMoney);
+            canvas.drawText(powerM, 510, 230, otherMoney);
             
             
         }

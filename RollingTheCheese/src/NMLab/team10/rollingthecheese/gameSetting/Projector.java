@@ -2,6 +2,15 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 import java.io.Serializable;
 
+import android.R.integer;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+
+import NMLab.team10.rollingthecheese.GameView;
+import NMLab.team10.rollingthecheese.R;
 import NMLab.team10.rollingthecheese.byteEnum.ProjectorEnum;
 
 public class Projector implements Serializable{
@@ -10,7 +19,28 @@ public class Projector implements Serializable{
      * 
      */
     private static final long serialVersionUID = 1161120424944559472L;
-
+    private static Bitmap projectorBitmap[];
+    private static Bitmap projectorBitmap_m[];
+    
+    
+    
+    public static void initBitmap(){
+        Resources r = GameView.r;
+        projectorBitmap = new Bitmap[2];
+        projectorBitmap[0] = BitmapFactory.decodeResource(r, R.drawable.wood_slide);
+        projectorBitmap[1]= BitmapFactory.decodeResource(r, R.drawable.slider_2);
+        projectorBitmap_m = new Bitmap[2];
+        
+        float[] mirrorX = { -1,0,0,
+                            0,1,0,
+                            0,0,1
+                            };
+        Matrix matrix = new Matrix();
+        matrix.setValues(mirrorX);      
+        projectorBitmap_m[0] = Bitmap.createBitmap(projectorBitmap[0],0,0,projectorBitmap[0].getWidth(),projectorBitmap[0].getHeight(),matrix,false);
+        projectorBitmap_m[1] = Bitmap.createBitmap(projectorBitmap[1],0,0,projectorBitmap[1].getWidth(),projectorBitmap[1].getHeight(),matrix,false);
+    }
+    
     public Projector() {
         this.setType(Board);
     }
@@ -85,6 +115,23 @@ public class Projector implements Serializable{
         return type;
     }
 
+    public void draw(boolean isLeft,Canvas canvas){
+        if(isLeft){
+            if(getType()==ProjectorEnum.Board)
+                canvas.drawBitmap(projectorBitmap[0], - 150, 275, null);
+            else {
+                canvas.drawBitmap(projectorBitmap[1], - 150, 275, null);
+            }
+        }else{
+            if(getType()==ProjectorEnum.Board)
+                canvas.drawBitmap(projectorBitmap_m[0], + 1470, 275, null);
+            else {
+                canvas.drawBitmap(projectorBitmap_m[1], + 1470, 275, null);
+            }
+            
+        }
+        
+    }
     public synchronized int getUpMilk() {
         switch (type) {
             case Board:

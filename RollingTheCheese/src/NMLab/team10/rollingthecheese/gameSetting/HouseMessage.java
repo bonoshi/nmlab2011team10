@@ -128,6 +128,36 @@ public class HouseMessage implements Serializable{
                 return "NOUSE";
         }
     }
+    
+    public int getUpQualMilk() {
+        switch (qual) {
+            case Handmade:
+                return HouseParameter.CheeseMoldMilk;
+            case CheeseMold:
+                return HouseParameter.FoodChemistyMilk;
+            case FoodChemisty:
+                return HouseParameter.GMOMilk;
+            case GMO:
+                return Integer.MAX_VALUE;
+            default:// no use
+                return Integer.MAX_VALUE;
+        }
+    }
+
+    public String getUpQualMilkText() {
+        switch (qual) {
+            case Handmade:
+                return Integer.toString(HouseParameter.CheeseMoldMilk);
+            case CheeseMold:
+                return Integer.toString(HouseParameter.FoodFactoryMilk);
+            case FoodChemisty:
+                return Integer.toString(HouseParameter.GMOMilk);
+            case GMO:
+                return "MAX";
+            default:// no use
+                return "NOUSE";
+        }
+    }
 
     private byte prod;
     private byte qual;
