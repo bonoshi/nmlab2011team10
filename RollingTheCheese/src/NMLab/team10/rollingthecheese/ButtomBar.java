@@ -191,13 +191,13 @@ public class ButtomBar {
             canvas.drawText("$"+farmMoney,500,130,otherMoney);
             canvas.drawText("$"+projMoney, 400, 235, otherMoney);
             canvas.drawText("$"+houseMoney, 500, 230, otherMoney);
-            if(displayData.getButtonD().MilkProdPercent!=0)
+            if(displayData.getButtonD().MilkProdPercent!=0&&displayData.getButtonD().MilkProdPercent!=100)
                 canvas.drawText(farmP+"%",550,130,otherMoney);
-            if(displayData.getButtonD().cheeseProdPercent!=0)
+            if(displayData.getButtonD().cheeseProdPercent!=0&&displayData.getButtonD().cheeseProdPercent!=100)
                 canvas.drawText(houseP+"%", 550, 230, otherMoney);
-            if(displayData.getCowList().size()!=0)
+            if(displayData.getButtonD().cowPercent!=0&&displayData.getButtonD().cowPercent!=100)
                 canvas.drawText(CowP+"%",450,125,otherMoney);
-            if(displayData.getButtonD().projectorPercent!=0)
+            if(displayData.getButtonD().projectorPercent!=0&&displayData.getButtonD().projectorPercent!=100)
                 canvas.drawText(projP+"%", 450, 235, otherMoney);
             
                       
