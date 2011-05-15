@@ -60,25 +60,27 @@ public class EntranceView extends View{
     Bitmap connectBitmap;
     Bitmap startBitmap;*/
  // TODO
-    static final int firstX = 200;
-    static final int firstY = 230;
-    static final int secondX = 200;
-    static final int secondY = 285;
-    static final int thirdX = 200;
-    static final int thirdY = 340;
-    static final int fourthX = 200;
-    static final int fourthY = 395;
-    static final int backX = 380;
-    static final int backY = 435;
+    static final int firstX = 100;
+    static final int firstY = 235;
+    static final int secondX = 100;
+    static final int secondY = 288;
+    static final int thirdX = 100;
+    static final int thirdY = 337;
+    static final int fourthX = 100;
+    static final int fourthY = 392;
+    static final int backX = 365;
+    static final int backY = 427;
     // end TODO
-    static final Rect firstRect = new Rect(firstX, firstY, firstX+100,firstY+50);
-    static final Rect secondRect = new Rect(secondX, secondY, secondX+100,secondY+50);
-    static final Rect thirdRect = new Rect(thirdX, thirdY, thirdX+100,thirdY+50);
-    static final Rect fourthRect = new Rect(fourthX, fourthY, fourthX+100,fourthY+50);
+    static final Rect firstRect = new Rect(firstX, firstY, firstX+200,firstY+50);
+    static final Rect secondRect = new Rect(secondX, secondY, secondX+200,secondY+50);
+    static final Rect thirdRect = new Rect(thirdX, thirdY, thirdX+200,thirdY+50);
+    static final Rect fourthRect = new Rect(fourthX, fourthY, fourthX+200,fourthY+50);
     static final Rect backRect = new Rect(backX, backY, backX+50,backY+30);
     
     Paint paint1;
     Paint paint2;
+    Paint paint3;
+    Paint paint4;
  
     
     int state = S_12;
@@ -113,10 +115,16 @@ public class EntranceView extends View{
         connected = false;
         paint1 = new Paint();
         paint1.setColor(Color.BLACK);
-        paint1.setTextSize(35);
+        paint1.setTextSize(30);
         paint2 = new Paint();
         paint2.setColor(Color.RED);
-        paint2.setTextSize(35);
+        paint2.setTextSize(30);
+        paint3 = new Paint();
+        paint3.setColor(Color.BLACK);
+        paint3.setTextSize(20);
+        paint4 = new Paint();
+        paint4.setColor(Color.RED);
+        paint4.setTextSize(20);
         entranceDrawThread = new EntranceDrawThread(this);
         entranceDrawThread.start();
         gotoState(S_12);
@@ -150,8 +158,8 @@ public class EntranceView extends View{
         else canvas.drawText(fourthString, fourthX, fourthY, paint2);
         
         if(!backPressing)
-            canvas.drawText(backString, backX, backY, paint1);
-        else canvas.drawText(backString, backX, backY, paint2);
+            canvas.drawText(backString, backX, backY, paint3);
+        else canvas.drawText(backString, backX, backY, paint4);
         
         entranceDrawThread.cancelDrawflag();
     }

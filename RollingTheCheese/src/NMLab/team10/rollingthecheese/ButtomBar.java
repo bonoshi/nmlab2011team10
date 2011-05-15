@@ -197,7 +197,6 @@ public class ButtomBar {
         listControlDe.onTouch(event);
         return;
     }
-
 }
 
 

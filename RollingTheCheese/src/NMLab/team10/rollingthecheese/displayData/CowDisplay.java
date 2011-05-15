@@ -2,6 +2,7 @@ package NMLab.team10.rollingthecheese.displayData;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 
 import android.R.drawable;
 import android.R.integer;
@@ -12,17 +13,19 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
 import NMLab.team10.rollingthecheese.GameView;
 import NMLab.team10.rollingthecheese.R;
 import NMLab.team10.rollingthecheese.gameSetting.CowMessage;
+import NMLab.team10.rollingthecheese.gameSetting.CheeseParameter.Normal;
 
 public class CowDisplay{
     static final int[][] normalPosY = {{0,0,0,0,0,0},
-                                 {160,0,0,0,0,0},
-                                 {110,210,0,0,0,0},
-                                 {90,160,230,0,0,0},
-                                 {70,130,200,260,0,0},
-                                 {60,110,160,210,260,0}};
+                                 {200,0,0,0,0,0},
+                                 {170,230,0,0,0,0},
+                                 {150,200,250,0,0,0},
+                                 {140,180,220,260,0,0},
+                                 {133,166,200,233,266,0}};
     static final int[][] normalPosXLeft = {{0,0,0,0,0,0},
                                            {0,0,0,0,0,0},
                                            {0,0,0,0,0,0},
@@ -30,22 +33,24 @@ public class CowDisplay{
                                            {0,0,0,0,0,0},
                                            {0,0,0,0,0,0}};
     static final int[][] normalPosXRight = {{0,0,0,0,0,0},
-                                            {350,0,0,0,0,0},
-                                            {440,270,0,0,0,0},
-                                            {475,350,225,0,0,0},
-                                            {500,400,300,200,0,0},
-                                            {525,440,355,270,185,0}};
+                                            {260,0,0,0,0,0},
+                                            {290,250,0,0,0,0},
+                                            {330,270,225,0,0,0},
+                                            {370,300,240,180,0,0},
+                                            {400,340,280,220,160,0}};
+    static final int normalVelocityX = 5;
     static GameView gameView;
     static int numCow;
-    static LinkedList<CowDisplay> leftCowList;
+    static LinkedList<CowDisplay> leftCowList = new LinkedList<CowDisplay>();
+    static LinkedList<CowDisplay> rightCowList = new LinkedList<CowDisplay>();
     static Bitmap ToRightCowBitmap;
     static Bitmap ToLeftCowBitmap;
     
     /*TODO*/
-    static final float PosYAdjustConst = 0.1F;
+    static final float PosYAdjustConst = 0.03F;
     static final float ProbBack = 0;
-    static final int COW_WIDTH = 60;
-    static final int COW_HEIGHT = 30;
+    static final int COW_WIDTH = 180;
+    static final int COW_HEIGHT = 150;
     /*end TODO*/
     
     static public void initial(){
@@ -58,7 +63,7 @@ public class CowDisplay{
         CowDisplay.gameView = gameView;
     }
     
-    static public void sortCowListbyID(LinkedList<CowDisplay> leftCowList){
+    static public void sortCowListbyID(){
         for(int i =0;i<leftCowList.size();i++){
             int maxID = -1;
             int maxIndex = -1;
@@ -71,20 +76,66 @@ public class CowDisplay{
             CowDisplay tmp = leftCowList.remove(maxIndex);
             leftCowList.addFirst(tmp);
         }
+        for(int i =0;i<rightCowList.size();i++){
+            int maxID = -1;
+            int maxIndex = -1;
+            for(int j=0;j<rightCowList.size();j++){
+                if(rightCowList.get(j).getCowMessage().getID() > maxID){
+                    maxID = rightCowList.get(j).getCowMessage().getID();
+                    maxIndex = j;
+                }
+            }
+            CowDisplay tmp = rightCowList.remove(maxIndex);
+            rightCowList.addFirst(tmp);
+        }
+    }
+    static public void sortCowListbyPosY(){
+        for(int i =0;i<leftCowList.size();i++){
+            float minY = 999;
+            int minIndex = -1;
+            for(int j=0;j<leftCowList.size();j++){
+                if(leftCowList.get(j).PosY < minY){
+                    minY = leftCowList.get(j).PosY;
+                    minIndex = j;
+                }
+            }
+            CowDisplay tmp = leftCowList.remove(minIndex);
+            leftCowList.addFirst(tmp);
+        }
+        for(int i =0;i<rightCowList.size();i++){
+            float minY = 999;
+            int minIndex = -1;
+            for(int j=0;j<rightCowList.size();j++){
+                if(rightCowList.get(j).PosY < minY){
+                    minY = rightCowList.get(j).PosY;
+                    minIndex = j;
+                }
+            }
+            CowDisplay tmp = rightCowList.remove(minIndex);
+            rightCowList.addFirst(tmp);
+        }
     }
     
     static public void updateCowDisplay(){
         leftCowList = (LinkedList<CowDisplay>)gameView.displayData.leftCowList.clone();
         numCow = leftCowList.size();
-        sortCowListbyID(leftCowList);
+        //Log.e("CowDisplay",String.format("numCow = %d",numCow));
+        sortCowListbyID();
         for(int i = 0;i<leftCowList.size();i++){
            leftCowList.get(i).updateCow(numCow,i);
+        }
+        for(int i =0;i<rightCowList.size();i++){
+            rightCowList.get(i).updateCow(numCow,i);
         }
     }
     static public void draw(Canvas canvas, int offset){
         updateCowDisplay();
+        sortCowListbyPosY();
         for(int i =0; i< leftCowList.size();i++){
-            leftCowList.get(i).drawCow(canvas, offset);
+            leftCowList.get(i).drawCow(canvas, offset,false);
+        }
+        for(int i = 0;i< rightCowList.size();i++){
+           rightCowList.get(i).drawCow(canvas, offset, true);
         }
     }
     
@@ -107,16 +158,24 @@ public class CowDisplay{
             velocityX = -Math.abs(velocityX);
     }
     
-    public void drawCow(Canvas canvas, int offset){
-        RectF dest = new RectF(PosX-COW_WIDTH/2+offset,PosY-COW_HEIGHT/2,
+    public void drawCow(Canvas canvas, int offset,boolean leftright){
+        if(leftright == false){
+           RectF dest = new RectF(PosX-COW_WIDTH/2+offset,PosY-COW_HEIGHT/2,
                 PosX+COW_WIDTH/2 + offset, PosY + COW_HEIGHT/2);
-        if(velocityX < 0)
-           canvas.drawBitmap(ToLeftCowBitmap, null, dest, null);
-        else canvas.drawBitmap(ToRightCowBitmap, null, dest, null);
+           if(velocityX < 0)
+              canvas.drawBitmap(ToLeftCowBitmap, null, dest, null);
+           else canvas.drawBitmap(ToRightCowBitmap, null, dest, null);
+        }else{
+            // TODO
+        }
     }
     
     public CowDisplay(CowMessage cm) {
         this.setCowMessage(cm);
+        velocityX = normalVelocityX;
+        PosX = 100;
+        int ID = cm.getID();
+        PosY = normalPosY[Math.max(5,numCow+1)][ID];
         /*initialize Pos, velocity*/
     }
     public void setCowMessage(CowMessage cowMessage) {
@@ -125,5 +184,28 @@ public class CowDisplay{
     public CowMessage getCowMessage() {
         return cowMessage;
     }
-    private CowMessage cowMessage;
+    public CowMessage cowMessage;
+    
+    ////////////////////// bobuway /////////////////
+    static Random random = new Random();
+    static public void debug_addCow(){
+        /*boolean add = false;
+        if(leftCowList.size() >= 5) return;
+        while(!add){
+            short rr = (short)(random.nextInt(5));
+            boolean found = false;
+            for(int i = 0;i<leftCowList.size();i++)
+                if(leftCowList.get(i).cowMessage.getID() == rr) found = true;
+            if(!found){
+                add = true;
+                leftCowList.addLast(new CowDisplay(new CowMessage(rr)));
+            }
+        }*/
+    }
+    static public void debug_deleteCow(){
+        /*if(leftCowList.size() > 0){
+            leftCowList.remove(0);
+        }*/
+    }
+    //////////////////////bobuway ///////////////////
 }

@@ -19,8 +19,12 @@ public class CowMessage implements Serializable{
     }
 
     private short ID;
-
     private byte status;
+    
+    ////////////////////////////// bobuway debug ////////////////////////////
+    public CowMessage(short ID){
+        this.ID = ID;
+    }
 //    private float x;//x for drawing
 //    private float y;
 //    private byte animation;//animation

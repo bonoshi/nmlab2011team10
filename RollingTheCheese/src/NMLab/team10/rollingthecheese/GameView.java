@@ -21,6 +21,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
@@ -372,6 +373,18 @@ public class GameView extends View {
             scroll.isPressing = false;
             touchScreen = false;
         }
+        
+        ///////////////////////// bobuway ////////////////////
+        if(event.getAction() == MotionEvent.ACTION_UP && x > 750 && y > 430){
+            Log.e("","debug_addcow");
+            CowDisplay.debug_addCow();
+        }
+        else if(event.getAction() == MotionEvent.ACTION_UP &&  x < 50 && y > 430){
+            Log.e("","debug_deletecow");
+            CowDisplay.debug_deleteCow();
+        }
+        //////////////////////////////////////////////////////
+        
         this.x = x;
         this.y = y;
         return true;

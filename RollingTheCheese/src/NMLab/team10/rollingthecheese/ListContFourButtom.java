@@ -115,7 +115,6 @@ public class ListContFourButtom {
                     status = CLOSE;
                 }
             }
-            
         }
         canvas.drawBitmap(buttomListBitmap,src,dest,null);
     }

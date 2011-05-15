@@ -400,10 +400,13 @@ public class CheeseDisplay {
     }
 
     private Bitmap getSweatyAni(){
+
         if(frame == sweatyRow*sweatyCol)frame=0;
         int row = frame/sweatyCol;
         int col = frame%sweatyCol;
+        frame++;
         return Bitmap.createBitmap(sweatyBitmap,col*sweatyWidth,row*sweatyHeight,sweatyWidth,sweatyHeight);
+
     }
     
     public void draw(boolean whichSide, Canvas canvas) {
