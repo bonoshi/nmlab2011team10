@@ -84,7 +84,7 @@ public class EventQueue {
     private int waitingTimeMax = 100;
 
     public byte getPercent() {
-        byte percent = (byte) Math.ceil(100.0 * waitingTime / waitingTimeMax);
+        byte percent = (byte) Math.floor(100.0 * (1 - waitingTime / waitingTimeMax));
         return percent;
     }
 }

@@ -504,19 +504,33 @@ public class EventQueueCenter {
             if (ds.fense && (ds.fenseCountDown <= 0 || !setting.isNight())) {
                 ds.fense = false;
                 ds.fenseDisplay = false;
+                ds.fenseCountDown = 0;
             }
+            if((ds.fenseCountDown-=GlobalParameter.FramePeriod)<0)
+                ds.fenseCountDown = 0;
+
             if (ds.power && (ds.powerCountDown <= 0 || !setting.isNight())) {
                 ds.power = false;
                 ds.powerDisplay = false;
+                ds.powerCountDown = 0;
             }
+            if((ds.powerCountDown-=GlobalParameter.FramePeriod)<0)
+                ds.powerCountDown = 0;
+
             if (ds.smallCheese && (ds.smallCheeseCountDown <= 0)) {
                 ds.smallCheese = false;
                 ds.smallCheeseDisplay = false;
             }
+            if((ds.smallCheeseCountDown-=GlobalParameter.FramePeriod)<0)
+                ds.smallCheeseCountDown = 0;
+
             if (ds.slowCheese && (ds.slowCheeseCountDown <= 0)) {
                 ds.slowCheese = false;
                 ds.slowCheeseDisplay = false;
             }
+            if((ds.slowCheeseCountDown-=GlobalParameter.FramePeriod)<0)
+                ds.slowCheeseCountDown= 0;
+
             if (ds.milk && (ds.milkCountDown <= 0)) {
                 ds.milk = false;
                 ds.milkDisplay = false;
@@ -526,6 +540,8 @@ public class EventQueueCenter {
                     cow.setStatus(Cow.Normal);
                 }
             }
+            if((ds.milkCountDown-=GlobalParameter.FramePeriod)<0)
+                ds.milkCountDown= 0;
         }
     }
 
