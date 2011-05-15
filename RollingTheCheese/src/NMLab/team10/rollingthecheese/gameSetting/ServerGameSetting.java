@@ -12,16 +12,13 @@ public class ServerGameSetting {
     public ServerGameSetting() {
         // TODO Auto-generated constructor stub
     }
-
     // setting relating to global display
     // String leftName = "LeftName";
     // String rightName = "RightName";
-    private int time = 30000;// current time of a day
+    private int time = 0;// current time of a day
     private byte climate = ClimateEnum.Cloudy;
     private byte background = BackGroundEnum.SpringFarm;
-
     private boolean isNight = false;
-
     // setting relating to players' properties. E.g., construction...
     // float leftStartBorder = 0F;
     // float rightStartBorder = 1600F;
@@ -33,11 +30,9 @@ public class ServerGameSetting {
     private Farm rightFarm = new Farm();
     private int leftMilk = GlobalParameter.initialMilk;
     private int rightMilk = GlobalParameter.initialMilk;
-
     // setting relating to destruction done to farm
     private DestructState leftDestruct = new DestructState();
     private DestructState rightDestruct = new DestructState();
-
     // dynamic object
     private LinkedList<Cheese> leftCheeseList = new LinkedList<Cheese>();
     private LinkedList<Cheese> rightCheeseList = new LinkedList<Cheese>();
@@ -189,6 +184,7 @@ public class ServerGameSetting {
     public void setRightCowList(LinkedList<Cow> rightCowList) {
         this.rightCowList = rightCowList;
     }
+    long lastMilkTime = System.currentTimeMillis();
 
     public void timeElapsing() {
         // Time++
@@ -196,8 +192,11 @@ public class ServerGameSetting {
         time %= GlobalParameter.TimePerDay;
         isNight = GlobalParameter.isNight(time);
         // Milk
-        milkIncrease(1.0F, Left);
-        milkIncrease(1.0F, Right);
+        if (System.currentTimeMillis() - lastMilkTime > CowParameter.MilkInterval) {
+            lastMilkTime = System.currentTimeMillis();
+            milkIncrease(1.0F, Left);
+            milkIncrease(1.0F, Right);
+        }
         // Take action
         takeAction();
     }
@@ -287,8 +286,9 @@ public class ServerGameSetting {
     private void clearDeadCheese(LinkedList<Cheese> list) {
         for (Iterator<Cheese> iterator = list.iterator(); iterator.hasNext();) {
             Cheese cheese = (Cheese) iterator.next();
-            if (cheese.isDead())
+            if (cheese.isDead()) {
                 iterator.remove();
+            }
         }
     }
 
@@ -297,8 +297,8 @@ public class ServerGameSetting {
             list.get(i).checkDead();
         }
     }
-    
-    private void refreshAngle(LinkedList<Cheese> list){
+
+    private void refreshAngle(LinkedList<Cheese> list) {
         for (int i = 0; i < list.size(); i++) {
             list.get(i).refreshAngle();
         }
@@ -325,7 +325,6 @@ public class ServerGameSetting {
             }
         }
     }
-
     byte headCase = 0;
 
     private void moveHead() {
@@ -334,9 +333,8 @@ public class ServerGameSetting {
                 Cheese leftC = leftCheeseList.getFirst();
                 boolean leftJoinBattle = leftC.isJoinBattle();// for fire
                 leftC.moveByDistance(leftC.getSpeed(), Left, this.getLeftProjector());
-                if (!leftJoinBattle && leftC.isJoinBattle() && leftC.getType()==Cheese.Firing) {// for fire
-                    FireLine f = new FireLine(leftC, FireLine.getFireSFromCheese(leftC), this
-                            .getLeftProjector().getBattleBorderX(leftC.getRadix(), Left));
+                if (!leftJoinBattle && leftC.isJoinBattle() && leftC.getType() == Cheese.Firing) {// for fire
+                    FireLine f = new FireLine(leftC, FireLine.getFireSFromCheese(leftC), this.getLeftProjector().getBattleBorderX(leftC.getRadix(), Left));
                     leftFireList.add(f);
 
                 }
@@ -354,9 +352,8 @@ public class ServerGameSetting {
                 Cheese rightC = rightCheeseList.getFirst();
                 boolean rightJoinBattle = rightC.isJoinBattle();// for fire
                 rightC.moveByDistance(rightC.getSpeed(), Right, this.getRightProjector());
-                if (!rightJoinBattle && rightC.isJoinBattle() && rightC.getType()==Cheese.Firing) {// for fire
-                    FireLine f = new FireLine(rightC, FireLine.getFireSFromCheese(rightC), this
-                            .getRightProjector().getBattleBorderX(rightC.getRadix(), Right));
+                if (!rightJoinBattle && rightC.isJoinBattle() && rightC.getType() == Cheese.Firing) {// for fire
+                    FireLine f = new FireLine(rightC, FireLine.getFireSFromCheese(rightC), this.getRightProjector().getBattleBorderX(rightC.getRadix(), Right));
                     rightFireList.add(f);
                 }
                 if (rightC.x < this.getLeftHouse().getBoader(Left, rightC.getRadix()) + rightC.getRadix() - BumpOffset) {
@@ -385,7 +382,7 @@ public class ServerGameSetting {
             float distance = Cheese.distance(leftC, rightC) - (leftC.getRadix() + rightC.getRadix())
                     + BumpOffset;
             if (distance > -1.0F) {// move forward, -1.0F is for float error
-                                   // tolerance
+                // tolerance
 
                 // no need to calculate!
                 if (leftMoveAmount == 0 && rightMoveAmount == 0) {
@@ -495,14 +492,12 @@ public class ServerGameSetting {
         }
 
         if (!leftJoinBattle && leftC.isJoinBattle()) {
-            FireLine f = new FireLine(leftC, FireLine.getFireSFromCheese(leftC), this.getLeftProjector()
-                    .getBattleBorderX(leftC.getRadix(), Left));
+            FireLine f = new FireLine(leftC, FireLine.getFireSFromCheese(leftC), this.getLeftProjector().getBattleBorderX(leftC.getRadix(), Left));
             leftFireList.add(f);
         }
 
         if (!rightJoinBattle && rightC.isJoinBattle()) {
-            FireLine f = new FireLine(rightC, FireLine.getFireSFromCheese(rightC), this.getRightProjector()
-                    .getBattleBorderX(rightC.getRadix(), Right));
+            FireLine f = new FireLine(rightC, FireLine.getFireSFromCheese(rightC), this.getRightProjector().getBattleBorderX(rightC.getRadix(), Right));
             rightFireList.add(f);
         }
 
@@ -546,7 +541,7 @@ public class ServerGameSetting {
             }
         }
 
-        if (!joinBattle && back.isJoinBattle() && back.getType()==Cheese.Firing) {
+        if (!joinBattle && back.isJoinBattle() && back.getType() == Cheese.Firing) {
             FireLine f = new FireLine(back, FireLine.getFireSFromCheese(back), p.getBattleBorderX(
                     back.getRadix(), whichSide));
             if (whichSide) {
@@ -571,8 +566,9 @@ public class ServerGameSetting {
         for (Iterator<FireLine> iterator = list.iterator(); iterator.hasNext();) {
             FireLine fireLine = (FireLine) iterator.next();
             boolean temp = fireLine.isDead();
-            if (temp)
+            if (temp) {
                 iterator.remove();
+            }
         }
     }
 
@@ -666,8 +662,9 @@ public class ServerGameSetting {
                         rightHouse.decreHP(damage);
                         toBreak = false;
                     }
-                    if (toBreak)
+                    if (toBreak) {
                         break;
+                    }
                 }
             }
         }
@@ -686,8 +683,9 @@ public class ServerGameSetting {
                         leftHouse.decreHP(damage);
                         toBreak = false;
                     }
-                    if (toBreak)
+                    if (toBreak) {
                         break;
+                    }
                 }
             }
         }
@@ -793,21 +791,18 @@ public class ServerGameSetting {
     public LinkedList<FireLine> getRightFireList() {
         return rightFireList;
     }
-
     public static final byte Grazing = MilkProdEnum.Grazing;
-   public static final byte Husbandry = MilkProdEnum.Husbandry;
+    public static final byte Husbandry = MilkProdEnum.Husbandry;
     public static final byte Mechanization = MilkProdEnum.Mechanization;
     public static final byte Hormone = MilkProdEnum.Hormone;
-
     public static final boolean Right = false;
     public static final boolean Left = true;
-
     public static final float BumpOffset = GlobalParameter.BumpOffset;
     public static final float FollowOffset = GlobalParameter.FollowOffset;
-
 }
 
 class HeadCase {
+
     public static final byte NoBumpHappen = 0;
     public static final byte HeadBumpHead = 1;
     public static final byte LeftBumpHouse = 2;

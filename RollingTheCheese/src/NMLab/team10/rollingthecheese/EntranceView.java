@@ -1,8 +1,6 @@
 package NMLab.team10.rollingthecheese;
 
 
-import android.R.integer;
-import android.R.string;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -19,7 +17,11 @@ public class EntranceView extends View{
     RollingCheeseActivity father;
     EntranceDrawThread entranceDrawThread;
     EntranceThread entranceThread;
-    
+
+    public void setPause(boolean pause){
+        entranceDrawThread.setPause(pause);
+    }
+
     /* µe(1) ÀRºA­I´º
      * (2) wait «ö¶s
      * (3) conncet «ö¶s
@@ -29,7 +31,7 @@ public class EntranceView extends View{
      * (7) disconnect «ö¶s
      * (8) °Êµe??
      */
-    
+
     static final int S_12 = 0;
     static final int S_1 = 1;
     static final int S_2 = 2;
@@ -47,7 +49,7 @@ public class EntranceView extends View{
     static final int BUT_EMPTY = 11;
     static final int BUT_DISCONN = 12;
     static final int BUT_QUIT = 13;
-    
+
     Bitmap staticBackgroundBitmap;
     /*Bitmap singlePlayerBitmap;
     Bitmap twoPlayerBitmap;
@@ -76,13 +78,12 @@ public class EntranceView extends View{
     static final Rect thirdRect = new Rect(thirdX, thirdY, thirdX+200,thirdY+50);
     static final Rect fourthRect = new Rect(fourthX, fourthY, fourthX+200,fourthY+50);
     static final Rect backRect = new Rect(backX, backY, backX+50,backY+30);
-    
+
     Paint paint1;
     Paint paint2;
     Paint paint3;
     Paint paint4;
- 
-    
+
     int state = S_12;
     boolean firstPressing;
     boolean secondPressing;
@@ -99,9 +100,9 @@ public class EntranceView extends View{
     int thirdButton;
     int fourthButton;
     int backButton;
-    
+
     boolean connected;
-     
+
     public EntranceView(RollingCheeseActivity father){
         super(father);
         this.father = father;
@@ -128,7 +129,7 @@ public class EntranceView extends View{
         entranceDrawThread = new EntranceDrawThread(this);
         entranceDrawThread.start();
         gotoState(S_12);
-        
+
     }
     public void initBitmap(Context context){
         Resources r = context.getResources();
@@ -138,32 +139,32 @@ public class EntranceView extends View{
     public void initRect(){
         // TODO
     }
-    
+
     public void onDraw(Canvas canvas){
         canvas.drawBitmap(staticBackgroundBitmap , 0, 0, null);
-        if(!firstPressing) 
+        if(!firstPressing)
             canvas.drawText(firstString, firstX, firstY, paint1);
         else canvas.drawText(firstString, firstX, firstY, paint2);
-        
-        if(!secondPressing) 
+
+        if(!secondPressing)
             canvas.drawText(secondString, secondX, secondY, paint1);
         else canvas.drawText(secondString, secondX, secondY, paint2);
-        
-        if(!thirdPressing) 
+
+        if(!thirdPressing)
             canvas.drawText(thirdString, thirdX, thirdY, paint1);
         else canvas.drawText(thirdString, thirdX, thirdY, paint2);
-        
-        if(!fourthPressing) 
+
+        if(!fourthPressing)
             canvas.drawText(fourthString, fourthX, fourthY, paint1);
         else canvas.drawText(fourthString, fourthX, fourthY, paint2);
-        
+
         if(!backPressing)
             canvas.drawText(backString, backX, backY, paint3);
         else canvas.drawText(backString, backX, backY, paint4);
-        
+
         entranceDrawThread.cancelDrawflag();
     }
-    
+
     public boolean onTouchEvent(MotionEvent event){
         if(event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE){
             int x = (int)event.getX();
@@ -205,7 +206,7 @@ public class EntranceView extends View{
         }
         return true;
     }
-    
+
     public void handleButton(int b){
         switch(b){
             case BUT_SINGLE:
@@ -244,7 +245,7 @@ public class EntranceView extends View{
         }
         entranceDrawThread.setDrawflag();
     }
-    
+
     public void gotoState(int s){
         switch(s){
             case S_12:
@@ -272,7 +273,7 @@ public class EntranceView extends View{
                 fourthString = "Crazy";
                 backString = "BACK";
                 state = S_1;
-                
+
                 break;
             case S_2:
                 if(!connected){
@@ -293,10 +294,10 @@ public class EntranceView extends View{
                 state = S_2;
                 break;
         }
-        
+
         entranceDrawThread.setDrawflag();
     }
-    
+
     public void becomeConnected(){
         connected = true;
         gotoState(S_2);

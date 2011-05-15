@@ -4,6 +4,7 @@ import java.util.Date;
 
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
+import NMLab.team10.rollingthecheese.gameSetting.GlobalParameter;
 import NMLab.team10.rollingthecheese.gameSetting.ServerGameSetting;
 import NMLab.team10.rollingthecheese.gameSetting.SynMessageData;
 
@@ -76,7 +77,7 @@ public class GameCalThread extends Thread {
             while (true) {
                 Date timeNow = new Date(System.currentTimeMillis());
                 long interval = timeNow.getTime() - timeLast.getTime();
-                if (interval < 50) {
+                if (interval < GlobalParameter.FramePeriod) {
                     try {
                         sleep(1);
                     } catch (InterruptedException e) {

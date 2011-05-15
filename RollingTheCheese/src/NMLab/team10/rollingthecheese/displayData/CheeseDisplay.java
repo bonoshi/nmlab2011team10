@@ -387,11 +387,9 @@ public class CheeseDisplay {
         return GlobalParameter.MapHeight - cheeseMessage.getY();
     }
 
-    short spinAngle;
-
     public short getSpinAngle() {
         //spinAngle += 3;
-        return spinAngle;
+        return cheeseMessage.getSpinAngle();
         // return cheeseMessage.getSpinAngle();
     }
 

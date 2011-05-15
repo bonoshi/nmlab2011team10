@@ -55,8 +55,6 @@ public class GameView extends View {
 
         scroll = new ScrollThread();
         scroll.start();
-
-
         gameDrawThread = new GameDrawThread(this);
         gameDrawThread.isRunning = true;
 
@@ -121,11 +119,6 @@ public class GameView extends View {
         paintMilk.setAntiAlias(true);
     }
 
-    // @Override
-    /*
-     * public void onDraw(Canvas canvas){ super.onDraw(canvas); }
-     */
-
     Paint paintInfo = new Paint();
     Paint paintMilk = new Paint();
 
@@ -149,12 +142,12 @@ public class GameView extends View {
     @Override
     public void onDraw(Canvas canvas) {
 
-        if(hasBeenInit){
-            if(displayData.hasNewData()){
-                hasBeenInit = false;
-            }
-            return;
-        }
+//        if(hasBeenInit){
+//            if(displayData.hasNewData()){
+//                hasBeenInit = false;
+//            }
+//            return;
+//        }
 
         int newX;
 
@@ -177,14 +170,12 @@ public class GameView extends View {
         canvas.translate(0, 50);
         canvas.drawBitmap(backgroundBitmap, newX / 2 - 80, 0, null);
         canvas.drawBitmap(farmBitmap, newX / 2 - 80, 0, null);
-        
+
         CowDisplay.draw(canvas,newX);
-        
+
         canvas.translate(0, -50);
         canvas.translate(newX, 0);
-        if (displayData.hasNewData()) {
-            displayData.drawHouse(canvas);
-        }
+        displayData.drawHouse(canvas);
         canvas.translate(-newX, 0);
         canvas.drawBitmap(wood_slideBitmap, newX - 150, 275, null);
         canvas.drawBitmap(wood_slideBitmap_m, newX + 1470, 275, null);

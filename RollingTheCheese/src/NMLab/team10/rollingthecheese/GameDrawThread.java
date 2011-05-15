@@ -11,6 +11,20 @@ public class GameDrawThread extends Thread {
     }
 
     public void run() {
+//      if(hasBeenInit){
+//      if(displayData.hasNewData()){
+//          hasBeenInit = false;
+//      }
+//      return;
+//  }
+        while(!GameView.displayData.hasNewData()){
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
         while (isRunning) {
             father.postInvalidate(); // make GameView to do onDraw()
             try {

@@ -18,9 +18,6 @@ import NMLab.team10.rollingthecheese.gameSetting.Farm;
 import NMLab.team10.rollingthecheese.gameSetting.House;
 import NMLab.team10.rollingthecheese.gameSetting.ServerGameSetting;
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -35,9 +32,6 @@ public class RollingCheeseActivity extends Activity {
     /** Called when the activity is first created. */
     static final int REQUEST_CONNECT_DEVICE = 0;
     static final int REQUEST_ENABLE_BT = 1;
-    boolean bluetoothSetupFinished = false;
-    private BluetoothAdapter mBluetoothAdapter = null;
-    public BluetoothService mBluetoothService = null;
     public String mConnectedDeviceName;
 
     // private boolean isLeft = false;// when two player
@@ -47,7 +41,6 @@ public class RollingCheeseActivity extends Activity {
     private static final int MENU_InitClient = 1;
     private static final int MENU_Send = 2;
 
-    public WelcomeView welcomeView;
     public GameView gameView;
     public EntranceView entranceView;
 
@@ -64,15 +57,8 @@ public class RollingCheeseActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        /*if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
-            finish();
-            return;
-        }*/
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        welcomeView = new WelcomeView(this);
         entranceView = new EntranceView(this);
         gameView = new GameView(this);
         setContentView(entranceView);
@@ -103,7 +89,7 @@ public class RollingCheeseActivity extends Activity {
 
     /**
      * Invoked during init to give the Activity a chance to set up its Menu.
-     * 
+     *
      * @param menu
      *            the Menu to which entries may be added
      * @return true
@@ -159,6 +145,7 @@ public class RollingCheeseActivity extends Activity {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
         myHandler.sendEmptyMessage(InterThreadMsg.startGameView);
     }
 
@@ -300,21 +287,6 @@ public class RollingCheeseActivity extends Activity {
         return false;
     }
 
-    // private void ensureDiscoverable() {
-    // if (mBluetoothAdapter.getScanMode() !=
-    // BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
-    // Intent discoverableIntent = new
-    // Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-    // discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,
-    // 300);
-    // startActivity(discoverableIntent);
-    // }
-    // }
-
-//    private void setupService() {
-//        // mBluetoothService = new BluetoothService(this, myHandler);
-//    }
-
     public Handler myHandler = new Handler() {
         RollingCheeseActivity rca = RollingCheeseActivity.this;
 
@@ -342,6 +314,7 @@ public class RollingCheeseActivity extends Activity {
                         gameCalThread.resumeGameCal();
                         gameView.initialOnePlayer();
                     }
+                    entranceView.setPause(true);
                     gameView.startDrawThread();
                     setContentView(gameView);
                     break;
