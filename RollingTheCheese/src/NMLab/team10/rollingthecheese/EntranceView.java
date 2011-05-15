@@ -62,16 +62,16 @@ public class EntranceView extends View{
     Bitmap connectBitmap;
     Bitmap startBitmap;*/
  // TODO
-    static final int firstX = 100;
-    static final int firstY = 235;
+    static final int firstX = 125;
+    static final int firstY = 238;
     static final int secondX = 100;
     static final int secondY = 288;
-    static final int thirdX = 100;
+    static final int thirdX = 130;
     static final int thirdY = 337;
-    static final int fourthX = 100;
-    static final int fourthY = 392;
+    static final int fourthX = 135;
+    static final int fourthY = 385;
     static final int backX = 365;
-    static final int backY = 427;
+    static final int backY = 426;
     // end TODO
     static final Rect firstRect = new Rect(firstX, firstY, firstX+200,firstY+50);
     static final Rect secondRect = new Rect(secondX, secondY, secondX+200,secondY+50);
@@ -116,16 +116,16 @@ public class EntranceView extends View{
         connected = false;
         paint1 = new Paint();
         paint1.setColor(Color.BLACK);
-        paint1.setTextSize(30);
+        paint1.setTextSize(27);
         paint2 = new Paint();
         paint2.setColor(Color.RED);
-        paint2.setTextSize(30);
+        paint2.setTextSize(27);
         paint3 = new Paint();
         paint3.setColor(Color.BLACK);
-        paint3.setTextSize(20);
+        paint3.setTextSize(17);
         paint4 = new Paint();
         paint4.setColor(Color.RED);
-        paint4.setTextSize(20);
+        paint4.setTextSize(17);
         entranceDrawThread = new EntranceDrawThread(this);
         entranceDrawThread.start();
         gotoState(S_12);
@@ -142,9 +142,17 @@ public class EntranceView extends View{
 
     public void onDraw(Canvas canvas){
         canvas.drawBitmap(staticBackgroundBitmap , 0, 0, null);
-        if(!firstPressing)
-            canvas.drawText(firstString, firstX, firstY, paint1);
-        else canvas.drawText(firstString, firstX, firstY, paint2);
+
+        if(state == S_12){
+           if(!firstPressing) 
+               canvas.drawText(firstString, firstX, firstY, paint1);
+           else canvas.drawText(firstString, firstX, firstY, paint2);
+        }else {
+            if(!firstPressing) 
+                canvas.drawText(firstString, firstX+20, firstY, paint1);
+            else canvas.drawText(firstString, firstX+20, firstY, paint2);
+        }
+
 
         if(!secondPressing)
             canvas.drawText(secondString, secondX, secondY, paint1);

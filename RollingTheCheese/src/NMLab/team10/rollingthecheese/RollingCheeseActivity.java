@@ -32,7 +32,9 @@ public class RollingCheeseActivity extends Activity {
     /** Called when the activity is first created. */
     static final int REQUEST_CONNECT_DEVICE = 0;
     static final int REQUEST_ENABLE_BT = 1;
+
     public String mConnectedDeviceName;
+    
 
     // private boolean isLeft = false;// when two player
     private boolean isTwoPlayer = true;
@@ -57,6 +59,10 @@ public class RollingCheeseActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        SoundController.initSoundController(this);
+        SoundController.playBackground(SoundController.BACKGROUND1);
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         entranceView = new EntranceView(this);
@@ -317,6 +323,7 @@ public class RollingCheeseActivity extends Activity {
                     entranceView.setPause(true);
                     gameView.startDrawThread();
                     setContentView(gameView);
+                    SoundController.playBackground(SoundController.BACKGROUND2);
                     break;
                 case InterThreadMsg.endGame:
                     Toast.makeText(getApplicationContext(),

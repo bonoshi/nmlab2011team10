@@ -16,6 +16,7 @@ import android.graphics.RectF;
 import android.util.Log;
 import NMLab.team10.rollingthecheese.GameView;
 import NMLab.team10.rollingthecheese.R;
+import NMLab.team10.rollingthecheese.SoundController;
 import NMLab.team10.rollingthecheese.gameSetting.CowMessage;
 import NMLab.team10.rollingthecheese.gameSetting.CheeseParameter.Normal;
 
@@ -189,6 +190,7 @@ public class CowDisplay{
     ////////////////////// bobuway /////////////////
     static Random random = new Random();
     static public void debug_addCow(){
+        //SoundController.playSound(SoundController.EFF_COLLISION1,0);
         /*boolean add = false;
         if(leftCowList.size() >= 5) return;
         while(!add){
