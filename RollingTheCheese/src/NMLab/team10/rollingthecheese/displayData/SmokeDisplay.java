@@ -47,13 +47,10 @@ public class SmokeDisplay {
     int counter;
 
     public SmokeDisplay(boolean whichSide, byte type) {
-        this.isBlack = (whichSide) ? GameView.displayData.getRightDSM().smallCheese : GameView.displayData
-                .getLeftDSM().smallCheese;
-        this.startX = (whichSide) ? GameView.displayData.getLeftHouse().getSmokeX(whichSide)
-                : GameView.displayData.getRightHouse().getSmokeX(whichSide);
+        this.isBlack = GameView.displayData.getDSM(!whichSide).smallCheese;
+        this.startX = GameView.displayData.getHouse(whichSide).getSmokeX(whichSide);
         startX -= SmokeWidth / 2;
-        this.startY = (whichSide) ? GameView.displayData.getLeftHouse().getSmokeY(whichSide)
-                : GameView.displayData.getRightHouse().getSmokeY(whichSide);
+        this.startY = GameView.displayData.getHouse(whichSide).getSmokeY(whichSide);
         startY -= SmokeHeight / 2;
         this.type = type;
         isDead = false;

@@ -57,7 +57,7 @@ public class GameCalThread extends Thread {
             // (2)prepare data for server
             // (3)send to client
             // local game display
-            synMessageData = new SynMessageData(setting, eventCenter, Right);
+            synMessageData = new SynMessageData(setting, eventCenter, Left);
             displayData.refresh(synMessageData);
 
             // Step 3: fetch construction event

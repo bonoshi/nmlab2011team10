@@ -99,6 +99,35 @@ public class HouseMessage implements Serializable{
                 return 0.0F;
         }
     }
+    public int getUpProdMilk() {
+        switch (prod) {
+            case ForFun:
+                return HouseParameter.AfterHoursMilk;
+            case AfterHours:
+                return HouseParameter.BakeryMilk;
+            case Bakery:
+                return HouseParameter.FoodFactoryMilk;
+            case FoodFactory:
+                return Integer.MAX_VALUE;
+            default:// no use
+                return Integer.MAX_VALUE;
+        }
+    }
+
+    public String getUpProdMilkText() {
+        switch (prod) {
+            case ForFun:
+                return Integer.toString(HouseParameter.AfterHoursMilk);
+            case AfterHours:
+                return Integer.toString(HouseParameter.BakeryMilk);
+            case Bakery:
+                return Integer.toString(HouseParameter.FoodFactoryMilk);
+            case FoodFactory:
+                return "MAX";
+            default:// no use
+                return "NOUSE";
+        }
+    }
 
     private byte prod;
     private byte qual;

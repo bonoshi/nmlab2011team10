@@ -67,14 +67,14 @@ public class GameView extends View {
     }
 
     public void initialOnePlayer() {
-        buttomBar = new ButtomBar(father, father.gameCalThread.getEventCenter());
+        buttomBar = new ButtomBar(father, father.gameCalThread.getEventCenter(),father.displayData);
         displayData = father.displayData;
         CowDisplay.initialGameView(this);
         hasBeenInit = true;
     }
 
     public void initialTwoPlayer() {
-        buttomBar = new ButtomBar(father, new EventQueueCenter(father));
+        buttomBar = new ButtomBar(father, new EventQueueCenter(father),father.displayData);
         displayData = father.displayData;
         CowDisplay.initialGameView(this);
         hasBeenInit = true;
@@ -209,12 +209,12 @@ public class GameView extends View {
         canvas.drawText("Scroll Pos: " + scrollPosition, 570, 450, paintInfo);
         canvas.drawText("(x,y)=(" + this.x + "," + this.y + ")", 570, 420,
                 paintInfo);
-        canvas.drawText(Integer.toString(displayData.getLeftMilk()), 494, 61,
+        canvas.drawText(Integer.toString(displayData.getMilk()), 494, 61,
                 paintMilk);
         canvas.drawText("Time=" + displayData.getTime(), 570, 30, paintInfo);
         canvas.drawText("FPS=" + fps, 570, 60, paintInfo);
         canvas.drawText("P/sec=" + pssString ,570, 90, paintInfo);
-        canvas.drawText("Cow Num=" + displayData.getLeftCowList().size() ,570, 120, paintInfo);
+        canvas.drawText("Cow Num=" + displayData.getCowList().size() ,570, 120, paintInfo);
 
     }
 

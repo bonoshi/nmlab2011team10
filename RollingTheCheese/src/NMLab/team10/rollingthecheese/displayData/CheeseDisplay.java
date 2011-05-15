@@ -351,7 +351,7 @@ public class CheeseDisplay {
                     case Tiny:
                         radix = CheeseParameter.Fire.RadixTiny;
                         break;
-                }
+                } 
                 break;
             }
         }

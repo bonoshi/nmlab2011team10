@@ -1,9 +1,15 @@
 package NMLab.team10.rollingthecheese;
 
 
+import NMLab.team10.rollingthecheese.displayData.DisplayData;
 import NMLab.team10.rollingthecheese.event.EventEnum;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 import NMLab.team10.rollingthecheese.gameSetting.CheeseParameter;
+import NMLab.team10.rollingthecheese.gameSetting.CowParameter;
+import NMLab.team10.rollingthecheese.gameSetting.Farm;
+import NMLab.team10.rollingthecheese.gameSetting.House;
+import NMLab.team10.rollingthecheese.gameSetting.HouseMessage;
+import NMLab.team10.rollingthecheese.gameSetting.Projector;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -28,13 +34,21 @@ public class ButtomBar {
     private static Bitmap buttomConBitmap;
     private static Bitmap buttomDeBitmap;
     private static Bitmap buttomCanBitmap;
-    
+     
     private static Bitmap listNBitmap;
     private static Bitmap listCBitmap;
     private static Bitmap listSBitmap;
     private static Bitmap listFBitmap;
     private static Bitmap listConBitmap;
     private static Bitmap listDeBitmap;
+    
+    
+    static float ListTwo_smallDeltaX = 47f;
+    static float ListTwo_smallDeltaY = 130f;
+    static float ListTwo_largeDeltaX = 40f;
+    static float ListTwo_largeDeltaY = 235f;
+    
+    static float buttomStep = 110f;
     
     
     private ListContTwoButtom listControlN;
@@ -53,20 +67,22 @@ public class ButtomBar {
     private ButtomControl ButContCan;
     
     private EventQueueCenter eqc;
+    private DisplayData displayData;
 
-    public ButtomBar(RollingCheeseActivity activity, EventQueueCenter eqc){
+    public ButtomBar(RollingCheeseActivity activity, EventQueueCenter eqc,DisplayData displayData){
         //this.activity = activity;
         this.isTouch = false;
         
         ButtomBar.initBitmap(activity);
         this.eqc = eqc;
+        this.displayData = displayData;
         
         listControlN = new ListContTwoButtom(0,listNBitmap,eqc,EventEnum.OriginalCheeseSmall,EventEnum.OriginalCheeseLarge);
         listControlC = new ListContTwoButtom(110,listCBitmap,eqc,EventEnum.CasuMarzuSmall,EventEnum.CasuMarzuLarge);
         listControlS = new ListContTwoButtom(220,listSBitmap,eqc,EventEnum.SweatyCheeseSmall,EventEnum.SweatyCheeseLarge);
         listControlF = new ListContTwoButtom(330,listFBitmap,eqc,EventEnum.FiringCheeseSmall,EventEnum.FiringCheeseLarge);
         
-        listControlCon = new ListContFourButtom(345, listConBitmap, eqc, EventEnum.PurchaseCow, 
+        listControlCon = new ListContFourButtom(365, listConBitmap, eqc, EventEnum.PurchaseCow, 
                                                                         EventEnum.PurchaseCow,
                                                                         EventEnum.PurchaseCow,
                                                                         EventEnum.PurchaseCow);
@@ -115,32 +131,71 @@ public class ButtomBar {
         listControlF.draw(canvas);
         listControlCon.draw(canvas);
         listControlDe.draw(canvas);
-        Paint paint = new Paint();
-        paint.setColor(Color.DKGRAY);
-        paint.setTextSize(9);
-        float smallDeltaX = 40f;
-        float smallDeltaY = 115f;
-        float largeDeltaX = 30f;
-        float largeDeltaY = 220f;
-        float buttomStep = 110f;
+        Paint moneyPaint = new Paint();
+        moneyPaint.setColor(Color.DKGRAY);
+        moneyPaint.setTextSize(15);
+        Paint numPaint = new Paint();
+        numPaint.setColor(Color.RED);
+        numPaint.setTextSize(15);
+        
         if(listControlN.isOpen()){
-            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.OriginalCheeseSmall)), smallDeltaX,smallDeltaY, paint);
-            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.OriginalCheeseLarge)), largeDeltaX,largeDeltaY, paint);
+            canvas.drawText("$"+Integer.toString(CheeseParameter.getPrice(EventEnum.OriginalCheeseSmall)), ListTwo_smallDeltaX,ListTwo_smallDeltaY, moneyPaint);
+            canvas.drawText("$"+Integer.toString(CheeseParameter.getPrice(EventEnum.OriginalCheeseLarge)), ListTwo_largeDeltaX,ListTwo_largeDeltaY, moneyPaint);
+            canvas.drawText(Integer.toString(displayData.getButtonD().normalSmallN)
+                            ,ListTwo_smallDeltaX+20,ListTwo_smallDeltaY+15, numPaint);
+            canvas.drawText(Integer.toString(displayData.getButtonD().normalLargeN)
+                    ,ListTwo_largeDeltaX+43,ListTwo_largeDeltaY+30, numPaint);
         }
         if(listControlC.isOpen()){
-            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.CasuMarzuSmall)), smallDeltaX+buttomStep,smallDeltaY, paint);
-            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.CasuMarzuLarge)), largeDeltaX+buttomStep,largeDeltaY, paint);
+            canvas.drawText("$"+Integer.toString(CheeseParameter.getPrice(EventEnum.CasuMarzuSmall)), ListTwo_smallDeltaX+buttomStep,ListTwo_smallDeltaY, moneyPaint);
+            canvas.drawText("$"+Integer.toString(CheeseParameter.getPrice(EventEnum.CasuMarzuLarge)), ListTwo_largeDeltaX+buttomStep,ListTwo_largeDeltaY, moneyPaint);
+            canvas.drawText(Integer.toString(displayData.getButtonD().poisonSmallN)
+                    ,ListTwo_smallDeltaX+buttomStep+20,ListTwo_smallDeltaY+15, numPaint);
+            canvas.drawText(Integer.toString(displayData.getButtonD().poisonLargeN)
+                    ,ListTwo_largeDeltaX+buttomStep+43,ListTwo_largeDeltaY+30, numPaint);
         }
         if(listControlS.isOpen()){
-            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.SweatyCheeseSmall)), smallDeltaX+buttomStep*2,smallDeltaY, paint);
-            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.SweatyCheeseLarge)), largeDeltaX+buttomStep*2,largeDeltaY, paint);
+            canvas.drawText("$"+Integer.toString(CheeseParameter.getPrice(EventEnum.SweatyCheeseSmall)), ListTwo_smallDeltaX+buttomStep*2,ListTwo_smallDeltaY, moneyPaint);
+            canvas.drawText("$"+Integer.toString(CheeseParameter.getPrice(EventEnum.SweatyCheeseLarge)), ListTwo_largeDeltaX+buttomStep*2,ListTwo_largeDeltaY, moneyPaint);
+            canvas.drawText(Integer.toString(displayData.getButtonD().sweatySmallN)
+                    ,ListTwo_smallDeltaX+buttomStep*2+20,ListTwo_smallDeltaY+15, numPaint);
+            canvas.drawText(Integer.toString(displayData.getButtonD().sweatyLargeN)
+                    ,ListTwo_largeDeltaX+buttomStep*2+43,ListTwo_largeDeltaY+30, numPaint);
         }
         if(listControlF.isOpen()){
-            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.FiringCheeseSmall)), smallDeltaX+buttomStep*3,smallDeltaY, paint);
-            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.FiringCheeseLarge)), largeDeltaX+buttomStep*3,largeDeltaY, paint);
+            canvas.drawText("$"+Integer.toString(CheeseParameter.getPrice(EventEnum.FiringCheeseSmall)), ListTwo_smallDeltaX+buttomStep*3,ListTwo_smallDeltaY, moneyPaint);
+            canvas.drawText("$"+Integer.toString(CheeseParameter.getPrice(EventEnum.FiringCheeseLarge)), ListTwo_largeDeltaX+buttomStep*3,ListTwo_largeDeltaY, moneyPaint);
+            canvas.drawText(Integer.toString(displayData.getButtonD().firingSmallN)
+                    ,ListTwo_smallDeltaX+buttomStep*3+20,ListTwo_smallDeltaY+15, numPaint);
+            canvas.drawText(Integer.toString(displayData.getButtonD().firingLargeN)
+                    ,ListTwo_largeDeltaX+buttomStep*3+43,ListTwo_largeDeltaY+30, numPaint);
         }
         
+        if(listControlCon.isOpen()){
+            String farmMoney = displayData.getFarm().getUpProdMilkText();
+            String houseMoney = displayData.getHouse().getUpProdMilkText();
+            String projMoney = displayData.getProjector().getUpMilkText();
+            String CowMoney = CowParameter.getPriceText(displayData.getCowList().size());
+            String farmP = Integer.toString(displayData.getButtonD().MilkProdPercent);
+            String houseP = Integer.toString(displayData.getButtonD().cheeseProdPercent);
+            String projP = Integer.toString(displayData.getButtonD().projectorPercent);
+            String CowP = Integer.toString(displayData.getButtonD().cowPercent);
+            
+            
+            canvas.drawText("$"+CowMoney,400,125,moneyPaint);
+            canvas.drawText("$"+farmMoney,440+80,130,moneyPaint);
+            canvas.drawText("$"+projMoney, 400, 235, moneyPaint);
+            canvas.drawText("$"+houseMoney, 440+80, 230, moneyPaint);
+            canvas.drawText(CowP+"%",450,125,moneyPaint);
+            canvas.drawText(farmP+"%",570,130,moneyPaint);
+            canvas.drawText(projP+"%", 450, 235, moneyPaint);
+            canvas.drawText(houseP+"%", 570, 230, moneyPaint);
+            
+        }
         
+        if(listControlDe.isOpen()){
+            
+        }
         canvas.drawBitmap(buttomBar, 0,0, null);
         
         butContN.draw(canvas);

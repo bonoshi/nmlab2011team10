@@ -19,6 +19,9 @@ import NMLab.team10.rollingthecheese.gameSetting.SynMessageData;
 
 public class DisplayData {
 
+    
+    public boolean isLeft = true;
+    
     public DisplayData() {
         hasNewData = false;
         this.smd = new SynMessageData();
@@ -210,82 +213,155 @@ public class DisplayData {
         return smd.getBackground();
     }
 
-    public Projector getLeftProjector() {
-        return smd.getLeftProjector();
+    public Projector getProjector() {
+        if(isLeft){
+            return smd.getLeftProjector();
+        }else{
+            return smd.getRightProjector();
+        }
+    }
+    public Projector getProjector(boolean _isLeft) {
+        if(_isLeft){
+            return smd.getLeftProjector();
+        }else{
+            return smd.getRightProjector();
+        }
     }
 
-    public Projector getRightProjector() {
-        return smd.getRightProjector();
+    
+
+    public HouseMessage getHouse() {
+        if(isLeft){
+            return smd.getLeftHouse();
+        }else{
+            return smd.getRightHouse();
+        }
     }
 
-    public HouseMessage getLeftHouse() {
-        return smd.getLeftHouse();
+    public HouseMessage getHouse(boolean _isLeft) {
+        if(_isLeft){
+            return smd.getLeftHouse();
+        }else{
+            return smd.getRightHouse();
+        }
     }
 
-    public HouseMessage getRightHouse() {
-        return smd.getRightHouse();
+    
+
+    public Farm getFarm() {
+        if(isLeft){
+            return smd.getLeftFarm();
+        }else{
+            return smd.getRightFarm();
+        }
+        
+    }
+    public Farm getFarm(boolean _isLeft) {
+        if(_isLeft){
+            return smd.getLeftFarm();
+        }else{
+            return smd.getRightFarm();
+        }
+        
+    }
+    
+    
+    
+    public int getMilk() {
+        if(isLeft){
+            return smd.getLeftMilk();
+        }else{
+            return smd.getRightMilk();
+        }
+    }
+    public int getMilk(boolean _isLeft) {
+        if(_isLeft){
+            return smd.getLeftMilk();
+        }else{
+            return smd.getRightMilk();
+        }
     }
 
-    public Farm getLeftFarm() {
-        return smd.getLeftFarm();
+    public byte getHouseHPPercent() {
+        if(isLeft){
+            return smd.getLeftHouseHPPercent();
+        }else{
+            return smd.getRightHouseHPPercent();
+        }
+    }
+    public byte getHouseHPPercent(boolean _isLeft) {
+        if(_isLeft){
+            return smd.getLeftHouseHPPercent();
+        }else{
+            return smd.getRightHouseHPPercent();
+        }
     }
 
-    public Farm getRightFarm() {
-        return smd.getRightFarm();
+    public LinkedList<CheeseMessage> getCheeseList() {
+        if(isLeft){
+            return smd.getLeftCheeseList();
+        }else{
+            return smd.getRightCheeseList();
+        }
+    }
+    public LinkedList<CheeseMessage> getCheeseList(boolean _isLeft) {
+        if(_isLeft){
+            return smd.getLeftCheeseList();
+        }else{
+            return smd.getRightCheeseList();
+        }
+    }
+    public LinkedList<CowMessage> getCowList() {
+        if(isLeft){
+            return smd.getLeftCowList();
+        }else{
+            return smd.getRightCowList();
+        }
+    }
+    public LinkedList<CowMessage> getCowList(boolean _isLeft) {
+        if(_isLeft){
+            return smd.getLeftCowList();
+        }else{
+            return smd.getRightCowList();
+        }
+    }
+ 
+    public LinkedList<FireLineMessage> getFireList() {
+        if(isLeft){
+            return smd.getLeftFireList();
+        }else{
+            return smd.getRightFireList();
+        }
+    }
+    public LinkedList<FireLineMessage> getFireList(boolean _isLeft) {
+        if(_isLeft){
+            return smd.getLeftFireList();
+        }else{
+            return smd.getRightFireList();
+        }
     }
 
-    public int getLeftMilk() {
-        return smd.getLeftMilk();
-    }
-
-    public int getRightMilk() {
-        return smd.getRightMilk();
-    }
-
-    public byte getLeftHouseHPPercent() {
-        return smd.getLeftHouseHPPercent();
-    }
-
-    public byte getRightHouseHPPercent() {
-        return smd.getRightHouseHPPercent();
-    }
-
-    public LinkedList<CheeseMessage> getLeftCheeseList() {
-        return smd.getLeftCheeseList();
-    }
-
-    public LinkedList<CheeseMessage> getRightCheeseList() {
-        return smd.getRightCheeseList();
-    }
-
-    public LinkedList<CowMessage> getLeftCowList() {
-        return smd.getLeftCowList();
-    }
-
-    public LinkedList<CowMessage> getRightCowList() {
-        return smd.getRightCowList();
-    }
-
-    public LinkedList<FireLineMessage> getLeftFireList() {
-        return smd.getLeftFireList();
-    }
-
-    public LinkedList<FireLineMessage> getRightFireList() {
-        return smd.getRightFireList();
-    }
 
     public ButtonDisplay getButtonD() {
         return smd.getButtonD();
     }
 
-    public DestructStateMessage getLeftDSM() {
-        return smd.getLeftDSM();
+    public DestructStateMessage getDSM() {
+        if(isLeft){
+            return smd.getLeftDSM();
+        }else{
+            return smd.getRightDSM();
+        }
+    }
+    public DestructStateMessage getDSM(boolean _isLeft) {
+        if(_isLeft){
+            return smd.getLeftDSM();
+        }else{
+            return smd.getRightDSM();
+        }
     }
 
-    public DestructStateMessage getRightDSM() {
-        return smd.getRightDSM();
-    }
-
+    
     public void drawCheese(boolean whichSide, Canvas canvas) {
         LinkedList<CheeseDisplay> cList = (whichSide) ? leftCheeseList : rightCheeseList;
         synchronized (cList) {
