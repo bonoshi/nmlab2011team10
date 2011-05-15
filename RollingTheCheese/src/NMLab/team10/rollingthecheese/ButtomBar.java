@@ -63,10 +63,10 @@ public class ButtomBar {
         listControlS = new ListContTwoButtom(220,listSBitmap,eqc,EventEnum.SweatyCheeseSmall,EventEnum.SweatyCheeseLarge);
         listControlF = new ListContTwoButtom(330,listFBitmap,eqc,EventEnum.FiringCheeseSmall,EventEnum.FiringCheeseLarge);
         
-        listControlCon = new ListContFourButtom(345, listConBitmap, eqc, EventEnum.OriginalCheeseSmall, 
-                                                                        EventEnum.OriginalCheeseMed,
-                                                                        EventEnum.OriginalCheeseMed,
-                                                                        EventEnum.OriginalCheeseLarge);
+        listControlCon = new ListContFourButtom(345, listConBitmap, eqc, EventEnum.PurchaseCow, 
+                                                                        EventEnum.PurchaseCow,
+                                                                        EventEnum.PurchaseCow,
+                                                                        EventEnum.PurchaseCow);
         listControlDe = new ListContFourButtom(455, listDeBitmap, eqc, EventEnum.OriginalCheeseSmall, 
                                                                         EventEnum.OriginalCheeseMed,
                                                                         EventEnum.OriginalCheeseMed,

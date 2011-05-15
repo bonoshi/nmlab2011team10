@@ -10,6 +10,7 @@ import NMLab.team10.rollingthecheese.displayData.Climate;
 import NMLab.team10.rollingthecheese.displayData.HouseDisplay;
 import NMLab.team10.rollingthecheese.displayData.SkyDisplay;
 import NMLab.team10.rollingthecheese.displayData.SmokeDisplay;
+import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 
 import NMLab.team10.rollingthecheese.gameSetting.Cheese;
 import NMLab.team10.rollingthecheese.gameSetting.GlobalParameter;
@@ -67,20 +68,24 @@ public class GameView extends View {
 
         gameDrawThread = new GameDrawThread(this);
         gameDrawThread.isRunning = true;
-        gameDrawThread.start();
+
         vTracker = VelocityTracker.obtain();
 
     }
 
-    public void initialServerGameView() {
+    public void startDrawThread(){
+        gameDrawThread.start();
+    }
+
+    public void initialOnePlayer() {
         buttomBar = new ButtomBar(father, father.gameCalThread.getEventCenter());
         displayData = father.displayData;
         CowDisplay.initialGameView(this);
         hasBeenInit = true;
     }
 
-    public void initialClientGameView() {
-        buttomBar = new ButtomBar(father, father.clientEventQueue);
+    public void initialTwoPlayer() {
+        buttomBar = new ButtomBar(father, new EventQueueCenter(father));
         displayData = father.displayData;
         CowDisplay.initialGameView(this);
         hasBeenInit = true;
@@ -153,12 +158,12 @@ public class GameView extends View {
     @Override
     public void onDraw(Canvas canvas) {
 
-//        if(hasBeenInit){
-//            if(displayData.hasNewData()){
-//                hasBeenInit = false;
-//            }
-//            return;
-//        }
+        if(hasBeenInit){
+            if(displayData.hasNewData()){
+                hasBeenInit = false;
+            }
+            return;
+        }
 
         int newX;
 
@@ -226,7 +231,8 @@ public class GameView extends View {
                 paintMilk);
         canvas.drawText("Time=" + displayData.getTime(), 570, 30, paintInfo);
         canvas.drawText("FPS=" + fps, 570, 60, paintInfo);
-        canvas.drawText("P/sec=" + pssString ,570, 90, paintInfo); 
+        canvas.drawText("P/sec=" + pssString ,570, 90, paintInfo);
+        canvas.drawText("Cow Num=" + displayData.getLeftCowList().size() ,570, 120, paintInfo);
 
     }
 

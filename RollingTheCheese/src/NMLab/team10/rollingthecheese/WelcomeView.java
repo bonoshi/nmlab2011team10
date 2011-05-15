@@ -82,12 +82,13 @@ public class WelcomeView extends SurfaceView implements SurfaceHolder.Callback{
         if(event.getAction() == MotionEvent.ACTION_UP){
             int x = (int)event.getX();
             int y = (int)event.getY();
-            if(connectToOtheRect.contains(x, y)){
-                father.myHandler.sendEmptyMessage(InterThreadMsg.scan);
-            }else if(waitingConnectRect.contains(x, y)){
-                father.myHandler.sendEmptyMessage(InterThreadMsg.discoverable);
+//            if(connectToOtheRect.contains(x, y)){
+//                father.myHandler.sendEmptyMessage(InterThreadMsg.scan);
+//            }else if(waitingConnectRect.contains(x, y)){
+//                father.myHandler.sendEmptyMessage(InterThreadMsg.discoverable);
 
-            }else if(titleRect.contains(x,y)){
+            if(titleRect.contains(x,y)){
+                father.setTwoPlayer(false);
                 father.myHandler.sendEmptyMessage(InterThreadMsg.startGameView);
             }
         }

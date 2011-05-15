@@ -1,17 +1,22 @@
 package NMLab.team10.rollingthecheese;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OptionalDataException;
+import java.io.StreamCorruptedException;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import NMLab.team10.rollingthecheese.displayData.CheeseDisplay;
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
 import NMLab.team10.rollingthecheese.event.EventEnum;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
-import NMLab.team10.rollingthecheese.gameSetting.Cheese;
+import NMLab.team10.rollingthecheese.gameSetting.AppMessage;
 import NMLab.team10.rollingthecheese.gameSetting.Farm;
 import NMLab.team10.rollingthecheese.gameSetting.House;
 import NMLab.team10.rollingthecheese.gameSetting.ServerGameSetting;
-import NMLab.team10.rollingthecheese.gameSetting.SynMessageData;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -19,6 +24,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -34,11 +40,12 @@ public class RollingCheeseActivity extends Activity {
     public BluetoothService mBluetoothService = null;
     public String mConnectedDeviceName;
 
-    private boolean isClient = false;
-    private boolean isTwoPlayer = false;
-    private boolean hasBeenServer = false;
+    // private boolean isLeft = false;// when two player
+    private boolean isTwoPlayer = true;
 
-    private static final int MENU_STOP = 7;
+    private static final int MENU_Exit = 0;
+    private static final int MENU_InitClient = 1;
+    private static final int MENU_Send = 2;
 
     public WelcomeView welcomeView;
     public GameView gameView;
@@ -74,32 +81,24 @@ public class RollingCheeseActivity extends Activity {
     @Override
     public void onStart() {
         super.onStart();
-        if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-            // Otherwise, setup the chat session
-        } else {
-            if (mBluetoothService == null)
-                setupService();
-        }
     }
 
     @Override
     public synchronized void onResume() {
         super.onResume();
-        if (mBluetoothService != null) {
-            if (mBluetoothService.getState() == BluetoothService.STATE_NONE) {
-                // Start the Blue-tooth chat services
-                mBluetoothService.start();
-            }
-        }
+        // if (mBluetoothService != null) {
+        // if (mBluetoothService.getState() == BluetoothService.STATE_NONE) {
+        // // Start the Blue-tooth chat services
+        // mBluetoothService.start();
+        // }
+        // }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mBluetoothService != null)
-            mBluetoothService.stop();
+//        if (mBluetoothService != null)
+//            mBluetoothService.stop();
     }
 
     /**
@@ -114,12 +113,167 @@ public class RollingCheeseActivity extends Activity {
         super.onCreateOptionsMenu(menu);
 
         // menu.add(0, MENU_CLEAR, 0, R.string.menu_clear);
-        menu.add(0, MENU_STOP, 0, "Exit");
+        menu.add(0, MENU_Exit, 0, "Exit");
+        menu.add(0, MENU_InitClient, 0, "Init");
+        menu.add(0, MENU_Send, 0, "Send");
         // menu.add(0, MENU_PAUSE, 0, R.string.menu_pause);
         // menu.add(0, MENU_RESUME, 0, R.string.menu_resume);
 
         return true;
     }
+
+    private Socket clientSocket = null;
+    private ObjectOutputStream oos = null;
+    private ObjectInputStream ois = null;
+
+    private void initClient() {
+        try {
+            this.clientSocket = new Socket("140.112.250.107", 5566);
+        } catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            oos = new ObjectOutputStream(clientSocket.getOutputStream());
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        try {
+            oos.flush();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        try {
+            ois = new ObjectInputStream(clientSocket.getInputStream());
+        } catch (StreamCorruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        myHandler.sendEmptyMessage(InterThreadMsg.startGameView);
+    }
+
+    private void send() {
+        Byte init = 20;
+        try {
+            oos.writeObject(init);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // System.out.println("Cliemt Send = " + init);
+        Log.e(TAG, "Client send = " + Byte.toString(init));
+        Byte result = 0;
+        try {
+            result = (Byte) ois.readObject();
+        } catch (OptionalDataException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Log.e(TAG, "Client receive = " + Byte.toString(result));
+        // System.out.println("Cliemt Receive = " + result);
+    }
+
+    class SynSending {
+
+    }
+
+    SynSending synSending = new SynSending();
+
+    public void sendEvent(Byte event) {
+        synchronized (synSending) {
+            try {
+                oos.writeObject(event);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
+
+    RefreshDisplayThread refreshDisplayThread = new RefreshDisplayThread();
+
+    class RefreshDisplayThread extends Thread {
+        public RefreshDisplayThread() {
+        }
+
+        private boolean running = true;
+        private boolean pause = false;
+
+        public void setPause(boolean pause) {
+            this.pause = pause;
+        }
+
+        public void setRunning(boolean running) {
+            this.running = running;
+        }
+
+        @Override
+        public void run() {
+            // TODO Auto-generated method stub
+            super.run();
+            while (running) {
+                while (pause) {
+                    try {
+                        sleep(10);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+                }
+
+                Object o = null;
+
+                try {
+                    Log.e("bonoshi", Integer.toString(ois.available()));
+                    o = ois.readObject();
+                } catch (OptionalDataException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (ClassNotFoundException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+                if (o != null) {
+                    try {
+                        AppMessage am = (AppMessage) o;
+                        giveData(am);
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
+                }
+
+            }
+        }
+
+        private void giveData(AppMessage am) {
+            if (am.getType() == EventEnum.Data) {
+                displayData.refresh(am.getSmd());
+            }
+        }
+    }
+
+    private static final String TAG = "ClientError";
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -127,8 +281,14 @@ public class RollingCheeseActivity extends Activity {
             // case MENU_CLEAR:
             // mAnimationThread.clearSprites();
             // return true;
-            case MENU_STOP:
+            case MENU_Exit:
                 finish();
+                return true;
+            case MENU_InitClient:
+                initClient();
+                return true;
+            case MENU_Send:
+                send();
                 return true;
                 // case MENU_PAUSE:
                 // mAnimationThread.pause();
@@ -140,99 +300,50 @@ public class RollingCheeseActivity extends Activity {
         return false;
     }
 
-    private void ensureDiscoverable() {
-        if (mBluetoothAdapter.getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
-            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-            startActivity(discoverableIntent);
-        }
-    }
+    // private void ensureDiscoverable() {
+    // if (mBluetoothAdapter.getScanMode() !=
+    // BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
+    // Intent discoverableIntent = new
+    // Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+    // discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,
+    // 300);
+    // startActivity(discoverableIntent);
+    // }
+    // }
 
-    private void setupService() {
-        mBluetoothService = new BluetoothService(this, myHandler);
-    }
+//    private void setupService() {
+//        // mBluetoothService = new BluetoothService(this, myHandler);
+//    }
 
     public Handler myHandler = new Handler() {
         RollingCheeseActivity rca = RollingCheeseActivity.this;
 
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case InterThreadMsg.startGameView:
-                    if (gameCalThread != null) {
-                        gameCalThread.stopGameCal();
-                        gameCalThread = null;
-                    }
-                    if (!isClient) {
-                        //myHandler.sendEmptyMessage(InterThreadMsg.serverStartGameView);
-                    } else {
-                        clientEventQueue = new EventQueueCenter(rca);
-                        gameView.initialClientGameView();
-                        clientEventQueue.addEvent(EventEnum.Start);
-                        setContentView(gameView);
-                    }
-                    break;
                 case InterThreadMsg.serverStartGameView:
-                    ServerGameSetting sgs = new ServerGameSetting();
-                    gameCalThread = new GameCalThread(rca, sgs, true);
-
-                    displayData = gameCalThread.getDisplayData();
-                    gameCalThread.start();
-                    gameCalThread.resumeGameCal();
-                    gameView.initialServerGameView();
-
-                    setContentView(gameView);
+                    isTwoPlayer=false;
+                    myHandler.sendEmptyMessage(InterThreadMsg.startGameView);
                     break;
-                case InterThreadMsg.scan:
-                    startScan();
-                    break;
-                case InterThreadMsg.discoverable:
-                    ensureDiscoverable();
-                    break;
-                case InterThreadMsg.MESSAGE_STATE_CHANGE:
-                    break;
-                case InterThreadMsg.MESSAGE_WRITE:
-                    break;
-                case InterThreadMsg.MESSAGE_READ:
-                    /* bobuway: receive a object */
-                    Object o = msg.obj;
-                    if (!isClient) {
-                        Byte eventByte = (Byte) o;
-                        if (eventByte == EventEnum.Start) {
-                            myHandler.sendEmptyMessage(InterThreadMsg.serverStartGameView);
-                        } else {
-                            gameCalThread.getEventCenter().addEvent(eventByte, Cheese.Right);
-                        }
+                case InterThreadMsg.startGameView:
+                    if (isTwoPlayer) {
+                        clientEventQueue = new EventQueueCenter(rca);
+                        gameView.initialTwoPlayer();
+                        refreshDisplayThread.start();
                     } else {
-                        SynMessageData smd = (SynMessageData) o;
-                        displayData.refresh(smd);
-                        GameView.refreshPPS(false);
+                        if (gameCalThread != null) {
+                            gameCalThread.stopGameCal();
+                            gameCalThread = null;
+                        }
+                        ServerGameSetting sgs = new ServerGameSetting();
+                        gameCalThread = new GameCalThread(rca, sgs);
+
+                        displayData = gameCalThread.getDisplayData();
+                        gameCalThread.start();
+                        gameCalThread.resumeGameCal();
+                        gameView.initialOnePlayer();
                     }
-                    break;
-                case InterThreadMsg.MESSAGE_DEVICE_NAME:
-                    mConnectedDeviceName = msg.getData().getString(BundleKey.DEVICE_NAME);
-                    Toast.makeText(getApplicationContext(), "Connected to " + mConnectedDeviceName,
-                            Toast.LENGTH_SHORT).show();
-                    switch (msg.arg1) {
-                        case BluetoothService.IAMSERVER:
-                            isClient = false;
-                            break;
-                        case BluetoothService.IAMCLIENT:
-                            isClient = true;
-                            break;
-                    }
-                    break;
-                case InterThreadMsg.ConnectionLost:
-                    Toast.makeText(getApplicationContext(), msg.getData().getString(BundleKey.TOAST),
-                            Toast.LENGTH_SHORT).show();
-                    // To do...back to two player menu
-                    // If server then pause GameCalThread
-                    break;
-                case InterThreadMsg.ConnectionFail:
-                    Toast.makeText(getApplicationContext(), msg.getData().getString(BundleKey.TOAST),
-                            Toast.LENGTH_SHORT).show();
-                    break;
-                case InterThreadMsg.LinkingErrorInGame:
-                    // To do...
+                    gameView.startDrawThread();
+                    setContentView(gameView);
                     break;
                 case InterThreadMsg.endGame:
                     Toast.makeText(getApplicationContext(),
@@ -252,56 +363,11 @@ public class RollingCheeseActivity extends Activity {
 
     };
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case REQUEST_CONNECT_DEVICE:
-                if (resultCode == Activity.RESULT_OK) {
-                    String address = data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
-                    BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-                    mBluetoothService.connect(device);
-                }
-                break;
-            case REQUEST_ENABLE_BT:
-                if (resultCode == Activity.RESULT_OK) {
-                    setupService();
-                } else {
-                    Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-        }
-    }
-
-    public void sendObject(Object o) throws IOException { // bobuway: send
-                                                          // Object
-        /*if (mBluetoothService.getState() != BluetoothService.STATE_CONNECTED) {
-            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        mBluetoothService.write(o);*/
-    }
-
-    private void startScan() {
-        Intent serverIntent = new Intent(this, DeviceListActivity.class);
-        startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
-    }
-
-    public boolean isClient() {
-        return isClient;
-    }
-
     public void setTwoPlayer(boolean isTwoPlayer) {
         this.isTwoPlayer = isTwoPlayer;
     }
 
     public boolean isTwoPlayer() {
         return isTwoPlayer;
-    }
-
-    public void setHasBeenServer(boolean hasBeenServer) {
-        this.hasBeenServer = hasBeenServer;
-    }
-
-    public boolean isHasBeenServer() {
-        return hasBeenServer;
     }
 }

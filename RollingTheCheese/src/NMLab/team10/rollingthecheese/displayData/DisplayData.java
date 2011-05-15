@@ -29,6 +29,8 @@ public class DisplayData {
     }
 
     public void refresh(SynMessageData smd) {
+        if(smd==null)
+            return;
         this.smd = smd;
         // Cheese
         addAndRefreshCheese(leftCheeseList, smd.getLeftCheeseList(), leftCheeseMap);

@@ -25,10 +25,10 @@ public class CheeseParameter {// have display light type
         // static final float SizeLarge = 2.0F;
         // static final float SizeMed = 1.0F;
         // static final float SizeSmall = 0.6F;
-        public static final float RadixLarge = 55F;
-        public static final float RadixMed = 44F;
-        public static final float RadixSmall = 35F;
-        public static final float RadixTiny = 27F;
+        public static final float RadixLarge = 45F;
+        public static final float RadixMed = 36F;
+        public static final float RadixSmall = 27F;
+        public static final float RadixTiny = 22F;
 
         public static final float CostLarge = 1.6F;
         public static final float CostMed = 1.0F;

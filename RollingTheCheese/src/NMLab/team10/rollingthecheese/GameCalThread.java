@@ -1,6 +1,5 @@
 package NMLab.team10.rollingthecheese;
 
-import java.io.IOException;
 import java.util.Date;
 
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
@@ -21,13 +20,10 @@ public class GameCalThread extends Thread {
     private boolean stop = false;
 
     private boolean hasNewData = false;
-    private boolean isTwoPlayer = false;
 
-    public GameCalThread(RollingCheeseActivity father, ServerGameSetting sgs,
-            boolean isTwoPlayer) {
+    public GameCalThread(RollingCheeseActivity father, ServerGameSetting sgs){
         this.father = father;
         this.setting = sgs;
-        this.isTwoPlayer = isTwoPlayer;
         eventCenter = new EventQueueCenter(sgs,father);
         synMessageData = new SynMessageData(sgs, eventCenter, Right);
         displayData = new DisplayData();
@@ -62,18 +58,6 @@ public class GameCalThread extends Thread {
             // local game display
             synMessageData = new SynMessageData(setting, eventCenter, Right);
             displayData.refresh(synMessageData);
-            if (isTwoPlayer) {
-                try {
-                    father.sendObject(synMessageData);
-                    GameView.refreshPPS(true);
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                    this.pauseGameCal();
-                    father.myHandler.obtainMessage(
-                            InterThreadMsg.LinkingErrorInGame).sendToTarget();
-                }
-            }
 
             // Step 3: fetch construction event
             eventCenter.fetchCons();

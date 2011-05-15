@@ -256,6 +256,8 @@ public class ServerGameSetting {
         rightHouse.setBump(false);
         headCase = HeadCase.NoBumpHappen;
         moveCheese();
+        refreshAngle(leftCheeseList);
+        refreshAngle(rightCheeseList);
 
         // Third Step: Bad effect
         firelineEffect();
@@ -293,6 +295,12 @@ public class ServerGameSetting {
     private void checkCheeseDead(LinkedList<Cheese> list) {
         for (int i = 0; i < list.size(); i++) {
             list.get(i).checkDead();
+        }
+    }
+    
+    private void refreshAngle(LinkedList<Cheese> list){
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).refreshAngle();
         }
     }
 
