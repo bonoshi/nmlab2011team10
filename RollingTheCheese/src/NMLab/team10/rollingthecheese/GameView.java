@@ -54,17 +54,7 @@ public class GameView extends View {
 
         scroll = new ScrollThread();
         scroll.start();
-/*
-<<<<<<< .mine
-        // for game calculation center
-        ServerGameSetting sgs = new ServerGameSetting();
-        GameCalThread game = new GameCalThread(father, sgs);
-        displayData = game.getDisplayData();
-        eqc = game.getEventCenter();
 
-        buttomBar = new ButtomBar(father, eqc);
-        gameDrawThread = new GameDrawThread(this, game);
-*/
 
         gameDrawThread = new GameDrawThread(this);
         gameDrawThread.isRunning = true;

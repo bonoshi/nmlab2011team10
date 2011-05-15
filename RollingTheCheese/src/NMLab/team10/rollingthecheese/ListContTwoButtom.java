@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
+import NMLab.team10.rollingthecheese.displayData.DisplayData;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 
 import android.graphics.Bitmap;
@@ -51,7 +52,6 @@ public class ListContTwoButtom {
         this.dest =  new Rect(startX, 0, startX + buttomListW, buttomListH);
         this.buttomListBitmap = listBitmap;
         this.eqc = eqc;
-
         //initial buttoms
         buttoms = new ArrayList<Rect>();
         buttom_function = new HashMap<Rect, Byte>();
@@ -131,9 +131,10 @@ public class ListContTwoButtom {
             }
         }
         canvas.drawBitmap(buttomListBitmap, src, dest, null);
-        /*if (status == OPEN) {
-            src = new Rect(animationEnd * buttomListW, 0, (animationEnd + 1) * buttomListW, buttomListH);
-        }*/
+        
+    }
+    public boolean isOpen(){
+        return status == OPEN;
     }
 
 

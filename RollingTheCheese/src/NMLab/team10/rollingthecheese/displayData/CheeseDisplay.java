@@ -29,8 +29,8 @@ public class CheeseDisplay {
     static Bitmap sweatyBitmap;
     static final int sweatyWidth = 450;
     static final int sweatyHeight = 250;
-    static final int sweatyRow = 5;
-    static final int sweatyCol = 4;
+    static final int sweatyRow = 4;
+    static final int sweatyCol = 5;
     static final int sweatyDelX = -50;
     static final int sweatyDelY = -85;
     
@@ -400,10 +400,10 @@ public class CheeseDisplay {
     }
 
     private Bitmap getSweatyAni(){
-        if(frame == sweatyRow*sweatyCol)frame =0;
-        int row = frame/sweatyRow;
-        int col = frame%5;
-        return Bitmap.createBitmap(sweatyBitmap,row*sweatyWidth,col*sweatyHeight,(row+1)*sweatyWidth,(col+1)*sweatyHeight);
+        if(frame == sweatyRow*sweatyCol)frame=0;
+        int row = frame/sweatyCol;
+        int col = frame%sweatyCol;
+        return Bitmap.createBitmap(sweatyBitmap,col*sweatyWidth,row*sweatyHeight,sweatyWidth,sweatyHeight);
     }
     
     public void draw(boolean whichSide, Canvas canvas) {

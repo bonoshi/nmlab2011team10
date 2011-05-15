@@ -3,11 +3,14 @@ package NMLab.team10.rollingthecheese;
 
 import NMLab.team10.rollingthecheese.event.EventEnum;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
+import NMLab.team10.rollingthecheese.gameSetting.CheeseParameter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.MotionEvent;
 
 
@@ -112,6 +115,31 @@ public class ButtomBar {
         listControlF.draw(canvas);
         listControlCon.draw(canvas);
         listControlDe.draw(canvas);
+        Paint paint = new Paint();
+        paint.setColor(Color.DKGRAY);
+        paint.setTextSize(9);
+        float smallDeltaX = 40f;
+        float smallDeltaY = 115f;
+        float largeDeltaX = 30f;
+        float largeDeltaY = 220f;
+        float buttomStep = 110f;
+        if(listControlN.isOpen()){
+            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.OriginalCheeseSmall)), smallDeltaX,smallDeltaY, paint);
+            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.OriginalCheeseLarge)), largeDeltaX,largeDeltaY, paint);
+        }
+        if(listControlC.isOpen()){
+            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.CasuMarzuSmall)), smallDeltaX+buttomStep,smallDeltaY, paint);
+            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.CasuMarzuLarge)), largeDeltaX+buttomStep,largeDeltaY, paint);
+        }
+        if(listControlS.isOpen()){
+            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.SweatyCheeseSmall)), smallDeltaX+buttomStep*2,smallDeltaY, paint);
+            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.SweatyCheeseLarge)), largeDeltaX+buttomStep*2,largeDeltaY, paint);
+        }
+        if(listControlF.isOpen()){
+            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.FiringCheeseSmall)), smallDeltaX+buttomStep*3,smallDeltaY, paint);
+            canvas.drawText(Integer.toString(CheeseParameter.getPrice(EventEnum.FiringCheeseLarge)), largeDeltaX+buttomStep*3,largeDeltaY, paint);
+        }
+        
         
         canvas.drawBitmap(buttomBar, 0,0, null);
         
@@ -122,6 +150,8 @@ public class ButtomBar {
         butContCon.draw(canvas);
         butContDe.draw(canvas);
         ButContCan.draw(canvas);
+        
+        
     }
 
 

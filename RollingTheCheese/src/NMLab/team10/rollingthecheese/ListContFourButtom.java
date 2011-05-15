@@ -138,6 +138,11 @@ public class ListContFourButtom {
         }
     }
     
+    public boolean isOpen(){
+        return status == OPEN;
+    }
+
+    
     public boolean onTouch(MotionEvent event){
         int x = (int)event.getX();
         int y = (int)event.getY();
