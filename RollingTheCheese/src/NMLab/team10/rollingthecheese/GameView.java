@@ -2,18 +2,19 @@ package NMLab.team10.rollingthecheese;
 
 import java.util.Date;
 
-import NMLab.team10.rollingthecheese.byteEnum.ProjectorEnum;
 import NMLab.team10.rollingthecheese.displayData.CheeseDisplay;
 import NMLab.team10.rollingthecheese.displayData.CloudDisplay;
 import NMLab.team10.rollingthecheese.displayData.CowDisplay;
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
 import NMLab.team10.rollingthecheese.displayData.Climate;
+import NMLab.team10.rollingthecheese.displayData.FireLineDisplay;
 import NMLab.team10.rollingthecheese.displayData.HouseDisplay;
 import NMLab.team10.rollingthecheese.displayData.SkyDisplay;
 import NMLab.team10.rollingthecheese.displayData.SmokeDisplay;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 
 import NMLab.team10.rollingthecheese.gameSetting.Cheese;
+import NMLab.team10.rollingthecheese.gameSetting.FireLine;
 import NMLab.team10.rollingthecheese.gameSetting.GlobalParameter;
 import NMLab.team10.rollingthecheese.gameSetting.Projector;
 import android.content.Context;
@@ -22,7 +23,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -40,10 +40,6 @@ public class GameView extends View {
     private static Bitmap backgroundBitmap;
     private static Bitmap farmBitmap;
     private static Bitmap grassBitmap;
-    private static Bitmap wood_slideBitmap;
-    private static Bitmap wood_slideBitmap_m;
-    private static Bitmap metal_slideBitmap;
-    private static Bitmap metal_slideBitmap_m;
 
     private ButtomBar buttomBar;
 
@@ -96,20 +92,7 @@ public class GameView extends View {
                 R.drawable.background);
         farmBitmap = BitmapFactory.decodeResource(r, R.drawable.farm);
         grassBitmap = BitmapFactory.decodeResource(r, R.drawable.grass);
-        wood_slideBitmap = BitmapFactory.decodeResource(r,
-                R.drawable.wood_slide);
-        wood_slideBitmap_m = BitmapFactory.decodeResource(r,
-                R.drawable.wood_slide_mirror);
 
-        float[] mirrorX = { -1,0,0,
-                0,1,0,
-                0,0,1
-                };
-        Matrix matrix = new Matrix();
-        matrix.setValues(mirrorX);    
-        metal_slideBitmap = BitmapFactory.decodeResource(r, R.drawable.slider_2);
-        metal_slideBitmap_m = Bitmap.createBitmap(metal_slideBitmap,0,0,metal_slideBitmap.getWidth(),metal_slideBitmap.getHeight(),matrix,false);
-        
         // clould1 = BitmapFactory.decodeResource(r,
         // R.drawable.clould).copy(Bitmap.Config.ARGB_8888, true);
         // alpha value = 255 => ���z��//
@@ -121,6 +104,7 @@ public class GameView extends View {
         CloudDisplay.Cloud.initial();
         HouseDisplay.initial();
         CowDisplay.initial();
+        FireLineDisplay.initial();
         Projector.initBitmap();
     }
 
@@ -164,7 +148,7 @@ public class GameView extends View {
 //            return;
 //        }
 
-        
+
         int newX;
 
         newX = scroll.posX;
@@ -175,10 +159,10 @@ public class GameView extends View {
         if (newX > 60) {
             newX = 60;
         }
-        
+
         String scrollPosition = Integer.toString(newX);
         if( !displayData.getDSM(!displayData.isLeft).power){
-        
+
         SkyDisplay.draw(canvas, newX / 2 - 80);
 
         CloudDisplay.updateCloud();
@@ -189,15 +173,13 @@ public class GameView extends View {
         if(displayData.getTime()<35000){
             canvas.drawBitmap(backgroundBitmap, newX / 2 - 80, 0, null);
             canvas.drawBitmap(farmBitmap, newX / 2 - 80, 0, null);
-
             CowDisplay.draw(canvas,newX);
         }
 
         canvas.translate(0, -50);
         canvas.translate(newX, 0);
         displayData.drawHouse(canvas);
-        
-        
+
         displayData.drawPorj(canvas);
 
         // below is for all dynamic objects
@@ -219,6 +201,8 @@ public class GameView extends View {
         // for game object
         displayData.drawCheese(Cheese.Left, canvas);
         displayData.drawCheese(Cheese.Right, canvas);
+        displayData.drawFireLine(FireLine.Left, canvas);
+        displayData.drawFireLine(FireLine.Right, canvas);
 
         // end of absolute coordinate system graphics
         canvas.translate(-newX, 0);
@@ -385,7 +369,7 @@ public class GameView extends View {
             scroll.isPressing = false;
             touchScreen = false;
         }
-        
+
         ///////////////////////// bobuway ////////////////////
         if(event.getAction() == MotionEvent.ACTION_UP && x > 750 && y > 430){
             Log.e("","debug_addcow");
@@ -396,7 +380,7 @@ public class GameView extends View {
             CowDisplay.debug_deleteCow();
         }
         //////////////////////////////////////////////////////
-        
+
         this.x = x;
         this.y = y;
         return true;

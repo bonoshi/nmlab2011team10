@@ -17,6 +17,8 @@ public class SynMessageData implements Serializable {
     int time;// current time of a day
     byte climate;
     byte background;
+    
+    boolean isLeft;
 
     Projector leftProjector;
     Projector rightProjector;
@@ -56,6 +58,7 @@ public class SynMessageData implements Serializable {
         rightFarm = new Farm();
         leftMilk = GlobalParameter.initialMilk;
         rightMilk = GlobalParameter.initialMilk;
+        isLeft = true;
     }
 
     private void refreshData(ServerGameSetting s, EventQueueCenter eqc, boolean whichSide) {
@@ -88,6 +91,8 @@ public class SynMessageData implements Serializable {
         } else {
             this.buttonD = ButtonDisplay.createButtonD(eqc, s.getRightDestruct(), whichSide);
         }
+        
+        isLeft = whichSide;
 
     }
 
@@ -198,6 +203,10 @@ public class SynMessageData implements Serializable {
 
     public DestructStateMessage getRightDSM() {
         return rightDSM;
+    }
+    
+    public boolean getWhichSide() {
+        return isLeft;
     }
 
     public static final boolean Right = false;

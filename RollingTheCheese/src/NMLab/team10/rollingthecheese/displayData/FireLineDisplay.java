@@ -15,7 +15,9 @@ import NMLab.team10.rollingthecheese.gameSetting.GlobalParameter;
 public class FireLineDisplay {
 
     static final int FireHeight = 56;
-    static final float FireDrawHeight = GlobalParameter.MapHeight - FireHeight;
+    static final float FireDrawOffset = 10;
+    static final float FireDrawTop = GlobalParameter.MapHeight - FireHeight - FireDrawOffset;
+    static final float FireDrawBottom = GlobalParameter.MapHeight - FireDrawOffset;
     static final int FrameCountPlusOne = 8;
     static final int FrameNum = 3;
 
@@ -61,15 +63,15 @@ public class FireLineDisplay {
         return fireLineMessage.getEndX();
     }
 
-    public void draw(Canvas canvas, boolean isLeft) {
+    public void draw(boolean isLeft, Canvas canvas) {
         Rect sRectangle;
         RectF dest;
         if (isLeft) {
             sRectangle = new Rect((int) getEndX(), 0, (int) getStartX(), FireHeight);
-            dest = new RectF(getEndX(), FireDrawHeight, getStartX(), GlobalParameter.MapHeight);
+            dest = new RectF(getEndX(), FireDrawTop, getStartX(), FireDrawBottom);
         } else {
             sRectangle = new Rect((int) getStartX(), 0, (int) getEndX(), FireHeight);
-            dest = new RectF(getStartX(), FireDrawHeight, getEndX(), GlobalParameter.MapHeight);
+            dest = new RectF(getStartX(), FireDrawTop, getEndX(), FireDrawBottom);
         }
         canvas.drawBitmap(fireBitmap[getType() + frame], sRectangle, dest, null);
         refreshFrame();
@@ -78,8 +80,8 @@ public class FireLineDisplay {
     public void refreshFrame() {
         if (++count == FrameCountPlusOne) {
             count = 0;
-            if (++frame >= getType() + FrameNum) {
-                frame = getType();
+            if (++frame == FrameNum) {
+                frame = 0;
             }
         }
     }

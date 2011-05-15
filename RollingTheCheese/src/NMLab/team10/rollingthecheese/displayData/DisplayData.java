@@ -19,9 +19,8 @@ import NMLab.team10.rollingthecheese.gameSetting.SynMessageData;
 
 public class DisplayData {
 
-    
-    public boolean isLeft = true;
-    
+    public boolean isLeft;
+
     public DisplayData() {
         hasNewData = false;
         this.smd = new SynMessageData();
@@ -32,7 +31,7 @@ public class DisplayData {
     }
 
     public void refresh(SynMessageData smd) {
-        if(smd==null)
+        if (smd == null)
             return;
         this.smd = smd;
         // Cheese
@@ -53,6 +52,7 @@ public class DisplayData {
         rightHouse.setHouse(smd.getRightHouse());
         // Flag
         hasNewData = true;
+        isLeft = smd.getWhichSide();
     }
 
     public void acceptData() {
@@ -214,154 +214,155 @@ public class DisplayData {
     }
 
     public Projector getProjector() {
-        if(isLeft){
+        if (isLeft) {
             return smd.getLeftProjector();
-        }else{
-            return smd.getRightProjector();
-        }
-    }
-    public Projector getProjector(boolean _isLeft) {
-        if(_isLeft){
-            return smd.getLeftProjector();
-        }else{
+        } else {
             return smd.getRightProjector();
         }
     }
 
-    
+    public Projector getProjector(boolean _isLeft) {
+        if (_isLeft) {
+            return smd.getLeftProjector();
+        } else {
+            return smd.getRightProjector();
+        }
+    }
 
     public HouseMessage getHouse() {
-        if(isLeft){
+        if (isLeft) {
             return smd.getLeftHouse();
-        }else{
+        } else {
             return smd.getRightHouse();
         }
     }
 
     public HouseMessage getHouse(boolean _isLeft) {
-        if(_isLeft){
+        if (_isLeft) {
             return smd.getLeftHouse();
-        }else{
+        } else {
             return smd.getRightHouse();
         }
     }
 
-    
-
     public Farm getFarm() {
-        if(isLeft){
+        if (isLeft) {
             return smd.getLeftFarm();
-        }else{
+        } else {
             return smd.getRightFarm();
         }
-        
+
     }
+
     public Farm getFarm(boolean _isLeft) {
-        if(_isLeft){
+        if (_isLeft) {
             return smd.getLeftFarm();
-        }else{
+        } else {
             return smd.getRightFarm();
         }
-        
+
     }
-    
-    
-    
+
     public int getMilk() {
-        if(isLeft){
+        if (isLeft) {
             return smd.getLeftMilk();
-        }else{
+        } else {
             return smd.getRightMilk();
         }
     }
+
     public int getMilk(boolean _isLeft) {
-        if(_isLeft){
+        if (_isLeft) {
             return smd.getLeftMilk();
-        }else{
+        } else {
             return smd.getRightMilk();
         }
     }
 
     public byte getHouseHPPercent() {
-        if(isLeft){
+        if (isLeft) {
             return smd.getLeftHouseHPPercent();
-        }else{
+        } else {
             return smd.getRightHouseHPPercent();
         }
     }
+
     public byte getHouseHPPercent(boolean _isLeft) {
-        if(_isLeft){
+        if (_isLeft) {
             return smd.getLeftHouseHPPercent();
-        }else{
+        } else {
             return smd.getRightHouseHPPercent();
         }
     }
 
     public LinkedList<CheeseMessage> getCheeseList() {
-        if(isLeft){
+        if (isLeft) {
             return smd.getLeftCheeseList();
-        }else{
+        } else {
             return smd.getRightCheeseList();
         }
     }
+
     public LinkedList<CheeseMessage> getCheeseList(boolean _isLeft) {
-        if(_isLeft){
+        if (_isLeft) {
             return smd.getLeftCheeseList();
-        }else{
+        } else {
             return smd.getRightCheeseList();
         }
     }
+
     public LinkedList<CowMessage> getCowList() {
-        if(isLeft){
+        if (isLeft) {
             return smd.getLeftCowList();
-        }else{
+        } else {
             return smd.getRightCowList();
         }
     }
+
     public LinkedList<CowMessage> getCowList(boolean _isLeft) {
-        if(_isLeft){
+        if (_isLeft) {
             return smd.getLeftCowList();
-        }else{
+        } else {
             return smd.getRightCowList();
         }
     }
- 
+
     public LinkedList<FireLineMessage> getFireList() {
-        if(isLeft){
+        if (isLeft) {
             return smd.getLeftFireList();
-        }else{
-            return smd.getRightFireList();
-        }
-    }
-    public LinkedList<FireLineMessage> getFireList(boolean _isLeft) {
-        if(_isLeft){
-            return smd.getLeftFireList();
-        }else{
+        } else {
             return smd.getRightFireList();
         }
     }
 
+    public LinkedList<FireLineMessage> getFireList(boolean _isLeft) {
+        if (_isLeft) {
+            return smd.getLeftFireList();
+        } else {
+            return smd.getRightFireList();
+        }
+    }
 
     public ButtonDisplay getButtonD() {
         return smd.getButtonD();
     }
 
     public DestructStateMessage getDSM() {
-        if(isLeft){
+        if (isLeft) {
             return smd.getLeftDSM();
-        }else{
-            return smd.getRightDSM();
-        }
-    }
-    public DestructStateMessage getDSM(boolean _isLeft) {
-        if(_isLeft){
-            return smd.getLeftDSM();
-        }else{
+        } else {
             return smd.getRightDSM();
         }
     }
 
-    
+    public DestructStateMessage getDSM(boolean _isLeft) {
+        if (_isLeft) {
+            return smd.getLeftDSM();
+        } else {
+            return smd.getRightDSM();
+        }
+    }
+
     public void drawCheese(boolean whichSide, Canvas canvas) {
         LinkedList<CheeseDisplay> cList = (whichSide) ? leftCheeseList : rightCheeseList;
         synchronized (cList) {
@@ -379,6 +380,16 @@ public class DisplayData {
     public void drawHouse(Canvas canvas) {
         leftHouse.draw(Cheese.Left, canvas);
         rightHouse.draw(Cheese.Right, canvas);
+    }
+
+    public void drawFireLine(boolean whichSide, Canvas canvas) {
+        LinkedList<FireLineDisplay> fList = (whichSide) ? leftFireList : rightFireList;
+        synchronized (fList) {
+            for (Iterator<FireLineDisplay> iterator = fList.iterator(); iterator.hasNext();) {
+                FireLineDisplay fireLineDisplay = (FireLineDisplay) iterator.next();
+                fireLineDisplay.draw(whichSide, canvas);
+            }
+        }
     }
     
     public void drawPorj(Canvas canvas){
