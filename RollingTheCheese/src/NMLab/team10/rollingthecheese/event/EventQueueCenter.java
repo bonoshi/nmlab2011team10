@@ -440,7 +440,7 @@ public class EventQueueCenter {
             if (consQue.getSize() == 0) {
                 consQue.initialWaitingTime(getConsTime(event, whichSide));
             }
-            addCheeseEvent(event, whichSide);
+            addConsEvent(event, whichSide);
         } else {
             return;
         }
