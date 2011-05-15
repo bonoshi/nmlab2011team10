@@ -131,6 +131,9 @@ public class ListContTwoButtom {
             }
         }
         canvas.drawBitmap(buttomListBitmap, src, dest, null);
+        /*if (status == OPEN) {
+            src = new Rect(animationEnd * buttomListW, 0, (animationEnd + 1) * buttomListW, buttomListH);
+        }*/
     }
 
 

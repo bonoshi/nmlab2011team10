@@ -1,5 +1,6 @@
 package NMLab.team10.rollingthecheese.displayData;
 
+import android.R.integer;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,7 +26,14 @@ public class CheeseDisplay {
     static Bitmap cheeseSU[];
     static Bitmap cheeseF[][];
     static Bitmap cheeseFU[];
-
+    static Bitmap sweatyBitmap;
+    static final int sweatyWidth = 450;
+    static final int sweatyHeight = 250;
+    static final int sweatyRow = 5;
+    static final int sweatyCol = 4;
+    static final int sweatyDelX = -50;
+    static final int sweatyDelY = -85;
+    
     static final int HEALTHY = 0;
     static final int LITTLE_DAMAGED = 1;
     static final int SERIOUS_DAMAGED = 2;
@@ -37,7 +45,8 @@ public class CheeseDisplay {
 
     int deadCount = 0;
     float radix = 0;
-
+    int frame=0;
+    
     public static void initBitmap() {
         Resources r = GameView.r;
 
@@ -265,12 +274,15 @@ public class CheeseDisplay {
         cheeseF[Tiny][DEAD] = Bitmap.createScaledBitmap(cheeseFU[DEAD],
                 (int) CheeseParameter.Fire.RadixTiny * 2, (int) CheeseParameter.Fire.RadixTiny * 2, false);
 
-        // cheeseO[MIDDLE][HEALTHY] =
-        // Bitmap.createBitmap(cheeseO[LARGE][HEALTHY],0,0,cheesePictureSize,cheesePictureSize,matrix,false);
-        // /* TO BE CONTINUE */
+        
+        sweatyBitmap = BitmapFactory.decodeResource(r, R.drawable.sweaty);
+        
 
+        
     }
 
+    
+    
     public CheeseDisplay(CheeseMessage cm) {
         this.setCheeseMessage(cm);
         switch (getType()) {
@@ -387,6 +399,13 @@ public class CheeseDisplay {
         return (deadCount == CheeseDisplay.MaxDeadCount);
     }
 
+    private Bitmap getSweatyAni(){
+        if(frame == sweatyRow*sweatyCol)frame =0;
+        int row = frame/sweatyRow;
+        int col = frame%5;
+        return Bitmap.createBitmap(sweatyBitmap,row*sweatyWidth,col*sweatyHeight,(row+1)*sweatyWidth,(col+1)*sweatyHeight);
+    }
+    
     public void draw(boolean whichSide, Canvas canvas) {
         Matrix matrix = new Matrix();
         int status;
@@ -420,6 +439,10 @@ public class CheeseDisplay {
                 break;
             }
             case Sweaty: {
+                if(getHPPercent()!=0){
+                    Bitmap s = getSweatyAni();
+                    canvas.drawBitmap(s, getX()-50,getY()-85, null);
+                }
                 canvas.drawBitmap(cheeseS[getSize()][status], matrix, null);
                 break;
             }

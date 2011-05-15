@@ -26,6 +26,7 @@ class HouseParameter {
     public static final float ForFunSmokeX = 113;
     //public static final float ForFunSmokeX = 100;
     public static final float ForFunSmokeY = GlobalParameter.MapHeight - 265;
+    
 
     public static final float AfterHours = 1.0F;
     public static final float AfterHoursHP = 650;
