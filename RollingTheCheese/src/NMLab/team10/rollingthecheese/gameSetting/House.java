@@ -70,11 +70,11 @@ public class House {
     public int getUpProdTime() {
         switch (prod) {
             case ForFun:
-                return HouseParameter.AfterHoursMilk;
+                return HouseParameter.AfterHoursTime;
             case AfterHours:
-                return HouseParameter.BakeryMilk;
+                return HouseParameter.BakeryTime;
             case Bakery:
-                return HouseParameter.FoodFactoryMilk;
+                return HouseParameter.FoodFactoryTime;
             case FoodFactory:
                 return Integer.MAX_VALUE;
             default:// no use

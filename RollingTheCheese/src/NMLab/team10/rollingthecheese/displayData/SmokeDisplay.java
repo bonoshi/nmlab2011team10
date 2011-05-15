@@ -14,11 +14,15 @@ public class SmokeDisplay {
     static Resources r = GameView.r;
     static Bitmap smokeWL;
     static Bitmap smokeWR;
+    static Bitmap smokeBL;
+    static Bitmap smokeBR;
 
     public static void initial() {
         r = GameView.r;
         smokeWL = BitmapFactory.decodeResource(r, R.drawable.house_smoke_w_l).copy(Config.ARGB_8888, true);
         smokeWR = BitmapFactory.decodeResource(r, R.drawable.house_smoke_w_r).copy(Config.ARGB_8888, true);
+        smokeBL = BitmapFactory.decodeResource(r, R.drawable.house_smoke_b_l).copy(Config.ARGB_8888, true);
+        smokeBR = BitmapFactory.decodeResource(r, R.drawable.house_smoke_b_r).copy(Config.ARGB_8888, true);
         //for black at day
         //GameView.modifyRGBByRatio(smokeWL, 0.2F);
         //for black at night
@@ -65,9 +69,9 @@ public class SmokeDisplay {
         if (time > 35000) {// night
             if (isBlack) {
                 if (whichSide) {
-                    canvas.drawBitmap(smokeWL, sRectangle, dest, null);
+                    canvas.drawBitmap(smokeBL, sRectangle, dest, null);
                 } else {
-                    canvas.drawBitmap(smokeWR, sRectangle, dest, null);
+                    canvas.drawBitmap(smokeBR, sRectangle, dest, null);
                 }
             } else {
                 if (whichSide) {

@@ -2,6 +2,8 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 import java.util.LinkedList;
 
+import NMLab.team10.rollingthecheese.byteEnum.FireEnum;
+
 public class FireLine {// have display light type
 
     public FireLine(Cheese c, byte type, float x) {
@@ -179,8 +181,3 @@ public class FireLine {// have display light type
     }
 }
 
-class FireEnum {
-    public static final byte Small = 1;
-    public static final byte Medium = 2;
-    public static final byte Large = 3;
-}

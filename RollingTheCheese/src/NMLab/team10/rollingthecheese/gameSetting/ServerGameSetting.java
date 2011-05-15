@@ -15,7 +15,7 @@ public class ServerGameSetting {
     // setting relating to global display
     // String leftName = "LeftName";
     // String rightName = "RightName";
-    private int time = 0;// current time of a day
+    private int time = 30000;// current time of a day
     private byte climate = ClimateEnum.Cloudy;
     private byte background = BackGroundEnum.SpringFarm;
     private boolean isNight = false;

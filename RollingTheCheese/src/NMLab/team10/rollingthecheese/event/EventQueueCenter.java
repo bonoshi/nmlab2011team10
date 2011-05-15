@@ -220,18 +220,22 @@ public class EventQueueCenter {
                             Projector p = (whichSide) ? setting.getLeftProjector() : setting
                                     .getRightProjector();
                             p.upgrade();
+                            break;
                         }
                         case EventEnum.CheeseProd: {
                             House h = (whichSide) ? setting.getLeftHouse() : setting.getRightHouse();
                             h.upgradeProd();
+                            break;
                         }
                         case EventEnum.CheeseQual: {
                             House h = (whichSide) ? setting.getLeftHouse() : setting.getRightHouse();
                             h.upgradeQual();
+                            break;
                         }
                         case EventEnum.MilkProd: {
                             Farm f = (whichSide) ? setting.getLeftFarm() : setting.getRightFarm();
                             f.upgradeProd();
+                            break;
                         }
                     }
 
@@ -355,6 +359,7 @@ public class EventQueueCenter {
                 } else {
                     return;
                 }
+                break;
             }
             case EventEnum.BlackOut: {
                 if (!ds.powerDisplay && (milk -= DestructParameter.PowerCost) >= 0) {

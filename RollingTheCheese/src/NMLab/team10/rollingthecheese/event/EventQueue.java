@@ -9,6 +9,7 @@ public class EventQueue {
     public EventQueue() {
         queue = new LinkedList<Byte>();
         this.waitingTime = 0;
+        this.waitingTimeMax = 100;
     }
 
     public synchronized void push(byte o) {
@@ -84,7 +85,7 @@ public class EventQueue {
     private int waitingTimeMax = 100;
 
     public byte getPercent() {
-        byte percent = (byte) Math.floor(100.0 * (1 - ((float)waitingTime) / waitingTimeMax));
+        byte percent = (byte) Math.floor(100.0 * (1 - ((float) waitingTime) / waitingTimeMax));
         return percent;
     }
 }
