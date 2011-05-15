@@ -54,6 +54,7 @@ public class RollingCheeseActivity extends Activity {
     public GameCalThread gameCalThread = null;
     public DisplayData displayData = new DisplayData();
     public EventQueueCenter clientEventQueue = null;
+    public RandomSoundGenerator randomSoundGenerator;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -324,6 +325,8 @@ public class RollingCheeseActivity extends Activity {
                     gameView.startDrawThread();
                     setContentView(gameView);
                     SoundController.playBackground(SoundController.BACKGROUND2);
+                    randomSoundGenerator = new RandomSoundGenerator();
+                    randomSoundGenerator.start();
                     break;
                 case InterThreadMsg.endGame:
                     Toast.makeText(getApplicationContext(),

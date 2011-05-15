@@ -11,7 +11,7 @@ import android.graphics.RectF;
 import NMLab.team10.rollingthecheese.GameView;
 import NMLab.team10.rollingthecheese.R;
 import NMLab.team10.rollingthecheese.gameSetting.Cow;
-import NMLab.team10.rollingthecheese.gameSetting.CowMessage;
+import NMLab.team10.rollingthecheese.gameSetting.CowMessage;    
 
 public class CowDisplay {
     static final int[][] normalPosY = { { 0, 0, 0, 0, 0, 0 }, { 200, 0, 0, 0, 0, 0 },
@@ -110,6 +110,7 @@ public class CowDisplay {
     @SuppressWarnings("unchecked")
     static public void updateCowDisplay() {
         leftCowList = (LinkedList<CowDisplay>) GameView.displayData.leftCowList.clone();
+        rightCowList = (LinkedList<CowDisplay>)gameView.displayData.rightCowList.clone();
         numCow = leftCowList.size();
         // Log.e("CowDisplay",String.format("numCow = %d",numCow));
         sortCowListbyID();
@@ -179,7 +180,11 @@ public class CowDisplay {
                 }
             }
         } else {
-            // TODO
+           RectF dest = new RectF(1600-PosX+COW_WIDTH/2+offset,PosY-COW_HEIGHT/2,
+                    1600-PosX-COW_WIDTH/2 + offset, PosY + COW_HEIGHT/2);
+               if(velocityX < 0)
+                  canvas.drawBitmap(ToRightCowBitmap, null, dest, null);
+               else canvas.drawBitmap(ToLeftCowBitmap, null, dest, null);
         }
     }
 
@@ -205,22 +210,26 @@ public class CowDisplay {
     // //////////////////// bobuway /////////////////
     static Random random = new Random();
 
-    static public void debug_addCow() {
-        // SoundController.playSound(SoundController.EFF_COLLISION1,0);
-        /*
-         * boolean add = false; if(leftCowList.size() >= 5) return; while(!add){
-         * short rr = (short)(random.nextInt(5)); boolean found = false; for(int
-         * i = 0;i<leftCowList.size();i++)
-         * if(leftCowList.get(i).cowMessage.getID() == rr) found = true;
-         * if(!found){ add = true; leftCowList.addLast(new CowDisplay(new
-         * CowMessage(rr))); } }
-         */
+    static public void debug_addCow(){
+        //SoundController.playSound(SoundController.EFF_COLLISION1,0);
+        /*boolean add = false;
+        if(rightCowList.size() >= 5) return;
+        while(!add){
+            short rr = (short)(random.nextInt(5));
+            boolean found = false;
+            for(int i = 0;i<rightCowList.size();i++)
+                if(rightCowList.get(i).cowMessage.getID() == rr) found = true;
+            if(!found){
+                add = true;
+                rightCowList.addLast(new CowDisplay(new CowMessage(rr)));
+            }
+        }*/
     }
 
-    static public void debug_deleteCow() {
-        /*
-         * if(leftCowList.size() > 0){ leftCowList.remove(0); }
-         */
+    static public void debug_deleteCow(){
+        /*if(rightCowList.size() > 0){
+            rightCowList.remove(0);
+        }*/
     }
     // ////////////////////bobuway ///////////////////
 }

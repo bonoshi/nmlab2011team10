@@ -66,18 +66,18 @@ public class EntranceView extends View{
     static final int firstY = 238;
     static final int secondX = 100;
     static final int secondY = 288;
-    static final int thirdX = 130;
+    static final int thirdX = 140;
     static final int thirdY = 337;
-    static final int fourthX = 135;
+    static final int fourthX = 145;
     static final int fourthY = 385;
     static final int backX = 365;
-    static final int backY = 426;
+    static final int backY = 424;
     // end TODO
     static final Rect firstRect = new Rect(firstX, firstY, firstX+200,firstY+50);
     static final Rect secondRect = new Rect(secondX, secondY, secondX+200,secondY+50);
     static final Rect thirdRect = new Rect(thirdX, thirdY, thirdX+200,thirdY+50);
     static final Rect fourthRect = new Rect(fourthX, fourthY, fourthX+200,fourthY+50);
-    static final Rect backRect = new Rect(backX, backY, backX+50,backY+30);
+    static final Rect backRect = new Rect(backX, backY, backX+80,backY+30);
 
     Paint paint1;
     Paint paint2;
@@ -153,11 +153,15 @@ public class EntranceView extends View{
             else canvas.drawText(firstString, firstX+20, firstY, paint2);
         }
 
-
-        if(!secondPressing)
-            canvas.drawText(secondString, secondX, secondY, paint1);
-        else canvas.drawText(secondString, secondX, secondY, paint2);
-
+        if(state == S_12){
+            if(!secondPressing)
+               canvas.drawText(secondString, secondX, secondY, paint1);
+            else canvas.drawText(secondString, secondX, secondY, paint2);
+        }else{
+            if(!secondPressing)
+                canvas.drawText(secondString, secondX+35, secondY, paint1);
+             else canvas.drawText(secondString, secondX+35, secondY, paint2);
+        }
         if(!thirdPressing)
             canvas.drawText(thirdString, thirdX, thirdY, paint1);
         else canvas.drawText(thirdString, thirdX, thirdY, paint2);
