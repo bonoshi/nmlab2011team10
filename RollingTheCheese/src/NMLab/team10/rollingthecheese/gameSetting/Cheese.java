@@ -10,10 +10,11 @@ public class Cheese {
 
     // Cheese a = new Cheese(Cheese.Normal, Cheese.Large, Cheese.Left);
     // public Cheese(byte type, byte size, boolean whichSide) {
+
     public Cheese(byte type, byte size) {
         ID = GlobalID++;
-        setType(type);
-        setSize(size);
+        this.type = type;
+        this.size = size;
         // setOwner(whichSide);
         switch (type) {
             case Original: {
@@ -34,15 +35,58 @@ public class Cheese {
                 break;
             }
             case Casumarzu: {
+                switch (size) {
+                    case Large:
+                        radix = CheeseParameter.Poison.RadixLarge;
+                        break;
+                    case Medium:
+                        radix = CheeseParameter.Poison.RadixMed;
+                        break;
+                    case Small:
+                        radix = CheeseParameter.Poison.RadixSmall;
+                        break;
+                    case Tiny:
+                        radix = CheeseParameter.Poison.RadixTiny;
+                        break;
+                }
                 break;
             }
             case Sweaty: {
+                switch (size) {
+                    case Large:
+                        radix = CheeseParameter.Sweat.RadixLarge;
+                        break;
+                    case Medium:
+                        radix = CheeseParameter.Sweat.RadixMed;
+                        break;
+                    case Small:
+                        radix = CheeseParameter.Sweat.RadixSmall;
+                        break;
+                    case Tiny:
+                        radix = CheeseParameter.Sweat.RadixTiny;
+                        break;
+                }
                 break;
             }
             case Firing: {
+                switch (size) {
+                    case Large:
+                        radix = CheeseParameter.Fire.RadixLarge;
+                        break;
+                    case Medium:
+                        radix = CheeseParameter.Fire.RadixMed;
+                        break;
+                    case Small:
+                        radix = CheeseParameter.Fire.RadixSmall;
+                        break;
+                    case Tiny:
+                        radix = CheeseParameter.Fire.RadixTiny;
+                        break;
+                }
                 break;
             }
         }
+
     }
 
     private static short GlobalID = 0;
@@ -513,7 +557,7 @@ public class Cheese {
         if (size == 0) {
             return false;
         } else {
-            Cheese c = list.get(size-1);
+            Cheese c = list.get(size - 1);
             if (Cheese.distance(this, c) >= (this.getRadix() + c.getRadix()))
                 return false;
             return true;
@@ -616,4 +660,3 @@ public class Cheese {
     public static final boolean Right = false;
     public static final boolean Left = true;
 }
-
