@@ -182,9 +182,19 @@ public class CowDisplay {
         } else {
            RectF dest = new RectF(1600-PosX+COW_WIDTH/2+offset,PosY-COW_HEIGHT/2,
                     1600-PosX-COW_WIDTH/2 + offset, PosY + COW_HEIGHT/2);
-               if(velocityX < 0)
-                  canvas.drawBitmap(ToRightCowBitmap, null, dest, null);
-               else canvas.drawBitmap(ToLeftCowBitmap, null, dest, null);
+               if(velocityX < 0){
+                   if (isPoison) {
+                       canvas.drawBitmap(ToRightCowBitmap_p, null, dest, null);
+                   } else {
+                       canvas.drawBitmap(ToRightCowBitmap, null, dest, null);
+                   }
+               }else {
+                   if (isPoison) {
+                       canvas.drawBitmap(ToLeftCowBitmap_p, null, dest, null);
+                   } else {
+                       canvas.drawBitmap(ToLeftCowBitmap, null, dest, null);
+                   }
+               }
         }
     }
 
