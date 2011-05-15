@@ -14,4 +14,6 @@ public class InterThreadMsg {
     static public final int discoverable = 8;
     static public final int LinkingErrorInGame = 9;
     static public final int serverStartGameView = 10;
+    static public final int endGame = 11;
+    static public final int connect = 12;
 }

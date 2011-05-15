@@ -4,6 +4,7 @@ import java.util.Date;
 
 import NMLab.team10.rollingthecheese.displayData.CheeseDisplay;
 import NMLab.team10.rollingthecheese.displayData.CloudDisplay;
+import NMLab.team10.rollingthecheese.displayData.CowDisplay;
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
 import NMLab.team10.rollingthecheese.displayData.Climate;
 import NMLab.team10.rollingthecheese.displayData.HouseDisplay;
@@ -74,12 +75,14 @@ public class GameView extends View {
     public void initialServerGameView() {
         buttomBar = new ButtomBar(father, father.gameCalThread.getEventCenter());
         displayData = father.displayData;
+        CowDisplay.initialGameView(this);
         hasBeenInit = true;
     }
 
     public void initialClientGameView() {
         buttomBar = new ButtomBar(father, father.clientEventQueue);
         displayData = father.displayData;
+        CowDisplay.initialGameView(this);
         hasBeenInit = true;
     }
 
@@ -109,7 +112,7 @@ public class GameView extends View {
         SmokeDisplay.initial();
         CloudDisplay.Cloud.initial();
         HouseDisplay.initial();
-
+        CowDisplay.initial();
     }
 
     private void initPaint() {
@@ -178,6 +181,9 @@ public class GameView extends View {
         canvas.translate(0, 50);
         canvas.drawBitmap(backgroundBitmap, newX / 2 - 80, 0, null);
         canvas.drawBitmap(farmBitmap, newX / 2 - 80, 0, null);
+        
+        CowDisplay.draw(canvas,newX);
+        
         canvas.translate(0, -50);
         canvas.translate(newX, 0);
         if (displayData.hasNewData()) {

@@ -42,6 +42,7 @@ public class RollingCheeseActivity extends Activity {
 
     public WelcomeView welcomeView;
     public GameView gameView;
+    public EntranceView entranceView;
 
     public House leftHouse, rightHouse;
     public Farm leftFarm, rightFarm;
@@ -57,16 +58,17 @@ public class RollingCheeseActivity extends Activity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (mBluetoothAdapter == null) {
+        /*if (mBluetoothAdapter == null) {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             finish();
             return;
-        }
+        }*/
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         welcomeView = new WelcomeView(this);
+        entranceView = new EntranceView(this);
         gameView = new GameView(this);
-        setContentView(welcomeView);
+        setContentView(entranceView);
     }
 
     @Override
@@ -232,6 +234,19 @@ public class RollingCheeseActivity extends Activity {
                 case InterThreadMsg.LinkingErrorInGame:
                     // To do...
                     break;
+                case InterThreadMsg.endGame:
+                    Toast.makeText(getApplicationContext(),
+                            "Application is terminating ...",
+                            Toast.LENGTH_SHORT).show();
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    finish();
+                    break;
+                case InterThreadMsg.connect:
+                    break;
             }
         }
 
@@ -258,11 +273,11 @@ public class RollingCheeseActivity extends Activity {
 
     public void sendObject(Object o) throws IOException { // bobuway: send
                                                           // Object
-        if (mBluetoothService.getState() != BluetoothService.STATE_CONNECTED) {
+        /*if (mBluetoothService.getState() != BluetoothService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
-        mBluetoothService.write(o);
+        mBluetoothService.write(o);*/
     }
 
     private void startScan() {

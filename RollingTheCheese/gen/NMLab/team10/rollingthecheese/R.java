@@ -11,13 +11,79 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int icon=0x7f020000;
+        public static final int background=0x7f020000;
+        public static final int buttom_cancel=0x7f020001;
+        public static final int buttom_casumarzu=0x7f020002;
+        public static final int buttom_construct=0x7f020003;
+        public static final int buttom_destruct=0x7f020004;
+        public static final int buttom_firing=0x7f020005;
+        public static final int buttom_normal=0x7f020006;
+        public static final int buttom_sweaty=0x7f020007;
+        public static final int buttombar=0x7f020008;
+        public static final int cheese_casumarzu=0x7f020009;
+        public static final int cheese_firing=0x7f02000a;
+        public static final int cheese_original=0x7f02000b;
+        public static final int cheese_sweaty=0x7f02000c;
+        public static final int cloud=0x7f02000d;
+        public static final int cloud_white=0x7f02000e;
+        public static final int connectbottom=0x7f02000f;
+        public static final int cowleft=0x7f020010;
+        public static final int cowright=0x7f020011;
+        public static final int enter=0x7f020012;
+        public static final int farm=0x7f020013;
+        public static final int grass=0x7f020014;
+        public static final int house=0x7f020015;
+        public static final int house_mirror=0x7f020016;
+        public static final int house_n=0x7f020017;
+        public static final int house_smoke_w_l=0x7f020018;
+        public static final int house_smoke_w_r=0x7f020019;
+        public static final int icon=0x7f02001a;
+        public static final int list_casumarzu=0x7f02001b;
+        public static final int list_construct=0x7f02001c;
+        public static final int list_destruct=0x7f02001d;
+        public static final int list_firing=0x7f02001e;
+        public static final int list_original=0x7f02001f;
+        public static final int list_sweaty=0x7f020020;
+        public static final int new_back=0x7f020021;
+        public static final int rectangle=0x7f020022;
+        public static final int sky_dusk=0x7f020023;
+        public static final int sky_morning=0x7f020024;
+        public static final int sky_night=0x7f020025;
+        public static final int sky_noon=0x7f020026;
+        public static final int star1=0x7f020027;
+        public static final int star2=0x7f020028;
+        public static final int star3=0x7f020029;
+        public static final int star4=0x7f02002a;
+        public static final int star5=0x7f02002b;
+        public static final int sweaty=0x7f02002c;
+        public static final int title=0x7f02002d;
+        public static final int waitbottom=0x7f02002e;
+        public static final int wood_slide=0x7f02002f;
+        public static final int wood_slide_mirror=0x7f020030;
+    }
+    public static final class id {
+        public static final int button_scan=0x7f050004;
+        public static final int new_devices=0x7f050003;
+        public static final int paired_devices=0x7f050001;
+        public static final int title_new_devices=0x7f050002;
+        public static final int title_paired_devices=0x7f050000;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
+        public static final int device_list=0x7f030000;
+        public static final int device_name=0x7f030001;
+        public static final int main=0x7f030002;
     }
     public static final class string {
         public static final int app_name=0x7f040001;
+        public static final int bt_not_enabled_leaving=0x7f040009;
+        public static final int button_scan=0x7f040008;
         public static final int hello=0x7f040000;
+        public static final int none_found=0x7f040005;
+        public static final int none_paired=0x7f040004;
+        public static final int not_connected=0x7f04000a;
+        public static final int scanning=0x7f040002;
+        public static final int select_device=0x7f040003;
+        public static final int title_other_devices=0x7f040007;
+        public static final int title_paired_devices=0x7f040006;
     }
 }

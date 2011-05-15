@@ -100,6 +100,7 @@ public class CheeseDisplay {
                 .createScaledBitmap(cheeseOU[DEAD], (int) CheeseParameter.Normal.RadixTiny * 2,
                         (int) CheeseParameter.Normal.RadixTiny * 2, false);
 
+        cheeseCU = new Bitmap[4];
         Bitmap cheeseCtmp = BitmapFactory.decodeResource(r, R.drawable.cheese_casumarzu);
         cheeseCU[HEALTHY] = Bitmap.createBitmap(cheeseCtmp, 0, 0, cheesePictureSize, cheesePictureSize);// ,matrix,true);
         cheeseCU[LITTLE_DAMAGED] = Bitmap.createBitmap(cheeseCtmp, cheesePictureStep, 0, cheesePictureSize,
