@@ -8,7 +8,7 @@ public class GlobalParameter {
     public static final float BumpOffset = 0.2F;
     public static final float FollowOffset = 2.0F;
 
-    public static final int initialMilk = 1000;
+    public static final int initialMilk = 10000;
 
     public static final int HouseMaxHp = 2000;
 

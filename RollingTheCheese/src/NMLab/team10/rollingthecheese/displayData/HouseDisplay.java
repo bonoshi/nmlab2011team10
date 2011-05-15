@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import NMLab.team10.rollingthecheese.GameView;
 import NMLab.team10.rollingthecheese.R;
 import NMLab.team10.rollingthecheese.byteEnum.CheeseProdEnum;
@@ -22,7 +23,15 @@ public class HouseDisplay {
     static public void initial(){
         r = GameView.r;
         houseBitmap = BitmapFactory.decodeResource(r, R.drawable.house);
-        houseBitmap_m = BitmapFactory.decodeResource(r, R.drawable.house_mirror);
+        float[] mirrorX = { 1,0,0,
+                            0,-1,0,
+                            0,0,1
+                            };
+        Matrix matrix = new Matrix();
+        matrix.setValues(mirrorX);
+        
+        houseBitmap_m = Bitmap.createBitmap(houseBitmap,0,0,houseBitmap.getWidth(),houseBitmap.getHeight(),matrix,false);
+        
     }
 
     public HouseDisplay(HouseMessage h) {
@@ -58,6 +67,7 @@ public class HouseDisplay {
             case ForFun:
                 if (whichSide) {
                     canvas.drawBitmap(houseBitmap, -97, 200, null);
+                    
                 } else {
                     canvas.drawBitmap(houseBitmap_m, 1420, 200, null);
                 }

@@ -1,11 +1,13 @@
 package NMLab.team10.rollingthecheese;
 
 
+import NMLab.team10.rollingthecheese.displayData.CowDisplay;
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
 import NMLab.team10.rollingthecheese.event.EventEnum;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 import NMLab.team10.rollingthecheese.gameSetting.CheeseParameter;
 import NMLab.team10.rollingthecheese.gameSetting.CowParameter;
+import NMLab.team10.rollingthecheese.gameSetting.DestructParameter;
 import NMLab.team10.rollingthecheese.gameSetting.Farm;
 import NMLab.team10.rollingthecheese.gameSetting.House;
 import NMLab.team10.rollingthecheese.gameSetting.HouseMessage;
@@ -83,13 +85,13 @@ public class ButtomBar {
         listControlF = new ListContTwoButtom(330,listFBitmap,eqc,EventEnum.FiringCheeseSmall,EventEnum.FiringCheeseLarge);
         
         listControlCon = new ListContFourButtom(365, listConBitmap, eqc, EventEnum.PurchaseCow, 
-                                                                        EventEnum.PurchaseCow,
-                                                                        EventEnum.PurchaseCow,
-                                                                        EventEnum.PurchaseCow);
-        listControlDe = new ListContFourButtom(455, listDeBitmap, eqc, EventEnum.OriginalCheeseSmall, 
-                                                                        EventEnum.OriginalCheeseMed,
-                                                                        EventEnum.OriginalCheeseMed,
-                                                                        EventEnum.OriginalCheeseLarge);
+                                                                        EventEnum.CheeseProd,
+                                                                        EventEnum.Projector,    
+                                                                        EventEnum.CheeseQual);
+        listControlDe = new ListContFourButtom(455, listDeBitmap, eqc, EventEnum.MilkLeak, 
+                                                                        EventEnum.MiceArmy,
+                                                                        EventEnum.BlackOut,
+                                                                        EventEnum.IntoTheWild);
                 
         butContN = new ButtomControl(0,buttomNBitmap);
         butContC = new ButtomControl(110,buttomCBitmap);
@@ -137,6 +139,9 @@ public class ButtomBar {
         Paint numPaint = new Paint();
         numPaint.setColor(Color.RED);
         numPaint.setTextSize(15);
+        Paint otherMoney = new Paint();
+        otherMoney.setColor(Color.RED);
+        otherMoney.setTextSize(15);
         
         if(listControlN.isOpen()){
             canvas.drawText("$"+Integer.toString(CheeseParameter.getPrice(EventEnum.OriginalCheeseSmall)), ListTwo_smallDeltaX,ListTwo_smallDeltaY, moneyPaint);
@@ -180,16 +185,54 @@ public class ButtomBar {
             String houseP = Integer.toString(displayData.getButtonD().cheeseProdPercent);
             String projP = Integer.toString(displayData.getButtonD().projectorPercent);
             String CowP = Integer.toString(displayData.getButtonD().cowPercent);
+                     
             
+            canvas.drawText("$"+CowMoney,400,125,otherMoney);
+            canvas.drawText("$"+farmMoney,500,130,otherMoney);
+            canvas.drawText("$"+projMoney, 400, 235, otherMoney);
+            canvas.drawText("$"+houseMoney, 500, 230, otherMoney);
+            if(displayData.getButtonD().MilkProdPercent!=0)
+                canvas.drawText(farmP+"%",550,130,otherMoney);
+            if(displayData.getButtonD().cheeseProdPercent!=0)
+                canvas.drawText(houseP+"%", 550, 230, otherMoney);
+            if(displayData.getCowList().size()!=0)
+                canvas.drawText(CowP+"%",450,125,otherMoney);
+            if(displayData.getButtonD().projectorPercent!=0)
+                canvas.drawText(projP+"%", 450, 235, otherMoney);
             
-            canvas.drawText("$"+CowMoney,400,125,moneyPaint);
-            canvas.drawText("$"+farmMoney,440+80,130,moneyPaint);
-            canvas.drawText("$"+projMoney, 400, 235, moneyPaint);
-            canvas.drawText("$"+houseMoney, 440+80, 230, moneyPaint);
-            canvas.drawText(CowP+"%",450,125,moneyPaint);
-            canvas.drawText(farmP+"%",570,130,moneyPaint);
-            canvas.drawText(projP+"%", 450, 235, moneyPaint);
-            canvas.drawText(houseP+"%", 570, 230, moneyPaint);
+                      
+        }
+        if(listControlDe.isOpen()){
+            String poisonM = "$"+Integer.toString(DestructParameter.MilkCost);
+            String smallM = "$"+Integer.toString(DestructParameter.SmallCost);
+            String fenceM = "$"+Integer.toString(DestructParameter.FenseCost);
+            String powerM = "$"+Integer.toString(DestructParameter.PowerCost);
+            
+            if(displayData.getTime()>35000){
+                if(displayData.getButtonD().milkDisplay)
+                    poisonM = "On duty!";
+                if(displayData.getButtonD().smallCheeseDisplay)
+                    smallM = "On duty!";
+                if(displayData.getButtonD().fenseDisplay)
+                    fenceM = "On duty!";
+                if(displayData.getButtonD().powerDisplay)
+                    powerM = "On duty!";
+           }else{
+               if(displayData.getButtonD().milkDisplay)
+                   poisonM = "Sunset...";
+               if(displayData.getButtonD().smallCheeseDisplay)
+                   smallM = "Sunset...";
+               if(displayData.getButtonD().fenseDisplay)
+                   fenceM = "Sunset...";
+               if(displayData.getButtonD().powerDisplay)
+                   powerM = "Sunset...";               
+           }
+                
+            canvas.drawText(poisonM,510,125,otherMoney);
+            canvas.drawText(smallM,610,130,otherMoney);
+            canvas.drawText(fenceM, 510, 235, otherMoney);
+            canvas.drawText(powerM, 610, 230, otherMoney);
+            
             
         }
         
