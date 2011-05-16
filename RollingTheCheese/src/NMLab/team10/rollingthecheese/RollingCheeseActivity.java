@@ -85,13 +85,19 @@ public class RollingCheeseActivity extends Activity {
         // mBluetoothService.start();
         // }
         // }
+        SoundController.initSoundController(this);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        SoundController.cancelAllMusic();
 //        if (mBluetoothService != null)
 //            mBluetoothService.stop();
+    }
+    public void onPause(){
+        super.onPause();
+        SoundController.cancelAllMusic();
     }
 
     /**
@@ -152,7 +158,7 @@ public class RollingCheeseActivity extends Activity {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        isTwoPlayer = true;
         myHandler.sendEmptyMessage(InterThreadMsg.startGameView);
     }
 
@@ -276,6 +282,7 @@ public class RollingCheeseActivity extends Activity {
             // mAnimationThread.clearSprites();
             // return true;
             case MENU_Exit:
+                
                 finish();
                 return true;
             case MENU_InitClient:

@@ -141,12 +141,12 @@ public class GameView extends View {
     @Override
     public void onDraw(Canvas canvas) {
 
-//        if(hasBeenInit){
-//            if(displayData.hasNewData()){
-//                hasBeenInit = false;
-//            }
-//            return;
-//        }
+        if(hasBeenInit){
+            if(displayData.hasNewData()){
+                hasBeenInit = false;
+            }
+            return;
+        }
 
 
         int newX;

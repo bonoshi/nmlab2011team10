@@ -6,7 +6,7 @@ import java.util.Random;
 import android.R.integer;
 
 public class RandomSoundGenerator {
-    static final int birdInterval = 10000;
+    static final int birdInterval = 20000;
     static final int cowInterval = 10000;
     static final int nightbirdInterval = 20000;
     static final int windInterval = 15000;
@@ -15,10 +15,10 @@ public class RandomSoundGenerator {
     static final float nightbirdProb = 0.7F;
     static final float windProb = 0.5F;
     
-    RandomSoundThread birdThread;
-    RandomSoundThread cowThread;
-    RandomSoundThread nightbirdThread;
-    RandomSoundThread windThread;
+    public RandomSoundThread birdThread;
+    public RandomSoundThread cowThread;
+    public RandomSoundThread nightbirdThread;
+    public RandomSoundThread windThread;
     
     public RandomSoundGenerator(){
         int[] birdEff = {SoundController.EFF_BIRD1,SoundController.EFF_BIRD2};
@@ -69,6 +69,6 @@ public class RandomSoundGenerator {
                     e.printStackTrace();
                 }
             }
-        }
+        }        
     }
 }

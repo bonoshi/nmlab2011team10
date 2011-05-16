@@ -23,52 +23,52 @@ public class HouseDisplay {
 
     static Resources r = GameView.r;
     private static Bitmap houseBitmap[][];
-    private static Bitmap houseBitmap_m[][];
+   // private static Bitmap houseBitmap_m[][];
     private static Bitmap onWorkingBitmap;
-    private static Bitmap onWorkingBitmap_m;
+   // private static Bitmap onWorkingBitmap_m;
     private static byte HEALTH=0;
     private static byte DAMAGED=1;
     private static byte SERIOUS_DAMAGED=2;
     private static byte NORMAL=0;
     private static byte UPGRADE1 = 1;
-    
+    private static Matrix matrix;
     
     static public void initial(){
         r = GameView.r;
         houseBitmap = new Bitmap[2][];
-        houseBitmap_m = new Bitmap[2][];
+       // houseBitmap_m = new Bitmap[2][];
         
         houseBitmap[NORMAL] = new Bitmap[3];
-        houseBitmap_m[NORMAL] = new Bitmap[3];
+       // houseBitmap_m[NORMAL] = new Bitmap[3];
         Bitmap tmp = BitmapFactory.decodeResource(r, R.drawable.house_n);
         houseBitmap[NORMAL][HEALTH] = Bitmap.createBitmap(tmp,0,0,280,280);
         houseBitmap[NORMAL][DAMAGED] = Bitmap.createBitmap(tmp,280,0,280,280);
         houseBitmap[NORMAL][SERIOUS_DAMAGED] = Bitmap.createBitmap(tmp,560,0,280,280);
-        
+        tmp = null;
         
         
         houseBitmap[UPGRADE1] = new Bitmap[3];
-        houseBitmap_m[UPGRADE1] = new Bitmap[3];
+       // houseBitmap_m[UPGRADE1] = new Bitmap[3];
         Bitmap tmp2 = BitmapFactory.decodeResource(r, R.drawable.house_2);
         houseBitmap[UPGRADE1][HEALTH] = Bitmap.createBitmap(tmp2,0,0,280,280);
         houseBitmap[UPGRADE1][DAMAGED] = Bitmap.createBitmap(tmp2,280,0,280,280);
         houseBitmap[UPGRADE1][SERIOUS_DAMAGED] = Bitmap.createBitmap(tmp2,560,0,280,280);
-        
+        matrix = new Matrix();
         
         float[] mirrorX = { -1,0,0,
                             0,1,0,
                             0,0,1
                             };
-        Matrix matrix = new Matrix();
+        
         matrix.setValues(mirrorX);      
-        houseBitmap_m[NORMAL][HEALTH] = Bitmap.createBitmap(houseBitmap[NORMAL][HEALTH],0,0,houseBitmap[NORMAL][HEALTH].getWidth(),houseBitmap[NORMAL][HEALTH].getHeight(),matrix,false);
-        houseBitmap_m[NORMAL][DAMAGED] = Bitmap.createBitmap(houseBitmap[NORMAL][DAMAGED],0,0,houseBitmap[NORMAL][DAMAGED].getWidth(),houseBitmap[NORMAL][DAMAGED].getHeight(),matrix,false);
-        houseBitmap_m[NORMAL][SERIOUS_DAMAGED] = Bitmap.createBitmap(houseBitmap[NORMAL][SERIOUS_DAMAGED],0,0,houseBitmap[NORMAL][SERIOUS_DAMAGED].getWidth(),houseBitmap[NORMAL][SERIOUS_DAMAGED].getHeight(),matrix,false);
-        houseBitmap_m[UPGRADE1][HEALTH] = Bitmap.createBitmap(houseBitmap[UPGRADE1][HEALTH],0,0,houseBitmap[UPGRADE1][HEALTH].getWidth(),houseBitmap[UPGRADE1][HEALTH].getHeight(),matrix,false);
-        houseBitmap_m[UPGRADE1][DAMAGED] = Bitmap.createBitmap(houseBitmap[UPGRADE1][DAMAGED],0,0,houseBitmap[UPGRADE1][DAMAGED].getWidth(),houseBitmap[UPGRADE1][DAMAGED].getHeight(),matrix,false);
-        houseBitmap_m[UPGRADE1][SERIOUS_DAMAGED] = Bitmap.createBitmap(houseBitmap[UPGRADE1][SERIOUS_DAMAGED],0,0,houseBitmap[UPGRADE1][SERIOUS_DAMAGED].getWidth(),houseBitmap[UPGRADE1][SERIOUS_DAMAGED].getHeight(),matrix,false);
+        //houseBitmap_m[NORMAL][HEALTH] = Bitmap.createBitmap(houseBitmap[NORMAL][HEALTH],0,0,houseBitmap[NORMAL][HEALTH].getWidth(),houseBitmap[NORMAL][HEALTH].getHeight(),matrix,false);
+        //houseBitmap_m[NORMAL][DAMAGED] = Bitmap.createBitmap(houseBitmap[NORMAL][DAMAGED],0,0,houseBitmap[NORMAL][DAMAGED].getWidth(),houseBitmap[NORMAL][DAMAGED].getHeight(),matrix,false);
+        //houseBitmap_m[NORMAL][SERIOUS_DAMAGED] = Bitmap.createBitmap(houseBitmap[NORMAL][SERIOUS_DAMAGED],0,0,houseBitmap[NORMAL][SERIOUS_DAMAGED].getWidth(),houseBitmap[NORMAL][SERIOUS_DAMAGED].getHeight(),matrix,false);
+        //houseBitmap_m[UPGRADE1][HEALTH] = Bitmap.createBitmap(houseBitmap[UPGRADE1][HEALTH],0,0,houseBitmap[UPGRADE1][HEALTH].getWidth(),houseBitmap[UPGRADE1][HEALTH].getHeight(),matrix,false);
+        //houseBitmap_m[UPGRADE1][DAMAGED] = Bitmap.createBitmap(houseBitmap[UPGRADE1][DAMAGED],0,0,houseBitmap[UPGRADE1][DAMAGED].getWidth(),houseBitmap[UPGRADE1][DAMAGED].getHeight(),matrix,false);
+        //houseBitmap_m[UPGRADE1][SERIOUS_DAMAGED] = Bitmap.createBitmap(houseBitmap[UPGRADE1][SERIOUS_DAMAGED],0,0,houseBitmap[UPGRADE1][SERIOUS_DAMAGED].getWidth(),houseBitmap[UPGRADE1][SERIOUS_DAMAGED].getHeight(),matrix,false);
         onWorkingBitmap = BitmapFactory.decodeResource(r, R.drawable.onworking);
-        onWorkingBitmap_m = Bitmap.createBitmap(onWorkingBitmap,0,0,onWorkingBitmap.getWidth(),onWorkingBitmap.getHeight(),matrix,false);
+        //onWorkingBitmap_m = Bitmap.createBitmap(onWorkingBitmap,0,0,onWorkingBitmap.getWidth(),onWorkingBitmap.getHeight(),matrix,false);
         
         
     }
@@ -124,10 +124,17 @@ public class HouseDisplay {
                 canvas.drawBitmap(houseBitmap[UPGRADE1][state], -97, 200, null);
             }
         }else{
+            
             if(getHouse().getQual()==HouseMessage.Handmade){
-                canvas.drawBitmap(houseBitmap_m[NORMAL][state], 1420, 200, null);
+                Bitmap tmpBitmap = Bitmap.createBitmap(houseBitmap[NORMAL][state],0,0,
+                                    houseBitmap[NORMAL][state].getWidth(),
+                                    houseBitmap[NORMAL][state].getHeight(),matrix,false);
+                canvas.drawBitmap(tmpBitmap, 1420, 200, null);
             }else{
-                canvas.drawBitmap(houseBitmap_m[UPGRADE1][state], 1420, 200, null);
+                Bitmap tmpBitmap = Bitmap.createBitmap(houseBitmap[UPGRADE1][state],0,0,
+                        houseBitmap[UPGRADE1][state].getWidth(),
+                        houseBitmap[UPGRADE1][state].getHeight(),matrix,false);
+                canvas.drawBitmap(tmpBitmap, 1420, 200, null);
             }
             
         }
@@ -176,7 +183,9 @@ public class HouseDisplay {
                 canvas.drawText(Integer.toString(FS)+"%", 270, 330, paint);
             }
           } else if(!GameView.displayData.isLeft&&!whichSide){
-            
+            Bitmap onWorkingBitmap_m = Bitmap.createBitmap(onWorkingBitmap,0,0,
+                                                           onWorkingBitmap.getWidth(),
+                                                           onWorkingBitmap.getHeight(),matrix,false);
             if(NL>0&&NL<100){
                 canvas.drawBitmap(onWorkingBitmap_m, 1250, 200,null);
                 canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,260, null);

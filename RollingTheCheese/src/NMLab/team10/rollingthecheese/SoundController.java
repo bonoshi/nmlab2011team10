@@ -46,10 +46,17 @@ public class SoundController {
     static int currentBackground;
     static MediaPlayer mediaPlayer;
     
+    static public void cancelAllMusic(){
+        mediaPlayer.stop();
+        soundPool.release();
+    }
+    
+    
     static public void initSoundController(RollingCheeseActivity father){
         SoundController.father = father;
         currentBackground = BACKGROUND1;
         mediaPlayer = MediaPlayer.create(father, R.raw.background1);
+        mediaPlayer.setLooping(true);
         
         soundPool = new SoundPool(numChannel, AudioManager.STREAM_MUSIC, 100);
         soundPoolMap = new HashMap<Integer, Integer>();
@@ -122,7 +129,9 @@ public class SoundController {
                 case BACKGROUND2:
                     mediaPlayer = MediaPlayer.create(father, R.raw.background2);
                     break;
+                
             }
+            mediaPlayer.setLooping(true);
         }
         if(!mediaPlayer.isPlaying()){
             mediaPlayer.start();
