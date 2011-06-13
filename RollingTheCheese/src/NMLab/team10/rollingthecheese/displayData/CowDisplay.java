@@ -110,7 +110,7 @@ public class CowDisplay {
     @SuppressWarnings("unchecked")
     static public void updateCowDisplay() {
         leftCowList = (LinkedList<CowDisplay>) GameView.displayData.leftCowList.clone();
-        rightCowList = (LinkedList<CowDisplay>)gameView.displayData.rightCowList.clone();
+        rightCowList = (LinkedList<CowDisplay>)GameView.displayData.rightCowList.clone();
         numCow = leftCowList.size();
         // Log.e("CowDisplay",String.format("numCow = %d",numCow));
         sortCowListbyID();

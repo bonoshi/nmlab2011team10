@@ -1,17 +1,12 @@
 package NMLab.team10.rollingthecheese;
 
 
-import NMLab.team10.rollingthecheese.displayData.CowDisplay;
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
 import NMLab.team10.rollingthecheese.event.EventEnum;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 import NMLab.team10.rollingthecheese.gameSetting.CheeseParameter;
 import NMLab.team10.rollingthecheese.gameSetting.CowParameter;
 import NMLab.team10.rollingthecheese.gameSetting.DestructParameter;
-import NMLab.team10.rollingthecheese.gameSetting.Farm;
-import NMLab.team10.rollingthecheese.gameSetting.House;
-import NMLab.team10.rollingthecheese.gameSetting.HouseMessage;
-import NMLab.team10.rollingthecheese.gameSetting.Projector;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;

@@ -2,7 +2,6 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 import java.io.Serializable;
 
-import android.R.integer;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,7 +15,7 @@ import NMLab.team10.rollingthecheese.byteEnum.ProjectorEnum;
 public class Projector implements Serializable{
 
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = 1161120424944559472L;
     private static Bitmap projectorBitmap[];

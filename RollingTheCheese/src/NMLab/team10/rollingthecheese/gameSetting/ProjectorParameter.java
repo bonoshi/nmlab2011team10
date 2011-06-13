@@ -18,8 +18,6 @@ class ProjectorParameter {
     static final int RocketTime = 12000;
 
     static class Board {
-        static final float offsetLeft;// pixel
-        static final float offsetRight;// pixel
         static final float startX;
         static final float startY;
         static final float endX;
@@ -30,11 +28,9 @@ class ProjectorParameter {
         // static final float point1X = 70;
         // static final float point1Y = 92;
         static {
-            offsetLeft = 202;
-            offsetRight = GlobalParameter.MapWidth - offsetLeft;
-            startX = 110;
-            startY = 92;
-            endX = 202;
+            startX = 0;
+            startY = 126;
+            endX = 126;
             endY = 0;
             angelX = 0.3825F;
             angelY = 0.9239F;

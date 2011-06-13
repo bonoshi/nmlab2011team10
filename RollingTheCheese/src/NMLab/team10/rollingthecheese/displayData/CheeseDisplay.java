@@ -1,6 +1,5 @@
 package NMLab.team10.rollingthecheese.displayData;
 
-import android.R.integer;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

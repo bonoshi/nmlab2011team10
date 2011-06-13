@@ -11,7 +11,7 @@ public class CheeseParameter {// have display light type
         public static final int Time = 2000;// ms
         public static final float Endurance = 100F * 1.5F;
         public static final float DistancePerSec = 100F;
-        public static final float Speed = DistancePerSec / GlobalParameter.FramePeriod;// 1sec
+        public static final float Speed = DistancePerSec * 0.001F * GlobalParameter.FramePeriod;// 1sec
 
         public static final float DamageTiny = 4.5F;
         public static final float DamageSmall = 5.0F;
@@ -54,7 +54,7 @@ public class CheeseParameter {// have display light type
         public static final int Time = 3000;// ms
         public static final float Endurance = 60F * 1.5F;
         public static final float DistancePerSec = 85F;
-        public static final float Speed = DistancePerSec / GlobalParameter.FramePeriod;// 1sec
+        public static final float Speed = DistancePerSec * 0.001F * GlobalParameter.FramePeriod;// 1sec
                                                                                        // 100pixel
         public static final int Cost = 80;
 
@@ -102,7 +102,7 @@ public class CheeseParameter {// have display light type
         public static final int Time = 2500;// ms
         public static final float Endurance = 75F * 1.5F;
         public static final float DistancePerSec = 75F;
-        public static final float Speed = DistancePerSec / GlobalParameter.FramePeriod;// 1sec
+        public static final float Speed = DistancePerSec * 0.001F * GlobalParameter.FramePeriod;// 1sec
                                                                                        // 100pixel
         public static final int Cost = 65;
 
@@ -144,7 +144,7 @@ public class CheeseParameter {// have display light type
         public static final int Time = 1200;// ms
         public static final float Endurance = 80F * 1.5F;
         public static final float DistancePerSec = 120F;
-        public static final float Speed = DistancePerSec / GlobalParameter.FramePeriod;// 1sec
+        public static final float Speed = DistancePerSec * 0.001F * GlobalParameter.FramePeriod;// 1sec
                                                                                        // 100pixel
         public static final int Cost = 95;
 

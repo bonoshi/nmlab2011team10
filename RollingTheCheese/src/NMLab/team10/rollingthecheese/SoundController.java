@@ -2,7 +2,6 @@ package NMLab.team10.rollingthecheese;
 
 import java.util.HashMap;
 
-import android.R.integer;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;

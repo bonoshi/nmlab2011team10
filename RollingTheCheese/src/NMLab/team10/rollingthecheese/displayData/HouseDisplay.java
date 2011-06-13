@@ -3,9 +3,6 @@ package NMLab.team10.rollingthecheese.displayData;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.w3c.dom.NameList;
-
-import android.R.integer;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

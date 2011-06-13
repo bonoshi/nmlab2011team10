@@ -1,9 +1,6 @@
 package NMLab.team10.rollingthecheese;
 
-import java.util.ArrayList;
 import java.util.Random;
-
-import android.R.integer;
 
 public class RandomSoundGenerator {
     static final int birdInterval = 20000;

@@ -84,7 +84,7 @@ public class EventQueueCenter {
                             continue;
 
                         LinkedList<Cow> cowList = (whichSide) ? setting.getLeftCowList() : setting
-                                .getLeftCowList();
+                            .getLeftCowList();
                         int cowNum = cowList.size();
                         if (cowNum >= CowParameter.MaxCow) {
                             continue;
@@ -176,11 +176,11 @@ public class EventQueueCenter {
 
                     // notice for the side!!
                     boolean isSmallCrisis = (whichSide) ? setting.getRightDestruct().smallCheese : setting
-                            .getLeftDestruct().smallCheese;
+                        .getLeftDestruct().smallCheese;
 
                     House house = (whichSide) ? setting.getLeftHouse() : setting.getRightHouse();
                     Projector projector = (whichSide) ? setting.getLeftProjector() : setting
-                            .getRightProjector();
+                        .getRightProjector();
 
                     // check if crowd!
                     byte event = peakCheeseEvent(whichSide);
@@ -189,7 +189,7 @@ public class EventQueueCenter {
                     cheese.initialPara(house, projector, whichSide);
 
                     LinkedList<Cheese> cheeseList = (whichSide) ? setting.getLeftCheeseList() : setting
-                            .getRightCheeseList();
+                        .getRightCheeseList();
 
                     if (cheese.checkCrowd(cheeseList))
                         continue;
@@ -485,7 +485,7 @@ public class EventQueueCenter {
                 ds.milkTriggered = false;
                 ds.milk = true;
                 ds.milkCountDown = DestructParameter.MilkTime;
-                LinkedList<Cow> cowList = (i == 0) ? setting.getLeftCowList() : setting.getRightCowList();
+                LinkedList<Cow> cowList = (i == 0) ? setting.getRightCowList() : setting.getLeftCowList();
                 for (int j = 0; j < cowList.size(); j++) {
                     Cow cow = cowList.get(j);
                     cow.setStatus(Cow.Leak);
