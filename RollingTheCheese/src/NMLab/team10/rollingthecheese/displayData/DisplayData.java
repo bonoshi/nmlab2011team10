@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 
 import NMLab.team10.rollingthecheese.gameSetting.Cheese;
 import NMLab.team10.rollingthecheese.gameSetting.CheeseMessage;
+import NMLab.team10.rollingthecheese.gameSetting.Cow;
 import NMLab.team10.rollingthecheese.gameSetting.CowMessage;
 import NMLab.team10.rollingthecheese.gameSetting.DestructStateMessage;
 import NMLab.team10.rollingthecheese.gameSetting.Farm;
@@ -38,9 +39,9 @@ public class DisplayData {
         addAndRefreshCheese(leftCheeseList, smd.getLeftCheeseList(), leftCheeseMap);
         addAndRefreshCheese(rightCheeseList, smd.getRightCheeseList(), rightCheeseMap);
         // Cow
-        addAndRefreshCow(leftCowList, smd.getLeftCowList(), leftCowMap);
+        addAndRefreshCow(leftCowList, smd.getLeftCowList(), leftCowMap, Cow.Left);
         deleteCow(leftCowList, smd.getLeftCowList(), leftCowMap);
-        addAndRefreshCow(rightCowList, smd.getRightCowList(), rightCowMap);
+        addAndRefreshCow(rightCowList, smd.getRightCowList(), rightCowMap, Cow.Right);
         deleteCow(rightCowList, smd.getRightCowList(), rightCowMap);
         // FireLine
         addAndRefreshFire(leftFireList, smd.getLeftFireList(), leftFireMap);
@@ -106,7 +107,7 @@ public class DisplayData {
     }
 
     private void addAndRefreshCow(LinkedList<CowDisplay> dList, LinkedList<CowMessage> mList,
-            HashMap<Short, CowDisplay> map) {
+            HashMap<Short, CowDisplay> map, boolean whichSide) {
         LinkedList<CowMessage> newAdd = new LinkedList<CowMessage>();
         for (Iterator<CowMessage> iterator = mList.iterator(); iterator.hasNext();) {
             CowMessage cowMessage = (CowMessage) iterator.next();
@@ -122,7 +123,7 @@ public class DisplayData {
             synchronized (dList) {
                 for (Iterator<CowMessage> iterator = newAdd.iterator(); iterator.hasNext();) {
                     CowMessage cowMessage = (CowMessage) iterator.next();
-                    CowDisplay cowDisplay = new CowDisplay(cowMessage);
+                    CowDisplay cowDisplay = new CowDisplay(cowMessage, whichSide);   // bobuway: add left or right
                     dList.add(cowDisplay);
                     map.put(cowMessage.getID(), cowDisplay);
                 }
@@ -391,7 +392,7 @@ public class DisplayData {
             }
         }
     }
-    
+
     public void drawPorj(Canvas canvas){
         smd.getLeftProjector().draw(true,canvas);
         smd.getRightProjector().draw(false,canvas);

@@ -128,7 +128,7 @@ public class RollingCheeseActivity extends Activity {
 
     private void initClient() {
         try {
-            this.clientSocket = new Socket("140.112.250.107", 5566);
+            this.clientSocket = new Socket("140.112.18.208", 5566);
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

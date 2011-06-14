@@ -5,7 +5,7 @@ import NMLab.team10.rollingthecheese.event.EventEnum;
 public class CheeseParameter {// have display light type
 
     public static final float UnitSize = 55F;
-    
+
     public static class Normal {// normal cheese
 
         public static final int Time = 2000;// ms

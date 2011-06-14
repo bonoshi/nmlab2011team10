@@ -24,7 +24,8 @@ public class CowDisplay {
             { 400, 340, 280, 220, 160, 0 } };
     static final int normalVelocityX = 5;
     static GameView gameView;
-    static int numCow;
+    static int numCowleft;
+    static int numCowright;
     static LinkedList<CowDisplay> leftCowList = new LinkedList<CowDisplay>();
     static LinkedList<CowDisplay> rightCowList = new LinkedList<CowDisplay>();
     static Bitmap ToRightCowBitmap;
@@ -111,14 +112,15 @@ public class CowDisplay {
     static public void updateCowDisplay() {
         leftCowList = (LinkedList<CowDisplay>) GameView.displayData.leftCowList.clone();
         rightCowList = (LinkedList<CowDisplay>)GameView.displayData.rightCowList.clone();
-        numCow = leftCowList.size();
+        numCowleft= leftCowList.size();
+        numCowright = rightCowList.size();
         // Log.e("CowDisplay",String.format("numCow = %d",numCow));
         sortCowListbyID();
         for (int i = 0; i < leftCowList.size(); i++) {
-            leftCowList.get(i).updateCow(numCow, i);
+            leftCowList.get(i).updateCow(numCowleft, i);
         }
         for (int i = 0; i < rightCowList.size(); i++) {
-            rightCowList.get(i).updateCow(numCow, i);
+            rightCowList.get(i).updateCow(numCowright, i);
         }
     }
 
@@ -182,6 +184,7 @@ public class CowDisplay {
         } else {
            RectF dest = new RectF((1600 - PosX) - COW_WIDTH/2 + offset,PosY-COW_HEIGHT/2,
                     (1600 - PosX) + COW_WIDTH/2 + offset, PosY + COW_HEIGHT/2);
+
                if(velocityX < 0){
                    if (isPoison) {
                        canvas.drawBitmap(ToRightCowBitmap_p, null, dest, null);
@@ -198,12 +201,15 @@ public class CowDisplay {
         }
     }
 
-    public CowDisplay(CowMessage cm) {
+    public CowDisplay(CowMessage cm, boolean leftright) {
         this.setCowMessage(cm);
         velocityX = normalVelocityX;
         PosX = 100;
         int ID = cm.getID();
-        PosY = normalPosY[Math.max(5, numCow + 1)][ID];
+        if(leftright == false)
+        PosY = normalPosY[Math.max(5, numCowleft + 1)][ID];
+        else
+            PosY = normalPosY[Math.max(5, numCowright+1)][ID];
         /* initialize Pos, velocity */
     }
 
