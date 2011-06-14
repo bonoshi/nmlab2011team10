@@ -47,11 +47,17 @@ public class ButtonDisplay implements Serializable{
     public byte MilkProdPercent = 100;
 
     // Destruction Button => get from GameSetting => DestructState => Display
-    public boolean fenseDisplay = false;
-    public boolean powerDisplay = false;
-    public boolean smallCheeseDisplay = false;
-    public boolean slowCheeseDisplay = false;
-    public boolean milkDisplay = false;
+    public boolean fense = false;
+    public boolean power = false;
+    public boolean smallCheese = false;
+    public boolean slowCheese = false;
+    public boolean milk = false;
+
+    public boolean fenseTriggered = false;
+    public boolean powerTriggered = false;
+    public boolean smallCheeseTriggered = false;
+    public boolean slowCheeseTriggered = false;// produce slower
+    public boolean milkTriggered = false;
 
     public static ButtonDisplay createButtonD(EventQueueCenter eqc, DestructState ds, boolean whichSide) {
         ButtonDisplay b = new ButtonDisplay();
@@ -122,11 +128,16 @@ public class ButtonDisplay implements Serializable{
         b.MilkProdPercent = (conQ.findEvent(EventEnum.MilkProd)) ? ((conQ.peak() == EventEnum.MilkProd) ? conQ
                 .getPercent() : 0) : 100;
         // Destruction
-        b.fenseDisplay = ds.fenseDisplay;
-        b.powerDisplay = ds.powerDisplay;
-        b.smallCheeseDisplay = ds.smallCheeseDisplay;
-        b.slowCheeseDisplay = ds.slowCheeseDisplay;
-        b.milkDisplay = ds.milkDisplay;
+        b.fense = ds.fense;
+        b.power = ds.power;
+        b.smallCheese = ds.smallCheese;
+        b.slowCheese = ds.slowCheese;
+        b.milk = ds.milk;
+        b.fenseTriggered = ds.fenseTriggered;
+        b.powerTriggered = ds.powerTriggered;
+        b.smallCheeseTriggered = ds.smallCheeseTriggered;
+        b.slowCheeseTriggered = ds.slowCheeseTriggered;
+        b.milkTriggered = ds.milkTriggered;
         return b;
     }
 

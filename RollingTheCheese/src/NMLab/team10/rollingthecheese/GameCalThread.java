@@ -2,7 +2,6 @@ package NMLab.team10.rollingthecheese;
 
 import java.util.Date;
 
-import NMLab.team10.rollingthecheese.displayData.DisplayData;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 import NMLab.team10.rollingthecheese.gameSetting.GlobalParameter;
 import NMLab.team10.rollingthecheese.gameSetting.ServerGameSetting;
@@ -15,7 +14,6 @@ public class GameCalThread extends Thread {
 
     private EventQueueCenter eventCenter = null;
     private SynMessageData synMessageData = null;// need to inspect if "null"
-    private DisplayData displayData = null;
 
     private boolean pause = true;
     private boolean stop = false;
@@ -27,7 +25,6 @@ public class GameCalThread extends Thread {
         this.setting = sgs;
         eventCenter = new EventQueueCenter(sgs,father);
         synMessageData = new SynMessageData(sgs, eventCenter, Right);
-        displayData = new DisplayData();
     }
 
     Date timeLast = null;
@@ -58,7 +55,14 @@ public class GameCalThread extends Thread {
             // (3)send to client
             // local game display
             synMessageData = new SynMessageData(setting, eventCenter, Left);
-            displayData.refresh(synMessageData);
+            if(father.isTwoPlayer()){
+//                if(father.isServer){
+//                    //refresh displayData in father
+//                    //send data
+//                }
+            }else{
+                father.refreshDisplayData(synMessageData);
+            }
 
             // Step 3: fetch construction event
             eventCenter.fetchCons();
@@ -90,13 +94,6 @@ public class GameCalThread extends Thread {
             }
         }
     }
-
-    public void refreshDisplayData(SynMessageData smd){//refresh by client blue-tooth
-        displayData.refresh(smd);
-    }
-
-    //public void
-
     public void stopGameCal() {
         this.stop = true;
     }
@@ -127,14 +124,6 @@ public class GameCalThread extends Thread {
 
     public SynMessageData getSynMessageData() {
         return synMessageData;
-    }
-
-    public void setDisplayData(DisplayData displayData) {
-        this.displayData = displayData;
-    }
-
-    public DisplayData getDisplayData() {
-        return displayData;
     }
 
     // for blue-tooth only, hasNewData() for displayData is in the displayData

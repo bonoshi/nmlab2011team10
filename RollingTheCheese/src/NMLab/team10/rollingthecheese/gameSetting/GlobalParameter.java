@@ -2,7 +2,6 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 public class GlobalParameter {
     public static final int TimePerDay = 60000;// 60sec = 60000ms
-    public static final int TimeHalfDay = 30000;// 60sec = 60000ms
     public static final int FramePeriod = 40;// 30ms
 
     public static final float BumpOffset = 0.2F;
@@ -16,7 +15,7 @@ public class GlobalParameter {
     public static final float MapHeight = 480.0F;
 
     public static final boolean isNight(int time){
-        return (time%TimePerDay > TimeHalfDay);
+        return (time%TimePerDay > 35000);
     }
 
     public static byte getTimePeriod(int time){

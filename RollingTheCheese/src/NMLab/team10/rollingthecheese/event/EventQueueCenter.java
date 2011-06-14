@@ -1,5 +1,6 @@
 package NMLab.team10.rollingthecheese.event;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import NMLab.team10.rollingthecheese.RollingCheeseActivity;
@@ -353,45 +354,45 @@ public class EventQueueCenter {
         }
         switch (desEvent) {
             case EventEnum.IntoTheWild: {
-                if (!ds.fenseDisplay && (milk -= DestructParameter.FenseCost) >= 0) {
+                if (!ds.fense && !ds.fenseTriggered && (milk -= DestructParameter.FenseCost) >= 0) {
                     ds.fenseTriggered = true;
-                    ds.fenseDisplay = true;
+//                    ds.fense = true;
                 } else {
                     return;
                 }
                 break;
             }
             case EventEnum.BlackOut: {
-                if (!ds.powerDisplay && (milk -= DestructParameter.PowerCost) >= 0) {
+                if (!ds.power && !ds.powerTriggered && (milk -= DestructParameter.PowerCost) >= 0) {
                     ds.powerTriggered = true;
-                    ds.powerDisplay = true;
+//                    ds.power = true;
                 } else {
                     return;
                 }
                 break;
             }
             case EventEnum.MiceArmy: {
-                if (!ds.smallCheeseDisplay && (milk -= DestructParameter.SmallCost) >= 0) {
+                if (!ds.smallCheese && !ds.smallCheeseTriggered && (milk -= DestructParameter.SmallCost) >= 0) {
                     ds.smallCheeseTriggered = true;
-                    ds.smallCheeseDisplay = true;
+//                    ds.smallCheese = true;
                 } else {
                     return;
                 }
                 break;
             }
             case EventEnum.LazyWeekend: {
-                if (!ds.slowCheeseDisplay && (milk -= DestructParameter.SlowCost) >= 0) {
+                if (!ds.slowCheese && !ds.slowCheeseTriggered && (milk -= DestructParameter.SlowCost) >= 0) {
                     ds.slowCheeseTriggered = true;
-                    ds.slowCheeseDisplay = true;
+//                    ds.slowCheese = true;
                 } else {
                     return;
                 }
                 break;
             }
             case EventEnum.MilkLeak: {
-                if (!ds.milkDisplay && (milk -= DestructParameter.MilkCost) >= 0) {
+                if (!ds.milk && !ds.milkTriggered && (milk -= DestructParameter.MilkCost) >= 0) {
                     ds.milkTriggered = true;
-                    ds.milkDisplay = true;
+//                    ds.milk = true;
                 } else {
                     return;
                 }
@@ -465,6 +466,12 @@ public class EventQueueCenter {
                 ds.fenseTriggered = false;
                 ds.fense = true;
                 ds.fenseCountDown = DestructParameter.FenseTime;
+                LinkedList<Cow> cowList = (i == 0) ? setting.getRightCowList() : setting.getLeftCowList();
+                for (Iterator<Cow> iterator = cowList.iterator(); iterator.hasNext();) {
+                    iterator.next();
+                    iterator.remove();//only remove one
+                    break;
+                }
             }
             if (ds.powerTriggered && setting.isNight()) {
                 ds.powerTriggered = false;
@@ -508,38 +515,36 @@ public class EventQueueCenter {
             ds = (i == 0) ? setting.getLeftDestruct() : setting.getRightDestruct();
             if (ds.fense && (ds.fenseCountDown <= 0 || !setting.isNight())) {
                 ds.fense = false;
-                ds.fenseDisplay = false;
-                ds.fenseCountDown = 0;
+//                ds.fenseDisplay = false;
             }
             if((ds.fenseCountDown-=GlobalParameter.FramePeriod)<0)
                 ds.fenseCountDown = 0;
 
             if (ds.power && (ds.powerCountDown <= 0 || !setting.isNight())) {
                 ds.power = false;
-                ds.powerDisplay = false;
-                ds.powerCountDown = 0;
+//                ds.powerDisplay = false;
             }
             if((ds.powerCountDown-=GlobalParameter.FramePeriod)<0)
                 ds.powerCountDown = 0;
 
             if (ds.smallCheese && (ds.smallCheeseCountDown <= 0)) {
                 ds.smallCheese = false;
-                ds.smallCheeseDisplay = false;
+//                ds.smallCheeseDisplay = false;
             }
             if((ds.smallCheeseCountDown-=GlobalParameter.FramePeriod)<0)
                 ds.smallCheeseCountDown = 0;
 
             if (ds.slowCheese && (ds.slowCheeseCountDown <= 0)) {
                 ds.slowCheese = false;
-                ds.slowCheeseDisplay = false;
+//                ds.slowCheeseDisplay = false;
             }
             if((ds.slowCheeseCountDown-=GlobalParameter.FramePeriod)<0)
                 ds.slowCheeseCountDown= 0;
 
             if (ds.milk && (ds.milkCountDown <= 0)) {
                 ds.milk = false;
-                ds.milkDisplay = false;
-                LinkedList<Cow> cowList = (i == 0) ? setting.getLeftCowList() : setting.getRightCowList();
+//                ds.milkDisplay = false;
+                LinkedList<Cow> cowList = (i == 0) ? setting.getRightCowList() : setting.getLeftCowList();
                 for (int j = 0; j < cowList.size(); j++) {
                     Cow cow = cowList.get(j);
                     cow.setStatus(Cow.Normal);

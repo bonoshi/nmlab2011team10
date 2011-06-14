@@ -10,14 +10,14 @@ import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 
 public class SynMessageData implements Serializable {
     /**
-     * 
+     *
      */
     private static final long serialVersionUID = -7296263958207475486L;
 
     int time;// current time of a day
     byte climate;
     byte background;
-    
+
     boolean isLeft;
 
     Projector leftProjector;
@@ -91,7 +91,7 @@ public class SynMessageData implements Serializable {
         } else {
             this.buttonD = ButtonDisplay.createButtonD(eqc, s.getRightDestruct(), whichSide);
         }
-        
+
         isLeft = whichSide;
 
     }
@@ -204,7 +204,7 @@ public class SynMessageData implements Serializable {
     public DestructStateMessage getRightDSM() {
         return rightDSM;
     }
-    
+
     public boolean getWhichSide() {
         return isLeft;
     }

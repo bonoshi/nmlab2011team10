@@ -17,6 +17,7 @@ import NMLab.team10.rollingthecheese.gameSetting.AppMessage;
 import NMLab.team10.rollingthecheese.gameSetting.Farm;
 import NMLab.team10.rollingthecheese.gameSetting.House;
 import NMLab.team10.rollingthecheese.gameSetting.ServerGameSetting;
+import NMLab.team10.rollingthecheese.gameSetting.SynMessageData;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,7 +35,7 @@ public class RollingCheeseActivity extends Activity {
     static final int REQUEST_ENABLE_BT = 1;
 
     public String mConnectedDeviceName;
-    
+
 
     // private boolean isLeft = false;// when two player
     private boolean isTwoPlayer = true;
@@ -52,7 +53,7 @@ public class RollingCheeseActivity extends Activity {
     public ArrayList<CheeseDisplay> rightCheeseDisplays;
 
     public GameCalThread gameCalThread = null;
-    public DisplayData displayData = new DisplayData();
+    private DisplayData displayData = new DisplayData();
     public EventQueueCenter clientEventQueue = null;
     public RandomSoundGenerator randomSoundGenerator;
 
@@ -268,9 +269,21 @@ public class RollingCheeseActivity extends Activity {
 
         private void giveData(AppMessage am) {
             if (am.getType() == EventEnum.Data) {
-                displayData.refresh(am.getSmd());
+                refreshDisplayData(am.getSmd());
             }
         }
+    }
+
+    public void refreshDisplayData(SynMessageData smd){
+        displayData.refresh(smd);
+    }
+
+    public DisplayData getDisplayData() {
+        return displayData;
+    }
+
+    public void setDisplayData(DisplayData displayData) {
+        this.displayData = displayData;
     }
 
     private static final String TAG = "ClientError";
@@ -282,7 +295,7 @@ public class RollingCheeseActivity extends Activity {
             // mAnimationThread.clearSprites();
             // return true;
             case MENU_Exit:
-                
+
                 finish();
                 return true;
             case MENU_InitClient:
@@ -323,7 +336,7 @@ public class RollingCheeseActivity extends Activity {
                         ServerGameSetting sgs = new ServerGameSetting();
                         gameCalThread = new GameCalThread(rca, sgs);
 
-                        displayData = gameCalThread.getDisplayData();
+//                        displayData = gameCalThread.getDisplayData();
                         gameCalThread.start();
                         gameCalThread.resumeGameCal();
                         gameView.initialOnePlayer();

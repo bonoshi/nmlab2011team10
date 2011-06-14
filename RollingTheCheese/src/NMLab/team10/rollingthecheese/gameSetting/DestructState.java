@@ -12,12 +12,6 @@ public class DestructState {
     public boolean slowCheese = false;// produce slower
     public boolean milk = false;
 
-    public boolean fenseDisplay = false;
-    public boolean powerDisplay = false;
-    public boolean smallCheeseDisplay = false;
-    public boolean slowCheeseDisplay = false;// produce slower
-    public boolean milkDisplay = false;
-    
     public boolean fenseTriggered = false;
     public boolean powerTriggered = false;
     public boolean smallCheeseTriggered = false;
@@ -29,15 +23,5 @@ public class DestructState {
     public int smallCheeseCountDown = 0;
     public int slowCheeseCountDown = 0;
     public int milkCountDown = 0;
-
-    public DestructButton clone(){
-        DestructButton d = new DestructButton();
-        d.fenseDisplay = fenseDisplay;
-        d.powerDisplay = powerDisplay;
-        d.smallCheeseDisplay = smallCheeseDisplay;
-        d.slowCheeseDisplay = slowCheeseDisplay;
-        d.milkDisplay = milkDisplay;
-        return d;
-    }
 
 }

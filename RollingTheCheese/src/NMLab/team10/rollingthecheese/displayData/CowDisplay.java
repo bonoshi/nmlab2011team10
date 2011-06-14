@@ -11,7 +11,7 @@ import android.graphics.RectF;
 import NMLab.team10.rollingthecheese.GameView;
 import NMLab.team10.rollingthecheese.R;
 import NMLab.team10.rollingthecheese.gameSetting.Cow;
-import NMLab.team10.rollingthecheese.gameSetting.CowMessage;    
+import NMLab.team10.rollingthecheese.gameSetting.CowMessage;
 
 public class CowDisplay {
     static final int[][] normalPosY = { { 0, 0, 0, 0, 0, 0 }, { 200, 0, 0, 0, 0, 0 },
@@ -180,8 +180,8 @@ public class CowDisplay {
                 }
             }
         } else {
-           RectF dest = new RectF(1600-PosX+COW_WIDTH/2+offset,PosY-COW_HEIGHT/2,
-                    1600-PosX-COW_WIDTH/2 + offset, PosY + COW_HEIGHT/2);
+           RectF dest = new RectF((1600 - PosX) - COW_WIDTH/2 + offset,PosY-COW_HEIGHT/2,
+                    (1600 - PosX) + COW_WIDTH/2 + offset, PosY + COW_HEIGHT/2);
                if(velocityX < 0){
                    if (isPoison) {
                        canvas.drawBitmap(ToRightCowBitmap_p, null, dest, null);

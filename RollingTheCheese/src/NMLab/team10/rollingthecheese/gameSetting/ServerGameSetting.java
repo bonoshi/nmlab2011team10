@@ -10,12 +10,16 @@ import NMLab.team10.rollingthecheese.byteEnum.MilkProdEnum;
 public class ServerGameSetting {
 
     public ServerGameSetting() {
-        // TODO Auto-generated constructor stub
+        rightCowList.add(new Cow());
+        rightCowList.add(new Cow());
+        leftCowList.add(new Cow());
+        leftCowList.add(new Cow());
     }
+
     // setting relating to global display
     // String leftName = "LeftName";
     // String rightName = "RightName";
-    private int time = 30000;// current time of a day
+    private int time = 0;// current time of a day
     private byte climate = ClimateEnum.Cloudy;
     private byte background = BackGroundEnum.SpringFarm;
     private boolean isNight = false;
@@ -184,6 +188,7 @@ public class ServerGameSetting {
     public void setRightCowList(LinkedList<Cow> rightCowList) {
         this.rightCowList = rightCowList;
     }
+
     long lastMilkTime = System.currentTimeMillis();
 
     public void timeElapsing() {
@@ -325,22 +330,28 @@ public class ServerGameSetting {
             }
         }
     }
+
     byte headCase = 0;
 
     private void moveHead() {
         if (leftCheeseList.size() == 0 || rightCheeseList.size() == 0) {
-            if (leftCheeseList.size() > 0) {
+            if (leftCheeseList.size() > 0) {// if there is only one cheese that
+                                            // is left
                 Cheese leftC = leftCheeseList.getFirst();
                 boolean leftJoinBattle = leftC.isJoinBattle();// for fire
                 leftC.moveByDistance(leftC.getSpeed(), Left, this.getLeftProjector());
-                if (!leftJoinBattle && leftC.isJoinBattle() && leftC.getType() == Cheese.Firing) {// for fire
-                    FireLine f = new FireLine(leftC, FireLine.getFireSFromCheese(leftC), this.getLeftProjector().getBattleBorderX(leftC.getRadix(), Left));
+                if (!leftJoinBattle && leftC.isJoinBattle() && leftC.getType() == Cheese.Firing) {// for
+                                                                                                  // fire
+                    FireLine f = new FireLine(leftC, FireLine.getFireSFromCheese(leftC), this
+                            .getLeftProjector().getBattleBorderX(leftC.getRadix(), Left));
                     leftFireList.add(f);
 
                 }
                 // fix if already bump into the enemy's house
-                if (leftC.x > this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix() + BumpOffset) {
-                    leftC.x = this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix() + BumpOffset;
+                if (leftC.x > this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix()
+                        + BumpOffset) {
+                    leftC.x = this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix()
+                            + BumpOffset;
                     leftC.setBump(true);
                     headCase = HeadCase.LeftBumpHouse;
                     rightHouse.setBump(true);
@@ -348,16 +359,22 @@ public class ServerGameSetting {
                     leftC.setBump(false);
                 }
             }
-            if (rightCheeseList.size() > 0) {
+            if (rightCheeseList.size() > 0) {// if there is only one cheese that
+                                             // is right
                 Cheese rightC = rightCheeseList.getFirst();
                 boolean rightJoinBattle = rightC.isJoinBattle();// for fire
                 rightC.moveByDistance(rightC.getSpeed(), Right, this.getRightProjector());
-                if (!rightJoinBattle && rightC.isJoinBattle() && rightC.getType() == Cheese.Firing) {// for fire
-                    FireLine f = new FireLine(rightC, FireLine.getFireSFromCheese(rightC), this.getRightProjector().getBattleBorderX(rightC.getRadix(), Right));
+                if (!rightJoinBattle && rightC.isJoinBattle() && rightC.getType() == Cheese.Firing) {// for
+                                                                                                     // fire
+                    FireLine f = new FireLine(rightC, FireLine.getFireSFromCheese(rightC), this
+                            .getRightProjector().getBattleBorderX(rightC.getRadix(), Right));
                     rightFireList.add(f);
                 }
-                if (rightC.x < this.getLeftHouse().getBoader(Left, rightC.getRadix()) + rightC.getRadix() - BumpOffset) {
-                    rightC.x = this.getLeftHouse().getBoader(Left, rightC.getRadix()) + rightC.getRadix() - BumpOffset;
+                // fix if already bump into the enemy's house
+                if (rightC.x < this.getLeftHouse().getBoader(Left, rightC.getRadix()) + rightC.getRadix()
+                        - BumpOffset) {
+                    rightC.x = this.getLeftHouse().getBoader(Left, rightC.getRadix()) + rightC.getRadix()
+                            - BumpOffset;
                     rightC.setBump(true);
                     headCase = HeadCase.RightBumpHouse;
                     leftHouse.setBump(true);
@@ -403,7 +420,8 @@ public class ServerGameSetting {
                         leftMoveAmount = 0;
                     }
                     // when right is destroying the house on the right
-                } else if (rightC.x < this.getLeftHouse().getBoader(Left, rightC.getRadix()) + rightC.getRadix()) {
+                } else if (rightC.x < this.getLeftHouse().getBoader(Left, rightC.getRadix())
+                        + rightC.getRadix()) {
                     rightC.setBump(true);
                     if (distance > leftMoveAmount) {
                         leftC.moveByDistance(leftMoveAmount, Left, this.getLeftProjector());
@@ -429,8 +447,10 @@ public class ServerGameSetting {
                         rightC.moveByDistance(rightMoveAmount, Right, this.getRightProjector());
 
                         // fix if already bump into the enemy's house
-                        if (leftC.x >= this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix() + BumpOffset) {
-                            leftC.x = this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix() + BumpOffset;
+                        if (leftC.x >= this.getRightHouse().getBoader(Right, leftC.getRadix())
+                                - leftC.getRadix() + BumpOffset) {
+                            leftC.x = this.getRightHouse().getBoader(Right, leftC.getRadix())
+                                    - leftC.getRadix() + BumpOffset;
                             // leftMoveAmount = leftC.x -
                             // (this.getRightHouse().getBoader(Right) +
                             // BumpOffset);
@@ -457,12 +477,16 @@ public class ServerGameSetting {
                         leftC.setBump(true);
                         rightC.setBump(true);
                         // fix if already bump into the enemy's house
-                        if (leftC.x >= this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix() + BumpOffset) {
-                            leftC.x = this.getRightHouse().getBoader(Right, leftC.getRadix()) - leftC.getRadix() + BumpOffset;
+                        if (leftC.x >= this.getRightHouse().getBoader(Right, leftC.getRadix())
+                                - leftC.getRadix() + BumpOffset) {
+                            leftC.x = this.getRightHouse().getBoader(Right, leftC.getRadix())
+                                    - leftC.getRadix() + BumpOffset;
                             leftMoveAmount = 0;
                         }
-                        if (rightC.x <= this.getLeftHouse().getBoader(Left, rightC.getRadix()) + rightC.getRadix() - BumpOffset) {
-                            rightC.x = this.getLeftHouse().getBoader(Left, rightC.getRadix()) + rightC.getRadix() - BumpOffset;
+                        if (rightC.x <= this.getLeftHouse().getBoader(Left, rightC.getRadix())
+                                + rightC.getRadix() - BumpOffset) {
+                            rightC.x = this.getLeftHouse().getBoader(Left, rightC.getRadix())
+                                    + rightC.getRadix() - BumpOffset;
                             rightMoveAmount = 0;
                         }
                     }
@@ -491,13 +515,15 @@ public class ServerGameSetting {
             leftHouse.setBump(true);
         }
 
-        if (!leftJoinBattle && leftC.isJoinBattle()) {
-            FireLine f = new FireLine(leftC, FireLine.getFireSFromCheese(leftC), this.getLeftProjector().getBattleBorderX(leftC.getRadix(), Left));
+        if (!leftJoinBattle && leftC.isJoinBattle() && leftC.getType() == Cheese.Firing) {
+            FireLine f = new FireLine(leftC, FireLine.getFireSFromCheese(leftC), this.getLeftProjector()
+                    .getBattleBorderX(leftC.getRadix(), Left));
             leftFireList.add(f);
         }
 
-        if (!rightJoinBattle && rightC.isJoinBattle()) {
-            FireLine f = new FireLine(rightC, FireLine.getFireSFromCheese(rightC), this.getRightProjector().getBattleBorderX(rightC.getRadix(), Right));
+        if (!rightJoinBattle && rightC.isJoinBattle() && rightC.getType() == Cheese.Firing) {
+            FireLine f = new FireLine(rightC, FireLine.getFireSFromCheese(rightC), this.getRightProjector()
+                    .getBattleBorderX(rightC.getRadix(), Right));
             rightFireList.add(f);
         }
 
@@ -791,6 +817,7 @@ public class ServerGameSetting {
     public LinkedList<FireLine> getRightFireList() {
         return rightFireList;
     }
+
     public static final byte Grazing = MilkProdEnum.Grazing;
     public static final byte Husbandry = MilkProdEnum.Husbandry;
     public static final byte Mechanization = MilkProdEnum.Mechanization;

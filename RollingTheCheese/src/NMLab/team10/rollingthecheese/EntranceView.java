@@ -16,7 +16,6 @@ import android.view.View;
 public class EntranceView extends View{
     RollingCheeseActivity father;
     EntranceDrawThread entranceDrawThread;
-    EntranceThread entranceThread;
 
     public void setPause(boolean pause){
         entranceDrawThread.setPause(pause);

@@ -63,20 +63,21 @@ public class GameView extends View {
 
     }
 
-    public void startDrawThread(){
+    public void startDrawThread() {
         gameDrawThread.start();
     }
 
     public void initialOnePlayer() {
-        buttomBar = new ButtomBar(father, father.gameCalThread.getEventCenter(),father.displayData);
-        displayData = father.displayData;
+        buttomBar = new ButtomBar(father, father.gameCalThread.getEventCenter(), father.getDisplayData());
+        displayData = father.getDisplayData();
         CowDisplay.initialGameView(this);
         hasBeenInit = true;
     }
 
     public void initialTwoPlayer() {
-        buttomBar = new ButtomBar(father, new EventQueueCenter(father),father.displayData);
-        displayData = father.displayData;
+        //should be modified for client and server
+        buttomBar = new ButtomBar(father, new EventQueueCenter(father), father.getDisplayData());
+        displayData = father.getDisplayData();
         CowDisplay.initialGameView(this);
         hasBeenInit = true;
     }
@@ -88,8 +89,7 @@ public class GameView extends View {
         GameView.context = context;
         GameView.r = context.getResources();
         CheeseDisplay.initBitmap();
-        backgroundBitmap = BitmapFactory.decodeResource(r,
-                R.drawable.background);
+        backgroundBitmap = BitmapFactory.decodeResource(r, R.drawable.background);
         farmBitmap = BitmapFactory.decodeResource(r, R.drawable.farm);
         grassBitmap = BitmapFactory.decodeResource(r, R.drawable.grass);
 
@@ -126,14 +126,15 @@ public class GameView extends View {
     static public float PacketPerSec = 0;
     static public String pssString = "";
     static public long lastUpPTime = System.currentTimeMillis();
-    static public void refreshPPS(boolean isServer){
-        PacketPerSec = 1000/(System.currentTimeMillis()-lastUpPTime);
-        if(PacketPerSec<0.1F)
+
+    static public void refreshPPS(boolean isServer) {
+        PacketPerSec = 1000 / (System.currentTimeMillis() - lastUpPTime);
+        if (PacketPerSec < 0.1F)
             PacketPerSec = 0.1F;
         pssString = Float.toString(PacketPerSec);
-        if(isServer){
+        if (isServer) {
             pssString = "S:" + pssString;
-        }else{
+        } else {
             pssString = "C:" + pssString;
         }
     }
@@ -141,13 +142,12 @@ public class GameView extends View {
     @Override
     public void onDraw(Canvas canvas) {
 
-        if(hasBeenInit){
-            if(displayData.hasNewData()){
+        if (hasBeenInit) {
+            if (displayData.hasNewData()) {
                 hasBeenInit = false;
             }
             return;
         }
-
 
         int newX;
 
@@ -161,65 +161,65 @@ public class GameView extends View {
         }
 
         String scrollPosition = Integer.toString(newX);
-        if( !displayData.getDSM(!displayData.isLeft).power){
+        if (!displayData.getDSM(!displayData.isLeft).power) {
 
-        SkyDisplay.draw(canvas, newX / 2 - 80);
+            SkyDisplay.draw(canvas, newX / 2 - 80);
 
-        CloudDisplay.updateCloud();
-        Climate.modifyWind(displayData.getClimate());
-        CloudDisplay.draw(canvas, newX / 2 - 80);
+            CloudDisplay.updateCloud();
+            Climate.modifyWind(displayData.getClimate());
+            CloudDisplay.draw(canvas, newX / 2 - 80);
 
-        canvas.translate(0, 50);
-        if(displayData.getTime()<35000){
-            canvas.drawBitmap(backgroundBitmap, newX / 2 - 80, 0, null);
-            canvas.drawBitmap(farmBitmap, newX / 2 - 80, 0, null);
-            CowDisplay.draw(canvas,newX);
-        }
+            canvas.translate(0, 50);
+            if (displayData.getTime() < 35000) {
+                canvas.drawBitmap(backgroundBitmap, newX / 2 - 80, 0, null);
+                canvas.drawBitmap(farmBitmap, newX / 2 - 80, 0, null);
+                CowDisplay.draw(canvas, newX);
+            }
 
-        canvas.translate(0, -50);
-        canvas.translate(newX, 0);
-        displayData.drawHouse(canvas);
+            canvas.translate(0, -50);
+            canvas.translate(newX, 0);
+            displayData.drawHouse(canvas);
 
-        displayData.drawPorj(canvas);
+            displayData.drawPorj(canvas);
 
-        // below is for all dynamic objects
-//        if (!displayData.hasNewData()) {
-//            return;
-//        } else {
-//            displayData.acceptData();
-//        }
-        canvas.translate(-newX, 0);
-        Date timeCurrentFrame = new Date(System.currentTimeMillis());
-        float fps = 1000 / (timeCurrentFrame.getTime() - timeLastFrame
-                .getTime());
-        timeLastFrame = timeCurrentFrame;
+            // below is for all dynamic objects
+            // if (!displayData.hasNewData()) {
+            // return;
+            // } else {
+            // displayData.acceptData();
+            // }
+            canvas.translate(-newX, 0);
+            Date timeCurrentFrame = new Date(System.currentTimeMillis());
+            float fps = 1000 / (timeCurrentFrame.getTime() - timeLastFrame.getTime());
+            timeLastFrame = timeCurrentFrame;
 
-        // for absolute coordinate system graphics
-        canvas.translate(newX, 0);
-        // for scene object
+            // for absolute coordinate system graphics
+            canvas.translate(newX, 0);
+            // for scene object
 
-        // for game object
-        displayData.drawCheese(Cheese.Left, canvas);
-        displayData.drawCheese(Cheese.Right, canvas);
-        displayData.drawFireLine(FireLine.Left, canvas);
-        displayData.drawFireLine(FireLine.Right, canvas);
+            // for game object
+            displayData.drawCheese(Cheese.Left, canvas);
+            displayData.drawCheese(Cheese.Right, canvas);
+            displayData.drawFireLine(FireLine.Left, canvas);
+            displayData.drawFireLine(FireLine.Right, canvas);
 
-        // end of absolute coordinate system graphics
-        canvas.translate(-newX, 0);
-        canvas.drawBitmap(grassBitmap, newX - 160, 460, null);
+            // end of absolute coordinate system graphics
+            canvas.translate(-newX, 0);
+            canvas.drawBitmap(grassBitmap, newX - 160, 460, null);
         }
         buttomBar.draw(canvas);
 
         // for floating text
-       // canvas.drawText("Scroll Pos: " + scrollPosition, 570, 450, paintInfo);
-        //canvas.drawText("(x,y)=(" + this.x + "," + this.y + ")", 570, 420,
-        //        paintInfo);
-        canvas.drawText("$"+Integer.toString(displayData.getMilk()), 670, 460,
-                paintInfo);
-        //canvas.drawText("Time=" + displayData.getTime(), 570, 30, paintInfo);
-        //canvas.drawText("FPS=" + fps, 570, 60, paintInfo);
-        //canvas.drawText("P/sec=" + pssString ,570, 90, paintInfo);
-        //canvas.drawText("Cow Num=" + displayData.getCowList().size() ,570, 120, paintInfo);
+        // canvas.drawText("Scroll Pos: " + scrollPosition, 570, 450,
+        // paintInfo);
+        // canvas.drawText("(x,y)=(" + this.x + "," + this.y + ")", 570, 420,
+        // paintInfo);
+        canvas.drawText("$" + Integer.toString(displayData.getMilk()), 670, 460, paintInfo);
+        // canvas.drawText("Time=" + displayData.getTime(), 570, 30, paintInfo);
+        // canvas.drawText("FPS=" + fps, 570, 60, paintInfo);
+        // canvas.drawText("P/sec=" + pssString ,570, 90, paintInfo);
+        // canvas.drawText("Cow Num=" + displayData.getCowList().size() ,570,
+        // 120, paintInfo);
 
     }
 
@@ -370,16 +370,15 @@ public class GameView extends View {
             touchScreen = false;
         }
 
-        ///////////////////////// bobuway ////////////////////
-        if(event.getAction() == MotionEvent.ACTION_UP && x > 750 && y > 430){
-            Log.e("","debug_addcow");
+        // /////////////////////// bobuway ////////////////////
+        if (event.getAction() == MotionEvent.ACTION_UP && x > 750 && y > 430) {
+            Log.e("", "debug_addcow");
             CowDisplay.debug_addCow();
-        }
-        else if(event.getAction() == MotionEvent.ACTION_UP &&  x < 50 && y > 430){
-            Log.e("","debug_deletecow");
+        } else if (event.getAction() == MotionEvent.ACTION_UP && x < 50 && y > 430) {
+            Log.e("", "debug_deletecow");
             CowDisplay.debug_deleteCow();
         }
-        //////////////////////////////////////////////////////
+        // ////////////////////////////////////////////////////
 
         this.x = x;
         this.y = y;
