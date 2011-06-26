@@ -127,10 +127,10 @@ public class CheeseParameter {// have display light type
         public static final float TimeCrisis = 0.8F;
 
         // for poison cheese and its contact infection
-        public static final float DamageTiny = 3.2F;
-        public static final float DamageSmall = 3.7F;
-        public static final float DamageMed = 4.5F;
-        public static final float DamageLarge = 5.5F;
+        public static final float DamageTiny = 1.1F;
+        public static final float DamageSmall = 1.4F;
+        public static final float DamageMed = 1.7F;
+        public static final float DamageLarge = 2.0F;
         public static final float RangeTiny = 200F;
         public static final float RangeSmall = 250F;
         public static final float RangeMed = 350F;

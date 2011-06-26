@@ -46,8 +46,10 @@ public class CowDisplay {
         Resources r = GameView.r;
         ToRightCowBitmap = BitmapFactory.decodeResource(r, R.drawable.cowright);
         ToLeftCowBitmap = BitmapFactory.decodeResource(r, R.drawable.cowleft);
-        ToRightCowBitmap_p = BitmapFactory.decodeResource(r, R.drawable.cowright_poison);
-        ToLeftCowBitmap_p = BitmapFactory.decodeResource(r, R.drawable.cowleft_poison);
+        ToRightCowBitmap_p = BitmapFactory.decodeResource(r, R.drawable.cowright);
+        ToLeftCowBitmap_p = BitmapFactory.decodeResource(r, R.drawable.cowleft);
+//        ToRightCowBitmap_p = BitmapFactory.decodeResource(r, R.drawable.cowright_poison);
+//        ToLeftCowBitmap_p = BitmapFactory.decodeResource(r, R.drawable.cowleft_poison);
     }
 
     static public void initialGameView(GameView gameView) {

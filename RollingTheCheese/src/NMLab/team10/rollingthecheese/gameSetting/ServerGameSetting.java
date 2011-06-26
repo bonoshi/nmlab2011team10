@@ -11,8 +11,6 @@ public class ServerGameSetting {
 
     public ServerGameSetting() {
         rightCowList.add(new Cow());
-        rightCowList.add(new Cow());
-        leftCowList.add(new Cow());
         leftCowList.add(new Cow());
     }
 

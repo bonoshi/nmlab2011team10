@@ -1,7 +1,9 @@
 package NMLab.team10.rollingthecheese;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -11,12 +13,17 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 public class EntranceView extends View{
     RollingCheeseActivity father;
     EntranceDrawThread entranceDrawThread;
+
+    boolean isContent = false;//to indicate it is now the content view
 
     public void setPause(boolean pause){
         entranceDrawThread.setPause(pause);
@@ -144,11 +151,11 @@ public class EntranceView extends View{
         canvas.drawBitmap(staticBackgroundBitmap , 0, 0, null);
 
         if(state == S_12){
-           if(!firstPressing) 
+           if(!firstPressing)
                canvas.drawText(firstString, firstX, firstY, paint1);
            else canvas.drawText(firstString, firstX, firstY, paint2);
         }else {
-            if(!firstPressing) 
+            if(!firstPressing)
                 canvas.drawText(firstString, firstX+20, firstY, paint1);
             else canvas.drawText(firstString, firstX+20, firstY, paint2);
         }
@@ -219,6 +226,10 @@ public class EntranceView extends View{
         return true;
     }
 
+    public void back(){
+        this.handleButton(backButton);
+    }
+
     public void handleButton(int b){
         switch(b){
             case BUT_SINGLE:
@@ -231,9 +242,31 @@ public class EntranceView extends View{
                 break;
             case BUT_GROUP:
                 break;
-            case BUT_EASY:
-            case BUT_NORMAL:
-            case BUT_HARD:
+            case BUT_EASY:{
+                father.ToastMessage.addMessage("Easy");
+                father.ToastMessage.display();
+//                Toast test = Toast.makeText(father, "Test\nTest", 0);
+//                test.setGravity(Gravity.CENTER, 0, 0);
+//                test.show();
+                break;
+            }
+            case BUT_NORMAL:{
+                //father.ToastMessage.addMessage("Normal");
+                //father.ToastMessage.display();
+                father.ToastMessage.cancel();
+//                Toast test = Toast.makeText(father, "Test\nTest", 0);
+//                test.setGravity(Gravity.CENTER, 100, 100);
+//                test.show();
+                break;
+            }
+            case BUT_HARD:{
+                father.ToastMessage.addMessage("Hard");
+                father.ToastMessage.display();
+//                Toast test = Toast.makeText(father, "Test\nTest", 0);
+//                test.setGravity(Gravity.CENTER, 200, 200);
+//                test.show();
+                break;
+            }
             case BUT_CRAZY:
                 father.myHandler.sendEmptyMessage(InterThreadMsg.serverStartGameView);
                 break;
@@ -248,8 +281,24 @@ public class EntranceView extends View{
                     gotoState(S_12);
                 }
                 else if(state == S_12){
-                    Log.e("entranceView","user LEAVE game");
-                    father.myHandler.sendEmptyMessage(InterThreadMsg.endGame);
+                    new AlertDialog.Builder(father)
+                    .setMessage("Are you sure to leave?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                    {
+                      public void onClick(DialogInterface dialog, int whichButton)
+                      {
+                        Log.e("entranceView","user LEAVE game");
+                        father.myHandler.sendEmptyMessage(InterThreadMsg.endGame);
+                      }
+                    }
+                    )
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Do nothing
+                        }
+                    })
+                    .show();
                 }
                 break;
             case BUT_EMPTY:

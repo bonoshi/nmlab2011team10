@@ -18,6 +18,7 @@ import NMLab.team10.rollingthecheese.gameSetting.Farm;
 import NMLab.team10.rollingthecheese.gameSetting.House;
 import NMLab.team10.rollingthecheese.gameSetting.ServerGameSetting;
 import NMLab.team10.rollingthecheese.gameSetting.SynMessageData;
+import NMLab.team10.rollingthecheese.gameSetting.ToastMessageThread;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,8 +35,13 @@ public class RollingCheeseActivity extends Activity {
     static final int REQUEST_CONNECT_DEVICE = 0;
     static final int REQUEST_ENABLE_BT = 1;
 
+    static final int ENTRANCE_VIEW = 0;
+    static final int GAME_VIEW = 1;
+
     public String mConnectedDeviceName;
 
+    public int viewState = ENTRANCE_VIEW;// indicate the current view
+                                         // to respond to onBackPressed()
 
     // private boolean isLeft = false;// when two player
     private boolean isTwoPlayer = true;
@@ -56,6 +62,7 @@ public class RollingCheeseActivity extends Activity {
     private DisplayData displayData = new DisplayData();
     public EventQueueCenter clientEventQueue = null;
     public RandomSoundGenerator randomSoundGenerator;
+    public ToastMessageThread ToastMessage = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -68,8 +75,25 @@ public class RollingCheeseActivity extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         entranceView = new EntranceView(this);
+        entranceView.isContent = true;
         gameView = new GameView(this);
         setContentView(entranceView);
+        ToastMessage = new ToastMessageThread(this, 200);
+        ToastMessage.start();
+    }
+
+    @Override
+    public void onBackPressed() {
+        switch (viewState) {
+            case ENTRANCE_VIEW: {
+                entranceView.back();
+                break;
+            }
+            case GAME_VIEW: {
+                break;
+            }
+        }
+        return;
     }
 
     @Override
@@ -93,10 +117,11 @@ public class RollingCheeseActivity extends Activity {
     public void onDestroy() {
         super.onDestroy();
         SoundController.cancelAllMusic();
-//        if (mBluetoothService != null)
-//            mBluetoothService.stop();
+        // if (mBluetoothService != null)
+        // mBluetoothService.stop();
     }
-    public void onPause(){
+
+    public void onPause() {
         super.onPause();
         SoundController.cancelAllMusic();
     }
@@ -118,8 +143,7 @@ public class RollingCheeseActivity extends Activity {
         menu.add(0, MENU_Send, 0, "Send");
         // menu.add(0, MENU_PAUSE, 0, R.string.menu_pause);
         // menu.add(0, MENU_RESUME, 0, R.string.menu_resume);
-
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     private Socket clientSocket = null;
@@ -274,7 +298,7 @@ public class RollingCheeseActivity extends Activity {
         }
     }
 
-    public void refreshDisplayData(SynMessageData smd){
+    public void refreshDisplayData(SynMessageData smd) {
         displayData.refresh(smd);
     }
 
@@ -320,7 +344,7 @@ public class RollingCheeseActivity extends Activity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case InterThreadMsg.serverStartGameView:
-                    isTwoPlayer=false;
+                    isTwoPlayer = false;
                     myHandler.sendEmptyMessage(InterThreadMsg.startGameView);
                     break;
                 case InterThreadMsg.startGameView:
@@ -336,7 +360,7 @@ public class RollingCheeseActivity extends Activity {
                         ServerGameSetting sgs = new ServerGameSetting();
                         gameCalThread = new GameCalThread(rca, sgs);
 
-//                        displayData = gameCalThread.getDisplayData();
+                        // displayData = gameCalThread.getDisplayData();
                         gameCalThread.start();
                         gameCalThread.resumeGameCal();
                         gameView.initialOnePlayer();
@@ -349,8 +373,7 @@ public class RollingCheeseActivity extends Activity {
                     randomSoundGenerator.start();
                     break;
                 case InterThreadMsg.endGame:
-                    Toast.makeText(getApplicationContext(),
-                            "Application is terminating ...",
+                    Toast.makeText(getApplicationContext(), "Application is terminating ...",
                             Toast.LENGTH_SHORT).show();
                     try {
                         Thread.sleep(2000);
@@ -361,6 +384,16 @@ public class RollingCheeseActivity extends Activity {
                     break;
                 case InterThreadMsg.connect:
                     break;
+                case InterThreadMsg.ToastDisplay: {
+//                    gameToastMessage = Toast.makeText(RollingCheeseActivity.this, (String) msg.obj,
+//                            Toast.LENGTH_SHORT);
+//                    gameToastMessage.show();
+                    break;
+                }
+                case InterThreadMsg.ToastClose: {
+//                    gameToastMessage.cancel();
+                    break;
+                }
             }
         }
 

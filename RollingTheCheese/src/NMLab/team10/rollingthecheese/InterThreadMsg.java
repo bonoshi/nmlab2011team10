@@ -16,4 +16,6 @@ public class InterThreadMsg {
     static public final int serverStartGameView = 10;
     static public final int endGame = 11;
     static public final int connect = 12;
+    static public final int ToastDisplay = 13;
+    static public final int ToastClose = 14;
 }
