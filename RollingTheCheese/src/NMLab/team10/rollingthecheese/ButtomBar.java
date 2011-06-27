@@ -1,5 +1,7 @@
 package NMLab.team10.rollingthecheese;
 
+import java.io.IOException;
+
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
 import NMLab.team10.rollingthecheese.event.EventEnum;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
@@ -287,7 +289,12 @@ public class ButtomBar {
             isTouch = true;
         }
         if (ButContCan.onTouch(event)) {
-            eqc.addEvent(EventEnum.CancelCheese);
+            try {
+                eqc.addEvent(EventEnum.CancelCheese);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             isTouch = true;
         }
 

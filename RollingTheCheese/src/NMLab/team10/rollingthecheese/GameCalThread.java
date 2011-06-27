@@ -1,8 +1,11 @@
 package NMLab.team10.rollingthecheese;
 
+import java.io.IOException;
 import java.util.Date;
 
+import NMLab.team10.rollingthecheese.event.EventEnum;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
+import NMLab.team10.rollingthecheese.gameSetting.AppMessage;
 import NMLab.team10.rollingthecheese.gameSetting.GlobalParameter;
 import NMLab.team10.rollingthecheese.gameSetting.ServerGameSetting;
 import NMLab.team10.rollingthecheese.gameSetting.SynMessageData;
@@ -14,6 +17,7 @@ public class GameCalThread extends Thread {
 
     private EventQueueCenter eventCenter = null;
     private SynMessageData synMessageData = null;// need to inspect if "null"
+    private SynMessageData clientSMD = null;
 
     private boolean pause = true;
     private boolean stop = false;
@@ -24,7 +28,12 @@ public class GameCalThread extends Thread {
         this.father = father;
         this.setting = sgs;
         eventCenter = new EventQueueCenter(sgs,father);
-        synMessageData = new SynMessageData(sgs, eventCenter, Right);
+        synMessageData = new SynMessageData(sgs, eventCenter, Left);
+        clientSMD = new SynMessageData(sgs, eventCenter, Right);
+    }
+
+    public void sendEvent(byte event){
+        eventCenter.addEvent(event, Right);
     }
 
     Date timeLast = null;
@@ -56,13 +65,22 @@ public class GameCalThread extends Thread {
             // local game display
             synMessageData = new SynMessageData(setting, eventCenter, Left);
             if(father.isTwoPlayer()){
-//                if(father.isServer){
-//                    //refresh displayData in father
-//                    //send data
-//                }
-            }else{
-                father.refreshDisplayData(synMessageData);
+                clientSMD = new SynMessageData(setting, eventCenter, Right);
+                AppMessage am = new AppMessage();
+                am.setType(EventEnum.Data);
+                am.setSmd(clientSMD);
+                try {
+//                    Toast toast = Toast.makeText(father, "Try to send", Toast.LENGTH_SHORT);
+//                    toast.show();
+                    father.sendMessage(am);
+                    GameView.refreshPPS(true);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    father.myHandler.sendEmptyMessage(InterThreadMsg.ServerFailToSend);
+                    e.printStackTrace();
+                }
             }
+            father.refreshDisplayData(synMessageData);
 
             // Step 3: fetch construction event
             eventCenter.fetchCons();

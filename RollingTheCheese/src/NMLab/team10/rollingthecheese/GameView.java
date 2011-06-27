@@ -74,8 +74,14 @@ public class GameView extends View {
         hasBeenInit = true;
     }
 
-    public void initialTwoPlayer() {
-        //should be modified for client and server
+    public void initialServer() {
+        buttomBar = new ButtomBar(father, father.gameCalThread.getEventCenter(), father.getDisplayData());
+        displayData = father.getDisplayData();
+        CowDisplay.initialGameView(this);
+        hasBeenInit = true;
+    }
+
+    public void initialClient() {
         buttomBar = new ButtomBar(father, new EventQueueCenter(father), father.getDisplayData());
         displayData = father.getDisplayData();
         CowDisplay.initialGameView(this);
@@ -217,7 +223,7 @@ public class GameView extends View {
         canvas.drawText("$" + Integer.toString(displayData.getMilk()), 670, 460, paintInfo);
         // canvas.drawText("Time=" + displayData.getTime(), 570, 30, paintInfo);
         // canvas.drawText("FPS=" + fps, 570, 60, paintInfo);
-        // canvas.drawText("P/sec=" + pssString ,570, 90, paintInfo);
+        canvas.drawText("P/sec=" + pssString ,570, 90, paintInfo);
         // canvas.drawText("Cow Num=" + displayData.getCowList().size() ,570,
         // 120, paintInfo);
 

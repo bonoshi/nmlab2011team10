@@ -1,5 +1,6 @@
 package NMLab.team10.rollingthecheese;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,19 +33,19 @@ public class ListContFourButtom {
     private static final int buttom2y2 = 275;
     private static final int buttomH = 85;
     private EventQueueCenter eqc;
-    
+
     public ListContFourButtom(int startX, Bitmap listBitmap,EventQueueCenter eqc,Byte event1,Byte event2,Byte event3, Byte event4){
         //initial state
         status = CLOSE;
         statusQueue = CLOSE;
         frame = 0;
-        
+
         //initial data members
         this.startX = startX;
         this.dest =  new Rect(startX, 0, startX + buttomListW, buttomListH);
         this.buttomListBitmap = listBitmap;
         this.eqc = eqc;
-        
+
         //initial buttoms
         buttoms = new ArrayList<Rect>();
         buttom_function = new HashMap<Rect, Byte>();
@@ -61,7 +62,7 @@ public class ListContFourButtom {
         buttoms.add(rect);
         buttom_function.put(rect, event4);
     }
-    
+
     public void draw(Canvas canvas){
         Rect src = new Rect(0,0,1,1);//dummy
 
@@ -136,23 +137,28 @@ public class ListContFourButtom {
                 break;
         }
     }
-    
+
     public boolean isOpen(){
         return status == OPEN;
     }
 
-    
+
     public boolean onTouch(MotionEvent event){
         int x = (int)event.getX();
         int y = (int)event.getY();
         Rect touchArea = new Rect(startX+10,buttomH,startX+290, buttomListH);
-        Rect buttomArea = new Rect(startX+150-55,0,startX+150+55,buttomH);       
-        if(buttomArea.contains(x,y))return false;       
+        Rect buttomArea = new Rect(startX+150-55,0,startX+150+55,buttomH);
+        if(buttomArea.contains(x,y))return false;
         if(touchArea.contains(x, y)){
             if(status == OPEN){
                 for (Rect r : buttoms) {
                     if(r.contains(x,y)){
-                        eqc.addEvent(buttom_function.get(r));
+                        try {
+                            eqc.addEvent(buttom_function.get(r));
+                        } catch (IOException e) {
+                            // nothing to do!!
+                            e.printStackTrace();
+                        }
                         return true;
                     }
                 }
@@ -168,6 +174,6 @@ public class ListContFourButtom {
             }
         }
         return true;
-    } 
+    }
 }
 

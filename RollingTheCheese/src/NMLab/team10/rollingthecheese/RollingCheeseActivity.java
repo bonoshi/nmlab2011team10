@@ -5,9 +5,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OptionalDataException;
 import java.io.StreamCorruptedException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 import NMLab.team10.rollingthecheese.displayData.CheeseDisplay;
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
@@ -19,6 +22,8 @@ import NMLab.team10.rollingthecheese.gameSetting.House;
 import NMLab.team10.rollingthecheese.gameSetting.ServerGameSetting;
 import NMLab.team10.rollingthecheese.gameSetting.SynMessageData;
 import NMLab.team10.rollingthecheese.gameSetting.ToastMessageThread;
+import NMLab.team10.rollingthecheese.gameSetting.cZipFactory;
+import NMLab.team10.rollingthecheese.gameSetting.cZipObject;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,7 +49,8 @@ public class RollingCheeseActivity extends Activity {
                                          // to respond to onBackPressed()
 
     // private boolean isLeft = false;// when two player
-    private boolean isTwoPlayer = true;
+    private boolean isTwoPlayer = true;// be careful to maintain
+    private boolean isClient = true;// be careful to maintain
 
     private static final int MENU_Exit = 0;
     private static final int MENU_InitClient = 1;
@@ -53,6 +59,8 @@ public class RollingCheeseActivity extends Activity {
     public GameView gameView;
     public EntranceView entranceView;
 
+    ServerSocket server = null;
+
     public House leftHouse, rightHouse;
     public Farm leftFarm, rightFarm;
     public ArrayList<CheeseDisplay> leftCheeseDisplays;
@@ -60,9 +68,12 @@ public class RollingCheeseActivity extends Activity {
 
     public GameCalThread gameCalThread = null;
     private DisplayData displayData = new DisplayData();
-    public EventQueueCenter clientEventQueue = null;
     public RandomSoundGenerator randomSoundGenerator;
     public ToastMessageThread ToastMessage = null;
+
+    private ServerThread serverThread = null;
+
+    private static final String TAG = "ClientError";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,84 +157,14 @@ public class RollingCheeseActivity extends Activity {
         return super.onCreateOptionsMenu(menu);
     }
 
-    private Socket clientSocket = null;
+    private Socket socket = null;
     private ObjectOutputStream oos = null;
     private ObjectInputStream ois = null;
 
-    private void initClient() {
-        try {
-            this.clientSocket = new Socket("140.112.18.208", 5566);
-        } catch (UnknownHostException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        try {
-            oos = new ObjectOutputStream(clientSocket.getOutputStream());
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        try {
-            oos.flush();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        try {
-            ois = new ObjectInputStream(clientSocket.getInputStream());
-        } catch (StreamCorruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        isTwoPlayer = true;
-        myHandler.sendEmptyMessage(InterThreadMsg.startGameView);
-    }
-
-    private void send() {
-        Byte init = 20;
-        try {
-            oos.writeObject(init);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        // System.out.println("Cliemt Send = " + init);
-        Log.e(TAG, "Client send = " + Byte.toString(init));
-        Byte result = 0;
-        try {
-            result = (Byte) ois.readObject();
-        } catch (OptionalDataException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        Log.e(TAG, "Client receive = " + Byte.toString(result));
-        // System.out.println("Cliemt Receive = " + result);
-    }
-
-    class SynSending {
-
-    }
-
-    SynSending synSending = new SynSending();
-
-    public void sendEvent(Byte event) {
-        synchronized (synSending) {
+    private void closeSocket() {
+        if (socket != null && !socket.isClosed()) {
             try {
-                oos.writeObject(event);
+                socket.close();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
@@ -231,10 +172,29 @@ public class RollingCheeseActivity extends Activity {
         }
     }
 
-    RefreshDisplayThread refreshDisplayThread = new RefreshDisplayThread();
+    class SynSending {
 
-    class RefreshDisplayThread extends Thread {
-        public RefreshDisplayThread() {
+    }
+
+    cZipFactory ZipFactory = new cZipFactory(java.util.zip.Deflater.BEST_COMPRESSION);
+
+    SynSending synSending = new SynSending();
+
+    public void sendMessage(AppMessage message) throws IOException {
+        synchronized (synSending) {
+            oos.reset();
+            synchronized (ZipFactory) {
+                cZipObject czo = ZipFactory.Compress(message);
+                oos.writeObject(czo);
+            }
+            oos.flush();
+        }
+    }
+
+    ReceiveThread receiveThread = null;
+
+    class ReceiveThread extends Thread {
+        public ReceiveThread() {
         }
 
         private boolean running = true;
@@ -266,7 +226,7 @@ public class RollingCheeseActivity extends Activity {
                 Object o = null;
 
                 try {
-                    Log.e("bonoshi", Integer.toString(ois.available()));
+                    //Log.e("bonoshi", Integer.toString(ois.available()));
                     o = ois.readObject();
                 } catch (OptionalDataException e) {
                     // TODO Auto-generated catch block
@@ -281,8 +241,31 @@ public class RollingCheeseActivity extends Activity {
 
                 if (o != null) {
                     try {
-                        AppMessage am = (AppMessage) o;
-                        giveData(am);
+                        AppMessage am = (AppMessage) ZipFactory.Decompress((cZipObject) o);
+                        byte type = am.getType();
+                        if(type <= EventEnum.DestEnd){
+                            gameCalThread.sendEvent(type);
+                        }else{
+                            switch (type){
+                                case EventEnum.Jump:{
+                                     break;
+                                }
+                                case EventEnum.Pause:{
+                                    break;
+                                }
+                                case EventEnum.Surrender:{
+                                    break;
+                                }
+                                case EventEnum.Restart:{
+                                    break;
+                                }
+                                case EventEnum.Data:{
+                                    refreshDisplayData(am.getSmd());
+                                    GameView.refreshPPS(false);
+                                    break;
+                                }
+                            }
+                        }
                     } catch (Exception e) {
                         // TODO: handle exception
                     }
@@ -290,13 +273,8 @@ public class RollingCheeseActivity extends Activity {
 
             }
         }
-
-        private void giveData(AppMessage am) {
-            if (am.getType() == EventEnum.Data) {
-                refreshDisplayData(am.getSmd());
-            }
-        }
     }
+
 
     public void refreshDisplayData(SynMessageData smd) {
         displayData.refresh(smd);
@@ -310,8 +288,6 @@ public class RollingCheeseActivity extends Activity {
         this.displayData = displayData;
     }
 
-    private static final String TAG = "ClientError";
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -319,14 +295,13 @@ public class RollingCheeseActivity extends Activity {
             // mAnimationThread.clearSprites();
             // return true;
             case MENU_Exit:
-
                 finish();
                 return true;
             case MENU_InitClient:
                 initClient();
                 return true;
             case MENU_Send:
-                send();
+                //send();
                 return true;
                 // case MENU_PAUSE:
                 // mAnimationThread.pause();
@@ -338,40 +313,126 @@ public class RollingCheeseActivity extends Activity {
         return false;
     }
 
+    public void stopGameCalThread() {
+        if (gameCalThread != null) {
+            gameCalThread.stopGameCal();
+            gameCalThread = null;
+        }
+    }
+
+    ServerGameSetting sgs = null;
+
     public Handler myHandler = new Handler() {
         RollingCheeseActivity rca = RollingCheeseActivity.this;
 
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case InterThreadMsg.serverStartGameView:
+                case InterThreadMsg.startCrazyGame:
                     isTwoPlayer = false;
-                    myHandler.sendEmptyMessage(InterThreadMsg.startGameView);
-                    break;
-                case InterThreadMsg.startGameView:
-                    if (isTwoPlayer) {
-                        clientEventQueue = new EventQueueCenter(rca);
-                        gameView.initialTwoPlayer();
-                        refreshDisplayThread.start();
-                    } else {
-                        if (gameCalThread != null) {
-                            gameCalThread.stopGameCal();
-                            gameCalThread = null;
-                        }
-                        ServerGameSetting sgs = new ServerGameSetting();
-                        gameCalThread = new GameCalThread(rca, sgs);
 
-                        // displayData = gameCalThread.getDisplayData();
-                        gameCalThread.start();
-                        gameCalThread.resumeGameCal();
-                        gameView.initialOnePlayer();
-                    }
+                    stopGameCalThread();
+
+                    sgs = new ServerGameSetting();
+                    gameCalThread = new GameCalThread(rca, sgs);
+
+                    // displayData = gameCalThread.getDisplayData();
+                    gameCalThread.start();
+                    gameCalThread.resumeGameCal();
+                    // will only draw after initialization
+                    // used before drawing
+                    gameView.initialOnePlayer();
+
                     entranceView.setPause(true);
                     gameView.startDrawThread();
+
                     setContentView(gameView);
                     SoundController.playBackground(SoundController.BACKGROUND2);
                     randomSoundGenerator = new RandomSoundGenerator();
                     randomSoundGenerator.start();
                     break;
+                case InterThreadMsg.clientConnect: {
+                    Toast toast = Toast.makeText(rca, "Client Connect", Toast.LENGTH_SHORT);
+                    toast.show();
+                    closeSocket();
+                    initClient();
+                    break;
+                }
+                case InterThreadMsg.connectSuccess: {// a waiting view
+                    Toast toast = Toast.makeText(rca, "Client Connect Success", Toast.LENGTH_SHORT);
+                    toast.show();
+                    isTwoPlayer = true;
+                    isClient = true;
+                    gameView.initialClient();
+
+                    receiveThread = new ReceiveThread();
+                    receiveThread.start();
+
+                    entranceView.setPause(true);
+                    gameView.startDrawThread();
+
+                    setContentView(gameView);
+                    SoundController.playBackground(SoundController.BACKGROUND2);
+                    randomSoundGenerator = new RandomSoundGenerator();
+                    randomSoundGenerator.start();
+                    break;
+                }
+                case InterThreadMsg.connectFail: {
+                    break;
+                }
+                case InterThreadMsg.serverWait: {
+                    String ip = "";
+                    try {
+                        ip = InetAddress.getLocalHost().getHostAddress();
+                    } catch (UnknownHostException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                    Toast toast = Toast.makeText(rca, "Server Wait at " + ip, Toast.LENGTH_SHORT);
+                    toast.show();
+                    ServerSocket ss = null;
+                    try {
+                        ss = new ServerSocket(5566);
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                    serverThread = new ServerThread(ss);
+                    serverThread.start();
+                    break;
+                }
+                case InterThreadMsg.waitSuccess: {
+                    Toast toast = Toast.makeText(rca, "Server Wait Success", Toast.LENGTH_SHORT);
+                    toast.show();
+                    isTwoPlayer = true;
+                    isClient = false;
+
+                    sgs = new ServerGameSetting();
+                    //before receiveThread to make sure eventqueue is ready to accept data
+                    gameCalThread = new GameCalThread(RollingCheeseActivity.this, sgs);
+
+                    //start to accept event from client
+                    receiveThread = new ReceiveThread();
+                    receiveThread.start();
+
+                    gameCalThread.start();
+                    gameCalThread.resumeGameCal();
+
+                    // will only draw after initialization
+                    // used before drawing
+                    gameView.initialServer();
+
+                    entranceView.setPause(true);
+                    gameView.startDrawThread();
+
+                    setContentView(gameView);
+                    SoundController.playBackground(SoundController.BACKGROUND2);
+                    randomSoundGenerator = new RandomSoundGenerator();
+                    randomSoundGenerator.start();
+                    break;
+                }
+                case InterThreadMsg.waitExceed: {
+                    break;
+                }
                 case InterThreadMsg.endGame:
                     Toast.makeText(getApplicationContext(), "Application is terminating ...",
                             Toast.LENGTH_SHORT).show();
@@ -382,16 +443,36 @@ public class RollingCheeseActivity extends Activity {
                     }
                     finish();
                     break;
-                case InterThreadMsg.connect:
-                    break;
                 case InterThreadMsg.ToastDisplay: {
-//                    gameToastMessage = Toast.makeText(RollingCheeseActivity.this, (String) msg.obj,
-//                            Toast.LENGTH_SHORT);
-//                    gameToastMessage.show();
+                    // gameToastMessage =
+                    // Toast.makeText(RollingCheeseActivity.this, (String)
+                    // msg.obj,
+                    // Toast.LENGTH_SHORT);
+                    // gameToastMessage.show();
                     break;
                 }
                 case InterThreadMsg.ToastClose: {
-//                    gameToastMessage.cancel();
+                    // gameToastMessage.cancel();
+                    break;
+                }
+                case InterThreadMsg.ServerFailToSend:{
+                    Toast toast = Toast.makeText(rca, "Fail to send", Toast.LENGTH_SHORT);
+                    toast.show();
+                    break;
+                }
+                case InterThreadMsg.OptionalDataException:{
+                    Toast toast = Toast.makeText(RollingCheeseActivity.this, "OptionalDataException", Toast.LENGTH_SHORT);
+                    toast.show();
+                    break;
+                }
+                case InterThreadMsg.ClassNotFoundException:{
+                    Toast toast = Toast.makeText(RollingCheeseActivity.this, "ClassNotFoundException", Toast.LENGTH_SHORT);
+                    toast.show();
+                    break;
+                }
+                case InterThreadMsg.IOException:{
+                    Toast toast = Toast.makeText(RollingCheeseActivity.this, "IOException", Toast.LENGTH_SHORT);
+                    toast.show();
                     break;
                 }
             }
@@ -406,4 +487,90 @@ public class RollingCheeseActivity extends Activity {
     public boolean isTwoPlayer() {
         return isTwoPlayer;
     }
+
+    public void setClient(boolean isClient) {
+        this.isClient = isClient;
+    }
+
+    public boolean isClient() {
+        return isClient;
+    }
+
+    class ServerThread extends Thread {
+
+        ServerSocket server = null;
+        public boolean isConnected = false;
+        public boolean isClosed = false;
+
+        public ServerThread(ServerSocket serverSocket) {
+            this.server = serverSocket;
+        }
+
+        public void closeServer() {
+            if (server != null && !server.isClosed()) {
+                try {
+                    server.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        @Override
+        public void run() {
+
+            try {
+                socket = server.accept();
+                oos = new ObjectOutputStream(socket.getOutputStream());
+                oos.flush();
+                ois = new ObjectInputStream(socket.getInputStream());
+            } catch (StreamCorruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                if(isClosed){
+                    //bonoshi: notify you close
+                }else{
+                    //bonoshi: notify accidental close
+                }
+                return;
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                if(isClosed){
+                    //bonoshi: notify you close
+                }else{
+                    //bonoshi: notify accidental close
+                }
+                return;
+            }
+
+            myHandler.sendEmptyMessage(InterThreadMsg.waitSuccess);
+
+        }
+    }
+
+    private void initClient() {
+        try {
+            this.socket = new Socket("192.168.1.1", 5566);
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            oos.flush();
+            ois = new ObjectInputStream(socket.getInputStream());
+        } catch (UnknownHostException e) {
+            // TODO Auto-generated catch block
+            //bonoshi: notify accidental failure
+            e.printStackTrace();
+            return;
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            //bonoshi: notify accidental failure
+            e.printStackTrace();
+            return;
+        }
+
+        isTwoPlayer = true;
+        myHandler.sendEmptyMessage(InterThreadMsg.connectSuccess);
+    }
+
+
 }

@@ -1,9 +1,11 @@
 package NMLab.team10.rollingthecheese.event;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 
 import NMLab.team10.rollingthecheese.RollingCheeseActivity;
+import NMLab.team10.rollingthecheese.gameSetting.AppMessage;
 import NMLab.team10.rollingthecheese.gameSetting.Cheese;
 import NMLab.team10.rollingthecheese.gameSetting.CheeseParameter;
 import NMLab.team10.rollingthecheese.gameSetting.Cow;
@@ -18,18 +20,26 @@ import NMLab.team10.rollingthecheese.gameSetting.ServerGameSetting;
 
 public class EventQueueCenter {
 
+    static public final int ONEPLAYER = 0;
+    static public final int TWOPLAYER_CLIENT = 1;
+    static public final int TWOPLAYER_SERVER = 2;
+
     public EventQueueCenter(ServerGameSetting s, RollingCheeseActivity father) {
+        //for the server side of two player game or for only one player
         this.setting = s;
         this.father = father;
-        this.isTwoPlayer = false;
+        this.isTwoPlayer = father.isTwoPlayer();
+        this.isClient = father.isClient();
     }
 
     public EventQueueCenter(RollingCheeseActivity father) {
         this.father = father;
-        this.isTwoPlayer = true;
+        this.isTwoPlayer = father.isTwoPlayer();
+        this.isClient = father.isClient();
     }
 
-    public boolean isTwoPlayer;
+    private boolean isTwoPlayer;
+    private boolean isClient;
 
     RollingCheeseActivity father;
 
@@ -143,7 +153,7 @@ public class EventQueueCenter {
                     } else if ((event >= EventEnum.DestStart) && (event <= EventEnum.DestEnd)) {
                         triggerDest(event, whichSide);
 
-                    } else if (event == EventEnum.Quit) {
+                    } else if (event == EventEnum.Jump) {
                         // bonoshi: not yet complete
                     } else if (event == EventEnum.Pause) {
                         // bonoshi: not yet complete
@@ -555,13 +565,17 @@ public class EventQueueCenter {
         }
     }
 
-    public void addEvent(Byte i) {
+    public void addEvent(Byte i) throws IOException {
         if (isTwoPlayer) {
-            father.sendEvent(i);
-        } else {
-            synchronized (leftEventQueue) {
-                leftEventQueue.push(i);
+            if (isClient){
+                AppMessage am = new AppMessage();
+                am.setType(i);
+                father.sendMessage(am);
+            }else{
+                addEvent(i, Left);
             }
+        } else {
+            addEvent(i, Left);
         }
     }
 
@@ -730,6 +744,22 @@ public class EventQueueCenter {
 
     public EventQueue getRightConsQueue() {
         return rightConsQueue;
+    }
+
+    public void setTwoPlayer(boolean isTwoPlayer) {
+        this.isTwoPlayer = isTwoPlayer;
+    }
+
+    public boolean isTwoPlayer() {
+        return isTwoPlayer;
+    }
+
+    public void setClient(boolean isClient) {
+        this.isClient = isClient;
+    }
+
+    public boolean isClient() {
+        return isClient;
     }
 
     public static final boolean Right = false;

@@ -1,5 +1,6 @@
 package NMLab.team10.rollingthecheese;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -148,7 +149,12 @@ public class ListContTwoButtom {
 
                 for (Rect r : buttoms) {
                     if (r.contains(x, y)) {
-                        eqc.addEvent(buttom_function.get(r));
+                        try {
+                            eqc.addEvent(buttom_function.get(r));
+                        } catch (IOException e) {
+                            // nothing to do!!
+                            e.printStackTrace();
+                        }
                         return true;
                     }
                 }

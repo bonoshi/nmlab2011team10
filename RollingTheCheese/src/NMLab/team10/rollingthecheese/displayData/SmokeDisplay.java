@@ -21,8 +21,10 @@ public class SmokeDisplay {
         r = GameView.r;
         smokeWL = BitmapFactory.decodeResource(r, R.drawable.house_smoke_w_l).copy(Config.ARGB_8888, true);
         smokeWR = BitmapFactory.decodeResource(r, R.drawable.house_smoke_w_r).copy(Config.ARGB_8888, true);
-        smokeBL = BitmapFactory.decodeResource(r, R.drawable.house_smoke_b_l).copy(Config.ARGB_8888, true);
-        smokeBR = BitmapFactory.decodeResource(r, R.drawable.house_smoke_b_r).copy(Config.ARGB_8888, true);
+        smokeBL = BitmapFactory.decodeResource(r, R.drawable.house_smoke_w_l).copy(Config.ARGB_8888, true);
+        smokeBR = BitmapFactory.decodeResource(r, R.drawable.house_smoke_w_r).copy(Config.ARGB_8888, true);
+//        smokeBL = BitmapFactory.decodeResource(r, R.drawable.house_smoke_b_l).copy(Config.ARGB_8888, true);
+//        smokeBR = BitmapFactory.decodeResource(r, R.drawable.house_smoke_b_r).copy(Config.ARGB_8888, true);
         //for black at day
         //GameView.modifyRGBByRatio(smokeWL, 0.2F);
         //for black at night
