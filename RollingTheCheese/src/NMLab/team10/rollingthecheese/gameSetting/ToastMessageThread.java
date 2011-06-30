@@ -67,9 +67,9 @@ public class ToastMessageThread extends Thread {
                     else
                         string += (list.get(i).text);
                 }
-                Message msg = new Message();
-                msg.what = InterThreadMsg.ToastDisplay;
-                msg.obj = string;
+//                Message msg = new Message();
+//                msg.what = InterThreadMsg.ToastDisplay;
+//                msg.obj = string;
 //                father.myHandler.sendMessage(msg);
                 toast = Toast.makeText(father, string, Toast.LENGTH_SHORT);
                 toast.show();
