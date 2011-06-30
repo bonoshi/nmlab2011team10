@@ -20,26 +20,26 @@ public class Projector implements Serializable{
     private static final long serialVersionUID = 1161120424944559472L;
     private static Bitmap projectorBitmap[];
     private static Bitmap projectorBitmap_m[];
-    
-    
-    
+
+
+
     public static void initBitmap(){
         Resources r = GameView.r;
         projectorBitmap = new Bitmap[2];
         projectorBitmap[0] = BitmapFactory.decodeResource(r, R.drawable.wood_slide);
         projectorBitmap[1]= BitmapFactory.decodeResource(r, R.drawable.slider_2);
         projectorBitmap_m = new Bitmap[2];
-        
+
         float[] mirrorX = { -1,0,0,
                             0,1,0,
                             0,0,1
                             };
         Matrix matrix = new Matrix();
-        matrix.setValues(mirrorX);      
+        matrix.setValues(mirrorX);
         projectorBitmap_m[0] = Bitmap.createBitmap(projectorBitmap[0],0,0,projectorBitmap[0].getWidth(),projectorBitmap[0].getHeight(),matrix,false);
         projectorBitmap_m[1] = Bitmap.createBitmap(projectorBitmap[1],0,0,projectorBitmap[1].getWidth(),projectorBitmap[1].getHeight(),matrix,false);
     }
-    
+
     public Projector() {
         this.setType(Board);
     }
@@ -49,7 +49,8 @@ public class Projector implements Serializable{
             case Board:
                 return (ProjectorParameter.Board.exceedAmount(d, radix));
             default:// no use
-                return 0F;
+                return (ProjectorParameter.Slide.exceedAmount(d, radix));
+                //return 0F;
         }
     }
 
@@ -58,7 +59,8 @@ public class Projector implements Serializable{
             case Board:
                 return (ProjectorParameter.Board.getCheeseX(d, radix, whichSide));
             default:// no use
-                return 0F;
+                return (ProjectorParameter.Slide.getCheeseX(d, radix, whichSide));
+//                return 0F;
         }
     }
 
@@ -67,7 +69,8 @@ public class Projector implements Serializable{
             case Board:
                 return (ProjectorParameter.Board.getCheeseY(d, radix, whichSide));
             default:// no use
-                return 0F;
+                return (ProjectorParameter.Slide.getCheeseY(d, radix, whichSide));
+//                return 0F;
         }
     }
 
@@ -76,7 +79,8 @@ public class Projector implements Serializable{
             case Board:
                 return (ProjectorParameter.Board.getBattleCheeseX(d, radix, whichSide));
             default:// no use
-                return 0F;
+                return (ProjectorParameter.Slide.getBattleCheeseX(d, radix, whichSide));
+//                return 0F;
         }
     }
 
@@ -85,7 +89,8 @@ public class Projector implements Serializable{
             case Board:
                 return (ProjectorParameter.Board.getMaxPrepareD(radix));
             default:// no use
-                return 0F;
+                return (ProjectorParameter.Slide.getMaxPrepareD(radix));
+//                return 0F;
         }
     }
 
@@ -94,7 +99,8 @@ public class Projector implements Serializable{
             case Board:
                 return (ProjectorParameter.Board.getBattleBorderX(radix, whichSide));
             default:// no use
-                return 0F;
+                return (ProjectorParameter.Slide.getBattleBorderX(radix, whichSide));
+//                return 0F;
         }
     }
 
@@ -117,19 +123,19 @@ public class Projector implements Serializable{
     public void draw(boolean isLeft,Canvas canvas){
         if(isLeft){
             if(getType()==ProjectorEnum.Board)
-                canvas.drawBitmap(projectorBitmap[0], - 150, 275, null);
+                canvas.drawBitmap(projectorBitmap[0], - 150 + 100, 275, null);//100 is offset
             else {
-                canvas.drawBitmap(projectorBitmap[1], - 150, 275, null);
+                canvas.drawBitmap(projectorBitmap[1], - 150 + 100, 275, null);
             }
         }else{
             if(getType()==ProjectorEnum.Board)
-                canvas.drawBitmap(projectorBitmap_m[0], + 1470, 275, null);
+                canvas.drawBitmap(projectorBitmap_m[0], + 1470 - 100, 275, null);
             else {
-                canvas.drawBitmap(projectorBitmap_m[1], + 1470, 275, null);
+                canvas.drawBitmap(projectorBitmap_m[1], + 1470 - 100, 275, null);
             }
-            
+
         }
-        
+
     }
     public synchronized int getUpMilk() {
         switch (type) {

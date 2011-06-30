@@ -1,7 +1,7 @@
 package NMLab.team10.rollingthecheese;
 
 public class EntranceDrawThread extends Thread {
-    public boolean isRunning;
+    private boolean isRunning;
 
     private boolean isPause = false;
 
@@ -44,5 +44,9 @@ public class EntranceDrawThread extends Thread {
 
     public void setPause(boolean isPause) {
         this.isPause = isPause;
+    }
+
+    public void setRunning(boolean isRunning) {
+        this.isRunning = isRunning;
     }
 }

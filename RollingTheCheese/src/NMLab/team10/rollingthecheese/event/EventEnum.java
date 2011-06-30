@@ -57,9 +57,12 @@ public class EventEnum {
     public static final byte MilkLeak = 22;
     public static final byte DestEnd = 22;
     // other bidirectional message => bonoshi and occqoo will discuss later!
-    public static final byte Jump = 23;// leave the game intentionally
-    public static final byte Pause = 24;// ask to pause game
-    public static final byte Surrender = 25;// surrender directly
-    public static final byte Restart = 26;// ask to restart game
-    public static final byte Data = 27;//client receive data from server
+    public static final byte Data = 23;//client receive data from server
+    // during the game
+    public static final byte Jump = 24;// leave the game intentionally
+    public static final byte Pause = 25;// ask to pause game
+    public static final byte Surrender = 26;// surrender directly
+    public static final byte Restart = 27;// ask to restart game
+    public static final byte YouWin = 28;
+    public static final byte YouLost = 29;
 }

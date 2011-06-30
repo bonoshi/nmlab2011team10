@@ -135,8 +135,8 @@ public class DisplayData {
             HashMap<Short, CowDisplay> map) {
         synchronized (dList) {
             for (Iterator<CowDisplay> iterator = dList.iterator(); iterator.hasNext();) {
-                if (dList.size() == mList.size())
-                    return;
+//                if (dList.size() == mList.size())
+//                    return;
                 CowDisplay cowDisplay = (CowDisplay) iterator.next();
                 boolean notFound = true;
                 for (Iterator<CowMessage> iterator2 = mList.iterator(); iterator2.hasNext();) {
@@ -379,8 +379,13 @@ public class DisplayData {
     }
 
     public void drawHouse(Canvas canvas) {
-        leftHouse.draw(Cheese.Left, canvas);
-        rightHouse.draw(Cheese.Right, canvas);
+        leftHouse.drawHouse(Cheese.Left, canvas);
+        rightHouse.drawHouse(Cheese.Right, canvas);
+    }
+
+    public void drawStatus(Canvas canvas) {
+        leftHouse.drawStatus(Cheese.Left, canvas);
+        rightHouse.drawStatus(Cheese.Right, canvas);
     }
 
     public void drawFireLine(boolean whichSide, Canvas canvas) {

@@ -28,6 +28,10 @@ public class EntranceView extends View {
         entranceDrawThread.setPause(pause);
     }
 
+    public void setRunning(boolean running) {
+        entranceDrawThread.setRunning(running);
+    }
+
     /*
      * 畫(1) 靜態背景 (2) wait 按鈕 (3) conncet 按鈕 (4) quit 按鈕 (5) enter 按鈕 (6)
      * 某區域顯示目前是否已連線/連線機器名稱、address (7) disconnect 按鈕 (8) 動畫??
@@ -251,8 +255,8 @@ public class EntranceView extends View {
             case BUT_GROUP:
                 break;
             case BUT_EASY: {
-                father.ToastMessage.addMessage("Easy");
-                father.ToastMessage.display();
+                father.toastMessage.addMessage("Easy");
+                father.toastMessage.display();
                 // Toast test = Toast.makeText(father, "Test\nTest", 0);
                 // test.setGravity(Gravity.CENTER, 0, 0);
                 // test.show();
@@ -261,15 +265,15 @@ public class EntranceView extends View {
             case BUT_NORMAL: {
                 // father.ToastMessage.addMessage("Normal");
                 // father.ToastMessage.display();
-                father.ToastMessage.cancel();
+                father.toastMessage.cancel();
                 // Toast test = Toast.makeText(father, "Test\nTest", 0);
                 // test.setGravity(Gravity.CENTER, 100, 100);
                 // test.show();
                 break;
             }
             case BUT_HARD: {
-                father.ToastMessage.addMessage("Hard");
-                father.ToastMessage.display();
+                father.toastMessage.addMessage("Hard");
+                father.toastMessage.display();
                 // Toast test = Toast.makeText(father, "Test\nTest", 0);
                 // test.setGravity(Gravity.CENTER, 200, 200);
                 // test.show();

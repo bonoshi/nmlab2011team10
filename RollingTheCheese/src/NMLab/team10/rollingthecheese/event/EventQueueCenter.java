@@ -95,7 +95,7 @@ public class EventQueueCenter {
                             continue;
 
                         LinkedList<Cow> cowList = (whichSide) ? setting.getLeftCowList() : setting
-                            .getLeftCowList();
+                            .getRightCowList();
                         int cowNum = cowList.size();
                         if (cowNum >= CowParameter.MaxCow) {
                             continue;
@@ -270,7 +270,7 @@ public class EventQueueCenter {
                 if (cowQueue.getSize() > 0 && cowQueue.getWaitingTime() <= 0) {
                     popCowEvent(whichSide);
 
-                    Cow cow = new Cow();// bonoshi: need to initialize!!!!!!
+                    Cow cow = new Cow(whichSide);// bonoshi: need to initialize!!!!!!
                     if (whichSide) {
                         setting.getLeftCowList().add(cow);
                     } else {
@@ -471,14 +471,16 @@ public class EventQueueCenter {
     public void conductDest() {
         DestructState ds = null;
         for (int i = 0; i < 2; i++) {
-            ds = (i == 0) ? setting.getLeftDestruct() : setting.getRightDestruct();
+            boolean whichSide = (i == 0) ? true : false;
+            ds = (whichSide) ? setting.getLeftDestruct() : setting.getRightDestruct();
             if (ds.fenseTriggered && setting.isNight()) {
                 ds.fenseTriggered = false;
                 ds.fense = true;
                 ds.fenseCountDown = DestructParameter.FenseTime;
-                LinkedList<Cow> cowList = (i == 0) ? setting.getRightCowList() : setting.getLeftCowList();
+                LinkedList<Cow> cowList = (whichSide) ? setting.getRightCowList() : setting.getLeftCowList();
                 for (Iterator<Cow> iterator = cowList.iterator(); iterator.hasNext();) {
-                    iterator.next();
+                    Cow cow = iterator.next();
+                    Cow.cowDie(cow, whichSide);
                     iterator.remove();//only remove one
                     break;
                 }
@@ -502,7 +504,7 @@ public class EventQueueCenter {
                 ds.milkTriggered = false;
                 ds.milk = true;
                 ds.milkCountDown = DestructParameter.MilkTime;
-                LinkedList<Cow> cowList = (i == 0) ? setting.getRightCowList() : setting.getLeftCowList();
+                LinkedList<Cow> cowList = (whichSide) ? setting.getRightCowList() : setting.getLeftCowList();
                 for (int j = 0; j < cowList.size(); j++) {
                     Cow cow = cowList.get(j);
                     cow.setStatus(Cow.Leak);

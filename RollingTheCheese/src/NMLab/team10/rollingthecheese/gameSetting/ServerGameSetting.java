@@ -10,15 +10,16 @@ import NMLab.team10.rollingthecheese.byteEnum.MilkProdEnum;
 public class ServerGameSetting {
 
     public ServerGameSetting() {
-        rightCowList.add(new Cow());
-        leftCowList.add(new Cow());
+        Cow.initial();
+        rightCowList.add(new Cow(Right));
+        leftCowList.add(new Cow(Left));
     }
 
     // setting relating to global display
     // String leftName = "LeftName";
     // String rightName = "RightName";
-    private int time = 0;// current time of a day
-    private byte climate = ClimateEnum.Cloudy;
+    private int time = 25000;// current time of a day
+    private byte climate = ClimateEnum.Sunny;
     private byte background = BackGroundEnum.SpringFarm;
     private boolean isNight = false;
     // setting relating to players' properties. E.g., construction...

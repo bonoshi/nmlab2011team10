@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.RectF;
 import NMLab.team10.rollingthecheese.GameView;
 import NMLab.team10.rollingthecheese.R;
+import NMLab.team10.rollingthecheese.RollingCheeseActivity;
 import NMLab.team10.rollingthecheese.gameSetting.Cow;
 import NMLab.team10.rollingthecheese.gameSetting.CowMessage;
 
@@ -48,8 +49,10 @@ public class CowDisplay {
         ToLeftCowBitmap = BitmapFactory.decodeResource(r, R.drawable.cowleft);
         ToRightCowBitmap_p = BitmapFactory.decodeResource(r, R.drawable.cowright);
         ToLeftCowBitmap_p = BitmapFactory.decodeResource(r, R.drawable.cowleft);
-//        ToRightCowBitmap_p = BitmapFactory.decodeResource(r, R.drawable.cowright_poison);
-//        ToLeftCowBitmap_p = BitmapFactory.decodeResource(r, R.drawable.cowleft_poison);
+        // ToRightCowBitmap_p = BitmapFactory.decodeResource(r,
+        // R.drawable.cowright_poison);
+        // ToLeftCowBitmap_p = BitmapFactory.decodeResource(r,
+        // R.drawable.cowleft_poison);
     }
 
     static public void initialGameView(GameView gameView) {
@@ -112,9 +115,9 @@ public class CowDisplay {
 
     @SuppressWarnings("unchecked")
     static public void updateCowDisplay() {
-        leftCowList = (LinkedList<CowDisplay>) GameView.displayData.leftCowList.clone();
-        rightCowList = (LinkedList<CowDisplay>)GameView.displayData.rightCowList.clone();
-        numCowleft= leftCowList.size();
+        leftCowList = (LinkedList<CowDisplay>) RollingCheeseActivity.getDisplayData().leftCowList.clone();
+        rightCowList = (LinkedList<CowDisplay>) RollingCheeseActivity.getDisplayData().rightCowList.clone();
+        numCowleft = leftCowList.size();
         numCowright = rightCowList.size();
         // Log.e("CowDisplay",String.format("numCow = %d",numCow));
         sortCowListbyID();
@@ -184,34 +187,35 @@ public class CowDisplay {
                 }
             }
         } else {
-           RectF dest = new RectF((1600 - PosX) - COW_WIDTH/2 + offset,PosY-COW_HEIGHT/2,
-                    (1600 - PosX) + COW_WIDTH/2 + offset, PosY + COW_HEIGHT/2);
+            RectF dest = new RectF((1600 - PosX) - COW_WIDTH / 2 + offset, PosY - COW_HEIGHT / 2,
+                    (1600 - PosX) + COW_WIDTH / 2 + offset, PosY + COW_HEIGHT / 2);
 
-               if(velocityX < 0){
-                   if (isPoison) {
-                       canvas.drawBitmap(ToRightCowBitmap_p, null, dest, null);
-                   } else {
-                       canvas.drawBitmap(ToRightCowBitmap, null, dest, null);
-                   }
-               }else {
-                   if (isPoison) {
-                       canvas.drawBitmap(ToLeftCowBitmap_p, null, dest, null);
-                   } else {
-                       canvas.drawBitmap(ToLeftCowBitmap, null, dest, null);
-                   }
-               }
+            if (velocityX < 0) {
+                if (isPoison) {
+                    canvas.drawBitmap(ToRightCowBitmap_p, null, dest, null);
+                } else {
+                    canvas.drawBitmap(ToRightCowBitmap, null, dest, null);
+                }
+            } else {
+                if (isPoison) {
+                    canvas.drawBitmap(ToLeftCowBitmap_p, null, dest, null);
+                } else {
+                    canvas.drawBitmap(ToLeftCowBitmap, null, dest, null);
+                }
+            }
         }
     }
 
     public CowDisplay(CowMessage cm, boolean leftright) {
+        updateCowDisplay();
         this.setCowMessage(cm);
         velocityX = normalVelocityX;
         PosX = 100;
         int ID = cm.getID();
-        if(leftright == false)
-        PosY = normalPosY[Math.max(5, numCowleft + 1)][ID];
+        if (leftright)
+            PosY = normalPosY[Math.max(5, numCowleft + 1)][ID];// error: out of
         else
-            PosY = normalPosY[Math.max(5, numCowright+1)][ID];
+            PosY = normalPosY[Math.max(5, numCowright + 1)][ID];
         /* initialize Pos, velocity */
     }
 
@@ -228,26 +232,22 @@ public class CowDisplay {
     // //////////////////// bobuway /////////////////
     static Random random = new Random();
 
-    static public void debug_addCow(){
-        //SoundController.playSound(SoundController.EFF_COLLISION1,0);
-        /*boolean add = false;
-        if(rightCowList.size() >= 5) return;
-        while(!add){
-            short rr = (short)(random.nextInt(5));
-            boolean found = false;
-            for(int i = 0;i<rightCowList.size();i++)
-                if(rightCowList.get(i).cowMessage.getID() == rr) found = true;
-            if(!found){
-                add = true;
-                rightCowList.addLast(new CowDisplay(new CowMessage(rr)));
-            }
-        }*/
+    static public void debug_addCow() {
+        // SoundController.playSound(SoundController.EFF_COLLISION1,0);
+        /*
+         * boolean add = false; if(rightCowList.size() >= 5) return;
+         * while(!add){ short rr = (short)(random.nextInt(5)); boolean found =
+         * false; for(int i = 0;i<rightCowList.size();i++)
+         * if(rightCowList.get(i).cowMessage.getID() == rr) found = true;
+         * if(!found){ add = true; rightCowList.addLast(new CowDisplay(new
+         * CowMessage(rr))); } }
+         */
     }
 
-    static public void debug_deleteCow(){
-        /*if(rightCowList.size() > 0){
-            rightCowList.remove(0);
-        }*/
+    static public void debug_deleteCow() {
+        /*
+         * if(rightCowList.size() > 0){ rightCowList.remove(0); }
+         */
     }
     // ////////////////////bobuway ///////////////////
 }

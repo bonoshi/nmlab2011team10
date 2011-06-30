@@ -13,10 +13,11 @@ public class SoundController {
     // SoundThread: public start(), pause(), stop()
     static RollingCheeseActivity father;
     static int numChannel = 8;
-    
+
     /////////////////////// add needed sound ///////////////////////////////
-    static public final int BACKGROUND1 = -1;  
+    static public final int BACKGROUND1 = -1;
     static public final int BACKGROUND2 = -2;
+    static public final int BACKGROUND3 = -3;
     static public final int EFF_COLLISION1 = 1;    static public final int PRIO_EFF_COLLISION1 = 0;
     static public final int EFF_BIRD1 = 2;         static public final int PRIO_EFF_BIRD1 = 0;
     static public final int EFF_BIRD2 = 3;         static public final int PRIO_EFF_BIRD2 = 0;
@@ -34,7 +35,7 @@ public class SoundController {
     static public final int EFF_WATER2 = 15;       static public final int PRIO_EFF_WATER2 = 0;
     static public final int EFF_WIND1 = 17;        static public final int PRIO_EFF_WIND1 = 0;
     /////////////////////////// add more ... ////////////////////////////
-    
+
     static SoundPool soundPool;
     static SoundController soundController;
     static HashMap<Integer, Integer> soundPoolMap;
@@ -44,19 +45,22 @@ public class SoundController {
     static AudioManager mgr;
     static int currentBackground;
     static MediaPlayer mediaPlayer;
-    
+
     static public void cancelAllMusic(){
         mediaPlayer.stop();
+        mediaPlayer.release();
         soundPool.release();
+        mediaPlayer = null;
+        soundPool = null;
     }
-    
-    
+
+
     static public void initSoundController(RollingCheeseActivity father){
         SoundController.father = father;
         currentBackground = BACKGROUND1;
         mediaPlayer = MediaPlayer.create(father, R.raw.background1);
         mediaPlayer.setLooping(true);
-        
+
         soundPool = new SoundPool(numChannel, AudioManager.STREAM_MUSIC, 100);
         soundPoolMap = new HashMap<Integer, Integer>();
         ///////////////////////// add needed sound //////////////////////////////
@@ -96,17 +100,17 @@ public class SoundController {
         soundPrioMap.put(EFF_WATER2, PRIO_EFF_WATER2);
         soundPrioMap.put(EFF_WIND1, PRIO_EFF_WIND1);
     }
-    
-    //////////// return streamID (0 if failed) , repeattime: -1 if forever loop 
+
+    //////////// return streamID (0 if failed) , repeattime: -1 if forever loop
     static public int playSound(int soundeff){
         Log.e("SoundController","playereff once");
         streamVolumeCurrent = mgr.getStreamVolume(AudioManager.STREAM_MUSIC);
         streamVolumeMax = mgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        float volume = streamVolumeCurrent/streamVolumeMax;
-        return soundPool.play(soundPoolMap.get(soundeff), volume, volume, 
-                soundPrioMap.get(soundeff),0, 1f);
+        float volume = (streamVolumeCurrent*0.7F)/streamVolumeMax;
+        return soundPool.play(soundPoolMap.get(soundeff), volume, volume,
+                soundPrioMap.get(soundeff),0, 1f);//error: null pointer exception here!!
     }
-    
+
     static public void stopSound(int streamID){
         soundPool.stop(streamID);
     }
@@ -116,7 +120,7 @@ public class SoundController {
     static public void resumeSound(int streamID){
         soundPool.resume(streamID);
     }
-    
+
     static public void playBackground(int background){
         if(background != currentBackground){
             stopBackground();
@@ -128,7 +132,10 @@ public class SoundController {
                 case BACKGROUND2:
                     mediaPlayer = MediaPlayer.create(father, R.raw.background2);
                     break;
-                
+                case BACKGROUND3:
+                    mediaPlayer = MediaPlayer.create(father, R.raw.background3);
+                    break;
+
             }
             mediaPlayer.setLooping(true);
         }
@@ -142,6 +149,6 @@ public class SoundController {
     static public void pauseBackground(){
         mediaPlayer.pause();
     }
-    
-    
+
+
 }

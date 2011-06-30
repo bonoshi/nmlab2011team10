@@ -56,7 +56,7 @@ public class RollingCheeseActivity extends Activity {
     private static final int MENU_InitClient = 1;
     private static final int MENU_Send = 2;
 
-    public GameView gameView;
+    public GameView gameView = null;
     public EntranceView entranceView;
 
     ServerSocket server = null;
@@ -67,30 +67,106 @@ public class RollingCheeseActivity extends Activity {
     public ArrayList<CheeseDisplay> rightCheeseDisplays;
 
     public GameCalThread gameCalThread = null;
-    private DisplayData displayData = new DisplayData();
-    public RandomSoundGenerator randomSoundGenerator;
-    public ToastMessageThread ToastMessage = null;
+    static private DisplayData displayData = null;
+    public RandomSoundGenerator randomSoundGenerator = null;
+    public ToastMessageThread toastMessage = null;
 
     private ServerThread serverThread = null;
+    private ReceiveThread receiveThread = null;
 
-    private static final String TAG = "ClientError";
+    // private static final String TAG = "ClientError";
+    private static final String TAG = "TestLeft";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        viewState = ENTRANCE_VIEW;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
-        SoundController.initSoundController(this);
-        SoundController.playBackground(SoundController.BACKGROUND1);
+//        SoundController.initSoundController(this);
+//        SoundController.playBackground(SoundController.BACKGROUND1);
 
+        displayData = new DisplayData();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         entranceView = new EntranceView(this);
         entranceView.isContent = true;
-        gameView = new GameView(this);
+        initialGameView();
         setContentView(entranceView);
-        ToastMessage = new ToastMessageThread(this, 200);
-        ToastMessage.start();
+        toastMessage = new ToastMessageThread(this, 200);
+        toastMessage.start();
+    }
+
+    public void initialGameView() {
+        if (gameView != null) {
+            gameView.stop();
+        }
+        gameView = new GameView(this);
+    }
+
+    public void resumeGameView() {
+        if (gameView != null) {
+            gameView.resume();
+        }
+    }
+
+    public void pauseGameView() {
+        if (gameView != null) {
+            gameView.pause();
+        }
+    }
+
+    public void stopGameView() {
+        if (gameView != null) {
+            gameView.stop();
+        }
+        gameView = null;
+    }
+
+    public void closeServer() {
+        if (serverThread != null) {
+            serverThread.closeServer();
+        }
+    }
+
+    public void resumeNetwork() {
+        if (receiveThread != null) {
+            receiveThread.setPause(false);
+        }
+    }
+
+    public void pauseNetwork() {
+        if (receiveThread != null) {
+            receiveThread.setPause(true);
+        }
+    }
+
+    public void stopNetwork() {
+        if (receiveThread != null) {
+            receiveThread.setRunning(false);
+            receiveThread.setPause(false);
+            receiveThread = null;
+        }
+    }
+
+    public void resumeRandomSound() {
+        if (randomSoundGenerator != null) {
+            randomSoundGenerator.resume();
+        }
+
+    }
+
+    public void pauseRandomSound() {
+        if (randomSoundGenerator != null) {
+            randomSoundGenerator.pause();
+        }
+    }
+
+    public void stopRandomSound() {
+        if (randomSoundGenerator != null) {
+            randomSoundGenerator.stop();
+            randomSoundGenerator = null;
+        }
     }
 
     @Override
@@ -122,19 +198,56 @@ public class RollingCheeseActivity extends Activity {
         // }
         // }
         SoundController.initSoundController(this);
+
+        entranceView.setPause(false);
+        resumeGameView();
+        resumeGameCalThread();
+        resumeRandomSound();
+        toastMessage.setPause(false);
+        pauseNetwork();
+        if (viewState == ENTRANCE_VIEW) {
+            SoundController.playBackground(SoundController.BACKGROUND1);
+            setContentView(entranceView);
+        } else if (viewState == GAME_VIEW) {
+            SoundController.playBackground(SoundController.BACKGROUND2);
+            setContentView(gameView);
+        }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        SoundController.cancelAllMusic();
+        destroy();
+        // SoundController.cancelAllMusic();
         // if (mBluetoothService != null)
         // mBluetoothService.stop();
+
+    }
+
+    private void destroy() {
+        entranceView.setRunning(false);
+        entranceView.setPause(false);
+        stopGameCalThread();
+        stopGameView();
+        stopRandomSound();
+        closeServer();
+        stopNetwork();
+        toastMessage.setRunning(false);
+        toastMessage.setPause(false);
+        finish();
     }
 
     public void onPause() {
         super.onPause();
         SoundController.cancelAllMusic();
+
+        entranceView.setPause(true);
+        pauseGameView();
+        pauseGameCalThread();
+        pauseRandomSound();
+        toastMessage.setPause(true);
+        pauseNetwork();
+        // closeServer();
     }
 
     /**
@@ -191,8 +304,6 @@ public class RollingCheeseActivity extends Activity {
         }
     }
 
-    ReceiveThread receiveThread = null;
-
     class ReceiveThread extends Thread {
         public ReceiveThread() {
         }
@@ -226,7 +337,7 @@ public class RollingCheeseActivity extends Activity {
                 Object o = null;
 
                 try {
-                    //Log.e("bonoshi", Integer.toString(ois.available()));
+                    // Log.e("bonoshi", Integer.toString(ois.available()));
                     o = ois.readObject();
                 } catch (OptionalDataException e) {
                     // TODO Auto-generated catch block
@@ -243,23 +354,23 @@ public class RollingCheeseActivity extends Activity {
                     try {
                         AppMessage am = (AppMessage) ZipFactory.Decompress((cZipObject) o);
                         byte type = am.getType();
-                        if(type <= EventEnum.DestEnd){
+                        if (type <= EventEnum.DestEnd) {
                             gameCalThread.sendEvent(type);
-                        }else{
-                            switch (type){
-                                case EventEnum.Jump:{
-                                     break;
-                                }
-                                case EventEnum.Pause:{
+                        } else {
+                            switch (type) {
+                                case EventEnum.Jump: {
                                     break;
                                 }
-                                case EventEnum.Surrender:{
+                                case EventEnum.Pause: {
                                     break;
                                 }
-                                case EventEnum.Restart:{
+                                case EventEnum.Surrender: {
                                     break;
                                 }
-                                case EventEnum.Data:{
+                                case EventEnum.Restart: {
+                                    break;
+                                }
+                                case EventEnum.Data: {
                                     refreshDisplayData(am.getSmd());
                                     GameView.refreshPPS(false);
                                     break;
@@ -275,17 +386,12 @@ public class RollingCheeseActivity extends Activity {
         }
     }
 
-
     public void refreshDisplayData(SynMessageData smd) {
         displayData.refresh(smd);
     }
 
-    public DisplayData getDisplayData() {
+    static public DisplayData getDisplayData() {
         return displayData;
-    }
-
-    public void setDisplayData(DisplayData displayData) {
-        this.displayData = displayData;
     }
 
     @Override
@@ -295,13 +401,13 @@ public class RollingCheeseActivity extends Activity {
             // mAnimationThread.clearSprites();
             // return true;
             case MENU_Exit:
-                finish();
+                destroy();
                 return true;
             case MENU_InitClient:
                 initClient();
                 return true;
             case MENU_Send:
-                //send();
+                // send();
                 return true;
                 // case MENU_PAUSE:
                 // mAnimationThread.pause();
@@ -317,6 +423,18 @@ public class RollingCheeseActivity extends Activity {
         if (gameCalThread != null) {
             gameCalThread.stopGameCal();
             gameCalThread = null;
+        }
+    }
+
+    public void pauseGameCalThread() {
+        if (gameCalThread != null) {
+            gameCalThread.pauseGameCal();
+        }
+    }
+
+    public void resumeGameCalThread() {
+        if (gameCalThread != null) {
+            gameCalThread.resumeGameCal();
         }
     }
 
@@ -337,15 +455,16 @@ public class RollingCheeseActivity extends Activity {
 
                     // displayData = gameCalThread.getDisplayData();
                     gameCalThread.start();
-                    gameCalThread.resumeGameCal();
+                    resumeGameCalThread();
                     // will only draw after initialization
                     // used before drawing
                     gameView.initialOnePlayer();
 
                     entranceView.setPause(true);
-                    gameView.startDrawThread();
+                    gameView.start();
 
                     setContentView(gameView);
+                    viewState = GAME_VIEW;
                     SoundController.playBackground(SoundController.BACKGROUND2);
                     randomSoundGenerator = new RandomSoundGenerator();
                     randomSoundGenerator.start();
@@ -368,10 +487,11 @@ public class RollingCheeseActivity extends Activity {
                     receiveThread.start();
 
                     entranceView.setPause(true);
-                    gameView.startDrawThread();
+                    gameView.start();
 
+                    viewState = GAME_VIEW;
                     setContentView(gameView);
-                    SoundController.playBackground(SoundController.BACKGROUND2);
+                    SoundController.playBackground(SoundController.BACKGROUND3);
                     randomSoundGenerator = new RandomSoundGenerator();
                     randomSoundGenerator.start();
                     break;
@@ -407,10 +527,11 @@ public class RollingCheeseActivity extends Activity {
                     isClient = false;
 
                     sgs = new ServerGameSetting();
-                    //before receiveThread to make sure eventqueue is ready to accept data
+                    // before receiveThread to make sure eventqueue is ready to
+                    // accept data
                     gameCalThread = new GameCalThread(RollingCheeseActivity.this, sgs);
 
-                    //start to accept event from client
+                    // start to accept event from client
                     receiveThread = new ReceiveThread();
                     receiveThread.start();
 
@@ -422,8 +543,9 @@ public class RollingCheeseActivity extends Activity {
                     gameView.initialServer();
 
                     entranceView.setPause(true);
-                    gameView.startDrawThread();
+                    gameView.start();
 
+                    viewState = GAME_VIEW;
                     setContentView(gameView);
                     SoundController.playBackground(SoundController.BACKGROUND2);
                     randomSoundGenerator = new RandomSoundGenerator();
@@ -441,7 +563,7 @@ public class RollingCheeseActivity extends Activity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    finish();
+                    destroy();
                     break;
                 case InterThreadMsg.ToastDisplay: {
                     // gameToastMessage =
@@ -455,23 +577,26 @@ public class RollingCheeseActivity extends Activity {
                     // gameToastMessage.cancel();
                     break;
                 }
-                case InterThreadMsg.ServerFailToSend:{
+                case InterThreadMsg.ServerFailToSend: {
                     Toast toast = Toast.makeText(rca, "Fail to send", Toast.LENGTH_SHORT);
                     toast.show();
                     break;
                 }
-                case InterThreadMsg.OptionalDataException:{
-                    Toast toast = Toast.makeText(RollingCheeseActivity.this, "OptionalDataException", Toast.LENGTH_SHORT);
+                case InterThreadMsg.OptionalDataException: {
+                    Toast toast = Toast.makeText(RollingCheeseActivity.this, "OptionalDataException",
+                            Toast.LENGTH_SHORT);
                     toast.show();
                     break;
                 }
-                case InterThreadMsg.ClassNotFoundException:{
-                    Toast toast = Toast.makeText(RollingCheeseActivity.this, "ClassNotFoundException", Toast.LENGTH_SHORT);
+                case InterThreadMsg.ClassNotFoundException: {
+                    Toast toast = Toast.makeText(RollingCheeseActivity.this, "ClassNotFoundException",
+                            Toast.LENGTH_SHORT);
                     toast.show();
                     break;
                 }
-                case InterThreadMsg.IOException:{
-                    Toast toast = Toast.makeText(RollingCheeseActivity.this, "IOException", Toast.LENGTH_SHORT);
+                case InterThreadMsg.IOException: {
+                    Toast toast = Toast.makeText(RollingCheeseActivity.this, "IOException",
+                            Toast.LENGTH_SHORT);
                     toast.show();
                     break;
                 }
@@ -507,6 +632,7 @@ public class RollingCheeseActivity extends Activity {
         }
 
         public void closeServer() {
+            isClosed = true;
             if (server != null && !server.isClosed()) {
                 try {
                     server.close();
@@ -528,19 +654,19 @@ public class RollingCheeseActivity extends Activity {
             } catch (StreamCorruptedException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-                if(isClosed){
-                    //bonoshi: notify you close
-                }else{
-                    //bonoshi: notify accidental close
+                if (isClosed) {
+                    // bonoshi: notify you close
+                } else {
+                    // bonoshi: notify accidental close
                 }
                 return;
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
-                if(isClosed){
-                    //bonoshi: notify you close
-                }else{
-                    //bonoshi: notify accidental close
+                if (isClosed) {
+                    // bonoshi: notify you close
+                } else {
+                    // bonoshi: notify accidental close
                 }
                 return;
             }
@@ -558,12 +684,12 @@ public class RollingCheeseActivity extends Activity {
             ois = new ObjectInputStream(socket.getInputStream());
         } catch (UnknownHostException e) {
             // TODO Auto-generated catch block
-            //bonoshi: notify accidental failure
+            // bonoshi: notify accidental failure
             e.printStackTrace();
             return;
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            //bonoshi: notify accidental failure
+            // bonoshi: notify accidental failure
             e.printStackTrace();
             return;
         }
@@ -571,6 +697,5 @@ public class RollingCheeseActivity extends Activity {
         isTwoPlayer = true;
         myHandler.sendEmptyMessage(InterThreadMsg.connectSuccess);
     }
-
 
 }

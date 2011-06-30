@@ -15,16 +15,19 @@ public class House {
         switch (prod) {
             case ForFun: {
                 this.prod = AfterHours;
-                HP = (int) Math.ceil(getHPPercent() * getHouseMaxHP() / 100.0);
+                HP += (HouseParameter.AfterHoursHP - HouseParameter.ForFunHP);
+//                HP = (int) Math.ceil(getHPPercent() * getHouseMaxHP() / 100.0);
                 break;
             }
             case AfterHours:
                 this.prod = Bakery;
-                HP = (int) Math.ceil(getHPPercent() * getHouseMaxHP() / 100.0);
+                HP += (HouseParameter.BakeryHP - HouseParameter.AfterHoursHP);
+//                HP = (int) Math.ceil(getHPPercent() * getHouseMaxHP() / 100.0);
                 break;
             case Bakery:
                 this.prod = FoodFactory;
-                HP = (int) Math.ceil(getHPPercent() * getHouseMaxHP() / 100.0);
+                HP += (HouseParameter.FoodFactoryHP - HouseParameter.BakeryHP);
+//                HP = (int) Math.ceil(getHPPercent() * getHouseMaxHP() / 100.0);
                 break;
             case FoodFactory:
                 break;
@@ -83,6 +86,21 @@ public class House {
     }
 
     public float getHouseMaxHP() {
+        switch (prod) {
+            case ForFun:
+                return HouseParameter.ForFunHP;
+            case AfterHours:
+                return HouseParameter.AfterHoursHP;
+            case Bakery:
+                return HouseParameter.BakeryHP;
+            case FoodFactory:
+                return HouseParameter.FoodFactoryHP;
+            default:// no use
+                return 0;
+        }
+    }
+
+    public static float getHouseMaxHP(byte prod) {
         switch (prod) {
             case ForFun:
                 return HouseParameter.ForFunHP;
@@ -259,6 +277,37 @@ public class House {
         }
     }
 
+    public static float getBoader(boolean whichSide, byte prod) {
+        switch (prod) {
+            case CheeseProdEnum.ForFun:
+                if (whichSide) {
+                    return HouseParameter.ForFunBorder;
+                } else {
+                    return (GlobalParameter.MapWidth - HouseParameter.ForFunBorder);
+                }
+            case CheeseProdEnum.AfterHours:
+                if (whichSide) {
+                    return HouseParameter.AfterHoursBorder;
+                } else {
+                    return (GlobalParameter.MapWidth - HouseParameter.AfterHoursBorder);
+                }
+            case CheeseProdEnum.Bakery:
+                if (whichSide) {
+                    return HouseParameter.BakeryBorder;
+                } else {
+                    return (GlobalParameter.MapWidth - HouseParameter.BakeryBorder);
+                }
+            case CheeseProdEnum.FoodFactory:
+                if (whichSide) {
+                    return HouseParameter.FoodFactoryBorder;
+                } else {
+                    return (GlobalParameter.MapWidth - HouseParameter.FoodFactoryBorder);
+                }
+            default:// no use
+                return 0.0F;
+        }
+    }
+
     public float getBoader(boolean whichSide, float radix) {
         switch (prod) {
             case ForFun:
@@ -270,7 +319,7 @@ public class House {
                 }
             case AfterHours:
                 if (whichSide) {
-                    return HouseParameter.AfterHoursBorder;
+                    return HouseParameter.AfterHoursBorder + 0.25679F * radix;
                 } else {
                     return (GlobalParameter.MapWidth - HouseParameter.AfterHoursBorder);
                 }

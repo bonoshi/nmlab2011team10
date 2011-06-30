@@ -32,7 +32,7 @@ public class CheeseDisplay {
     static final int sweatyCol = 5;
     static final int sweatyDelX = -50;
     static final int sweatyDelY = -85;
-    
+
     static final int HEALTHY = 0;
     static final int LITTLE_DAMAGED = 1;
     static final int SERIOUS_DAMAGED = 2;
@@ -45,7 +45,7 @@ public class CheeseDisplay {
     int deadCount = 0;
     float radix = 0;
     int frame=0;
-    
+
     public static void initBitmap() {
         Resources r = GameView.r;
 
@@ -273,15 +273,15 @@ public class CheeseDisplay {
         cheeseF[Tiny][DEAD] = Bitmap.createScaledBitmap(cheeseFU[DEAD],
                 (int) CheeseParameter.Fire.RadixTiny * 2, (int) CheeseParameter.Fire.RadixTiny * 2, false);
 
-        
-        sweatyBitmap = BitmapFactory.decodeResource(r, R.drawable.sweaty);
-        
 
-        
+        sweatyBitmap = BitmapFactory.decodeResource(r, R.drawable.sweaty);
+
+
+
     }
 
-    
-    
+
+
     public CheeseDisplay(CheeseMessage cm) {
         this.setCheeseMessage(cm);
         switch (getType()) {
@@ -350,7 +350,7 @@ public class CheeseDisplay {
                     case Tiny:
                         radix = CheeseParameter.Fire.RadixTiny;
                         break;
-                } 
+                }
                 break;
             }
         }
@@ -405,7 +405,7 @@ public class CheeseDisplay {
         return Bitmap.createBitmap(sweatyBitmap,col*sweatyWidth,row*sweatyHeight,sweatyWidth,sweatyHeight);
 
     }
-    
+
     public void draw(boolean whichSide, Canvas canvas) {
         Matrix matrix = new Matrix();
         int status;

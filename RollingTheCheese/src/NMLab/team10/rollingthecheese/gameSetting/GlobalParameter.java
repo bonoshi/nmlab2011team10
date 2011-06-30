@@ -15,31 +15,20 @@ public class GlobalParameter {
     public static final float MapHeight = 480.0F;
 
     public static final boolean isNight(int time){
-        return (time%TimePerDay > 35000);
+        return (time%TimePerDay > 40000);
     }
 
-    public static byte getTimePeriod(int time){
-        if(time>30000){
-            if(time>35000){
-                return Night;
-            }else{
-                return Dusk;
-            }
-        }else{
-            if(time>20000){
-                return Morning;
-            }else if(time>10000){
-                return Noon;
-            }
-            else{
-                return Morning;
-            }
-        }
-    }
-    
-    public static final byte Morning = 0;
-    public static final byte Noon = 1;
-    public static final byte Dusk = 2;
-    public static final byte Night = 3;
+    public static final int RefreshPaintCount = 5;
+
+    public static final int Morning = 10000;
+    public static final int Noon = 25000;
+    public static final int Dusk = 30000;
+    public static final int Night = 40000;
+
+    public static final float Night2Morning = 10000;
+    public static final float Morn2Noon = 15000;
+    public static final float Noon2Dusk = 5000;
+    public static final float Dusk2Night = 10000;
+
 }
 
