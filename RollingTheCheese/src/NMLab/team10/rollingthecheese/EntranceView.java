@@ -22,10 +22,12 @@ public class EntranceView extends View {
     RollingCheeseActivity father;
     EntranceDrawThread entranceDrawThread;
 
-    boolean isContent = false;// to indicate it is now the content view
-
     public void setPause(boolean pause) {
         entranceDrawThread.setPause(pause);
+    }
+
+    public void interrupt(){
+        entranceDrawThread.interrupt();
     }
 
     public void setRunning(boolean running) {
@@ -107,6 +109,7 @@ public class EntranceView extends View {
         super(father);
         this.father = father;
         initBitmap(father);
+        hasLoadedButton = false;
         initRect();
         state = S_12;
         firstPressing = false;
@@ -142,7 +145,14 @@ public class EntranceView extends View {
         // TODO
     }
 
+    public boolean hasLoadedButton;
+
     public void onDraw(Canvas canvas) {
+        if(!hasLoadedButton){
+            ButtomBar.warmupButton(canvas);
+            hasLoadedButton = true;
+        }
+
         canvas.drawBitmap(staticBackgroundBitmap, 0, 0, null);
 
         if (state == S_12) {

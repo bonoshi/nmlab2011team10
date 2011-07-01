@@ -5,13 +5,13 @@ class ProjectorParameter {
     static final int TimeInterval = 10000;// ms
 
     public static final float BoardSpeed = 1.0F;
-    public static final float SlideSpeed = 1.3F;
-    public static final float CannonSpeed = 1.8F;
-    public static final float RocketSpeed = 2.4F;
+    public static final float SlideSpeed = 1.5F;
+    public static final float CannonSpeed = 2.2F;
+    public static final float RocketSpeed = 3.3F;
 
-    static final int SlideMilk = 1000;
+    static final int SlideMilk = 700;
     static final int CannonMilk = 1000;
-    static final int RocketMilk = 1000;
+    static final int RocketMilk = 1300;
 
     static final int SlideTime = 4000;
     static final int CannonTime = 9000;
@@ -82,11 +82,7 @@ class ProjectorParameter {
         }
 
         static float getBattleBorderX(float radix, boolean whichSide) {
-            float x = getCheeseX(getMaxPrepareD(radix), radix, whichSide);
-            if (!whichSide) {// right
-                x = GlobalParameter.MapWidth - x;
-            }
-            return x;
+            return getCheeseX(getMaxPrepareD(radix), radix, whichSide);
         }
 
         // no need since it is equal to radix

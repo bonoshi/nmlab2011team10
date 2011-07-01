@@ -47,8 +47,8 @@ public class CowDisplay {
         Resources r = GameView.r;
         ToRightCowBitmap = BitmapFactory.decodeResource(r, R.drawable.cowright);
         ToLeftCowBitmap = BitmapFactory.decodeResource(r, R.drawable.cowleft);
-        ToRightCowBitmap_p = BitmapFactory.decodeResource(r, R.drawable.cowright);
-        ToLeftCowBitmap_p = BitmapFactory.decodeResource(r, R.drawable.cowleft);
+        ToRightCowBitmap_p = BitmapFactory.decodeResource(r, R.drawable.cowright_poison);
+        ToLeftCowBitmap_p = BitmapFactory.decodeResource(r, R.drawable.cowleft_poison);
         // ToRightCowBitmap_p = BitmapFactory.decodeResource(r,
         // R.drawable.cowright_poison);
         // ToLeftCowBitmap_p = BitmapFactory.decodeResource(r,
@@ -115,8 +115,8 @@ public class CowDisplay {
 
     @SuppressWarnings("unchecked")
     static public void updateCowDisplay() {
-        leftCowList = (LinkedList<CowDisplay>) RollingCheeseActivity.getDisplayData().leftCowList.clone();
-        rightCowList = (LinkedList<CowDisplay>) RollingCheeseActivity.getDisplayData().rightCowList.clone();
+        leftCowList = (LinkedList<CowDisplay>) GameView.displayData.leftCowList.clone();
+        rightCowList = (LinkedList<CowDisplay>) GameView.displayData.rightCowList.clone();
         numCowleft = leftCowList.size();
         numCowright = rightCowList.size();
         // Log.e("CowDisplay",String.format("numCow = %d",numCow));

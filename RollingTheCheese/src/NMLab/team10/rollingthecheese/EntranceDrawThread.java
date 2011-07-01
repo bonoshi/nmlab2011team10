@@ -26,17 +26,20 @@ public class EntranceDrawThread extends Thread {
         isRunning = true;
         while (isRunning) {
             father.postInvalidate(); // make GameView to do onDraw()
-            try {
-                Thread.sleep(sleepSpan);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            while (isPause) {
+            if (isPause) {
+                while (isPause) {
+                    try {
+                        Thread.sleep(0);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        // e.printStackTrace();
+                    }
+                }
+            } else {
                 try {
                     Thread.sleep(sleepSpan);
                 } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+//                    e.printStackTrace();
                 }
             }
         }

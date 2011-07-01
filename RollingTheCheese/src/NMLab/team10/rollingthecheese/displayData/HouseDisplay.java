@@ -35,9 +35,14 @@ public class HouseDisplay {
     private static Paint hpPaint;
     private static Paint qualLeftPaint;
     private static Paint qualRightPaint;
+    private static Paint onWorkPaint = null;
 
     static public void initial() {
         r = GameView.r;
+        onWorkPaint = new Paint();
+        onWorkPaint.setTextSize(15);
+        onWorkPaint.setAntiAlias(true);
+        onWorkPaint.setColor(Color.DKGRAY);
         hpPaint = new Paint();
         hpPaint.setColor(0xFFE7003E);
         hpPaint.setAntiAlias(true);
@@ -133,18 +138,7 @@ public class HouseDisplay {
             state = DAMAGED;
         else
             state = SERIOUS_DAMAGED;
-        int NL = GameView.displayData.getButtonD().normalLargeP;
-        int NS = GameView.displayData.getButtonD().normalSmallP;
-        int PL = GameView.displayData.getButtonD().poisonLargeP;
-        int PS = GameView.displayData.getButtonD().poisonSmallP;
-        int SL = GameView.displayData.getButtonD().sweatyLargeP;
-        int SS = GameView.displayData.getButtonD().sweatySmallP;
-        int FL = GameView.displayData.getButtonD().firingLargeP;
-        int FS = GameView.displayData.getButtonD().firingSmallP;
-        Paint paint = new Paint();
-        paint.setTextSize(15);
-        paint.setAntiAlias(true);
-        paint.setColor(Color.DKGRAY);
+
         if (whichSide) {
             if (getHouse().getProd() == HouseMessage.Handmade) {
                 canvas.drawBitmap(houseBitmap[NORMAL][state], HouseParameter.ForFunBorder - 227, 200, null);
@@ -168,109 +162,6 @@ public class HouseDisplay {
                         matrix, false);
                 canvas.drawBitmap(tmpBitmap, House.getBoader(false, getProd()) - 53, 200, null);
                 // canvas.drawBitmap(tmpBitmap, 1420, 200, null);
-            }
-        }
-
-        if (GameView.displayData.isLeft && whichSide) {
-
-            if (NL > 0 && NL < 100) {
-                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
-                        null);
-                canvas.drawText(Integer.toString(NL) + "%", 270, 330, paint);
-            }
-            if (NS > 0 && NS < 100) {
-                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
-                        null);
-                canvas.drawText(Integer.toString(NS) + "%", 270, 330, paint);
-            }
-            if (PL > 0 && PL < 100) {
-                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseC[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
-                        null);
-                canvas.drawText(Integer.toString(PL) + "%", 270, 330, paint);
-            }
-            if (PS > 0 && PS < 100) {
-                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseC[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
-                        null);
-                canvas.drawText(Integer.toString(PS) + "%", 270, 330, paint);
-            }
-            if (SL > 0 && SL < 100) {
-                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseS[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
-                        null);
-                canvas.drawText(Integer.toString(SL) + "%", 270, 330, paint);
-            }
-            if (SS > 0 && SS < 100) {
-                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseS[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
-                        null);
-                canvas.drawText(Integer.toString(SS) + "%", 270, 330, paint);
-            }
-            if (FL > 0 && FL < 100) {
-                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseF[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
-                        null);
-                canvas.drawText(Integer.toString(FL) + "%", 270, 330, paint);
-            }
-            if (FS > 0 && FS < 100) {
-                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseF[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
-                        null);
-                canvas.drawText(Integer.toString(FS) + "%", 270, 330, paint);
-            }
-        } else if (!GameView.displayData.isLeft && !whichSide) {
-            Bitmap onWorkingBitmap_m = Bitmap.createBitmap(onWorkingBitmap, 0, 0, onWorkingBitmap.getWidth(),
-                    onWorkingBitmap.getHeight(), matrix, false);
-            if (NL > 0 && NL < 100) {
-                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
-                        260, null);
-                canvas.drawText(Integer.toString(NL) + "%", 1360, 330, paint);
-            }
-            if (NS > 0 && NS < 100) {
-                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
-                        260, null);
-                canvas.drawText(Integer.toString(NS) + "%", 1360, 330, paint);
-            }
-            if (PL > 0 && PL < 100) {
-                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseC[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
-                        260, null);
-                canvas.drawText(Integer.toString(PL) + "%", 1360, 330, paint);
-            }
-            if (PS > 0 && PS < 100) {
-                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseC[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
-                        260, null);
-                canvas.drawText(Integer.toString(PS) + "%", 1360, 330, paint);
-            }
-            if (SL > 0 && SL < 100) {
-                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseS[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
-                        260, null);
-                canvas.drawText(Integer.toString(SL) + "%", 1360, 330, paint);
-            }
-            if (SS > 0 && SS < 100) {
-                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseS[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
-                        260, null);
-                canvas.drawText(Integer.toString(SS) + "%", 1360, 330, paint);
-            }
-            if (FL > 0 && FL < 100) {
-                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseF[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
-                        260, null);
-                canvas.drawText(Integer.toString(FL) + "%", 1360, 330, paint);
-            }
-            if (FS > 0 && FS < 100) {
-                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
-                canvas.drawBitmap(CheeseDisplay.cheeseF[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
-                        260, null);
-                canvas.drawText(Integer.toString(FS) + "%", 1360, 330, paint);
             }
         }
 
@@ -313,7 +204,120 @@ public class HouseDisplay {
     }
 
     public void drawStatus(boolean whichSide, Canvas canvas) {
+        int NL = GameView.displayData.getButtonD().normalLargeP;
+        int NS = GameView.displayData.getButtonD().normalSmallP;
+        int PL = GameView.displayData.getButtonD().poisonLargeP;
+        int PS = GameView.displayData.getButtonD().poisonSmallP;
+        int SL = GameView.displayData.getButtonD().sweatyLargeP;
+        int SS = GameView.displayData.getButtonD().sweatySmallP;
+        int FL = GameView.displayData.getButtonD().firingLargeP;
+        int FS = GameView.displayData.getButtonD().firingSmallP;
+        if (GameView.displayData.isLeft && whichSide) {
+
+            if (NL > 0 && NL < 100) {
+                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
+                        null);
+                canvas.drawText(Integer.toString(NL) + "%", 270, 330, onWorkPaint);
+            }
+            if (NS > 0 && NS < 100) {
+                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
+                        null);
+                canvas.drawText(Integer.toString(NS) + "%", 270, 330, onWorkPaint);
+            }
+            if (PL > 0 && PL < 100) {
+                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseC[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
+                        null);
+                canvas.drawText(Integer.toString(PL) + "%", 270, 330, onWorkPaint);
+            }
+            if (PS > 0 && PS < 100) {
+                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseC[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
+                        null);
+                canvas.drawText(Integer.toString(PS) + "%", 270, 330, onWorkPaint);
+            }
+            if (SL > 0 && SL < 100) {
+                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseS[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
+                        null);
+                canvas.drawText(Integer.toString(SL) + "%", 270, 330, onWorkPaint);
+            }
+            if (SS > 0 && SS < 100) {
+                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseS[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
+                        null);
+                canvas.drawText(Integer.toString(SS) + "%", 270, 330, onWorkPaint);
+            }
+            if (FL > 0 && FL < 100) {
+                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseF[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
+                        null);
+                canvas.drawText(Integer.toString(FL) + "%", 270, 330, onWorkPaint);
+            }
+            if (FS > 0 && FS < 100) {
+                canvas.drawBitmap(onWorkingBitmap, 120, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseF[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 260, 260,
+                        null);
+                canvas.drawText(Integer.toString(FS) + "%", 270, 330, onWorkPaint);
+            }
+        } else if (!GameView.displayData.isLeft && !whichSide) {
+            Bitmap onWorkingBitmap_m = Bitmap.createBitmap(onWorkingBitmap, 0, 0, onWorkingBitmap.getWidth(),
+                    onWorkingBitmap.getHeight(), matrix, false);
+            if (NL > 0 && NL < 100) {
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
+                        260, null);
+                canvas.drawText(Integer.toString(NL) + "%", 1360, 330, onWorkPaint);
+            }
+            if (NS > 0 && NS < 100) {
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseO[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
+                        260, null);
+                canvas.drawText(Integer.toString(NS) + "%", 1360, 330, onWorkPaint);
+            }
+            if (PL > 0 && PL < 100) {
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseC[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
+                        260, null);
+                canvas.drawText(Integer.toString(PL) + "%", 1360, 330, onWorkPaint);
+            }
+            if (PS > 0 && PS < 100) {
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseC[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
+                        260, null);
+                canvas.drawText(Integer.toString(PS) + "%", 1360, 330, onWorkPaint);
+            }
+            if (SL > 0 && SL < 100) {
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseS[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
+                        260, null);
+                canvas.drawText(Integer.toString(SL) + "%", 1360, 330, onWorkPaint);
+            }
+            if (SS > 0 && SS < 100) {
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseS[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
+                        260, null);
+                canvas.drawText(Integer.toString(SS) + "%", 1360, 330, onWorkPaint);
+            }
+            if (FL > 0 && FL < 100) {
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseF[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
+                        260, null);
+                canvas.drawText(Integer.toString(FL) + "%", 1360, 330, onWorkPaint);
+            }
+            if (FS > 0 && FS < 100) {
+                canvas.drawBitmap(onWorkingBitmap_m, 1250, 200, null);
+                canvas.drawBitmap(CheeseDisplay.cheeseF[CheeseDisplay.Tiny][CheeseDisplay.HEALTHY], 1350,
+                        260, null);
+                canvas.drawText(Integer.toString(FS) + "%", 1360, 330, onWorkPaint);
+            }
+        }
+
+
         HouseMessage tempHouse = this.house;
+
         if (whichSide) {
             canvas.drawRect(0, 90,
                     tempHouse.getHPPercent() * House.getHouseMaxHP(tempHouse.getProd()) / 2500, 100, hpPaint);

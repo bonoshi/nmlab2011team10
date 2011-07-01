@@ -30,6 +30,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
+import android.widget.Button;
 
 public class GameView extends View {
 
@@ -56,22 +57,28 @@ public class GameView extends View {
     static LightingColorFilter testCMCF;
 
     public GameView(RollingCheeseActivity father) {
-
         super(father);
         this.father = father;
-        GameView.initBitmap(father);
         initPaint();
 
         scroll = new ScrollThread();
         gameDrawThread = new GameDrawThread(this);
 
         vTracker = VelocityTracker.obtain();
+    }
 
+    public void startNewGame(){
+        gameDrawThread.setNewlyCreated(true);
     }
 
     public void resume() {
         gameDrawThread.setPause(false);
         scroll.setPause(false);
+    }
+
+    public void interrupt(){
+        gameDrawThread.interrupt();
+        scroll.interrupt();
     }
 
     public void pause() {
@@ -82,7 +89,6 @@ public class GameView extends View {
     public void stop() {
         gameDrawThread.setRunning(false);
         scroll.setRunning(false);
-        resume();
     }
 
     public void start() {
@@ -157,6 +163,7 @@ public class GameView extends View {
         CowDisplay.initial();
         FireLineDisplay.initial();
         Projector.initBitmap();
+        ButtomBar.initBitmap(context);
     }
 
     private void refreshPaint() {
@@ -318,6 +325,10 @@ public class GameView extends View {
         // canvas.drawText("Cow Num=" + displayData.getCowList().size() ,570,
         // 120, paintInfo);
 
+    }
+
+    public void refreshButtonFrame(){
+        buttomBar.refreshFrame();
     }
 
     int x = 0;

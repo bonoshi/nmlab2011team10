@@ -40,7 +40,6 @@ public class ListContTwoButtom {
 
     public ListContTwoButtom(int startX, Bitmap listBitmap,EventQueueCenter eqc,Byte event1,Byte event2){
         //initial state
-
         status = CLOSE;
         statusQueue = CLOSE;
         frame = 0;
@@ -87,15 +86,11 @@ public class ListContTwoButtom {
 
     public void draw(Canvas canvas) {
         Rect src = new Rect(0, 0, 1, 1);
-
         if (status == CLOSE) {
             if (statusQueue == CLOSE)
                 return;
             if (statusQueue == CLOSE_TO_OPEN) {
-                frame = 0;
                 src = new Rect(frame * buttomListW, 0, (frame + 1) * buttomListW, buttomListH);
-                status = CLOSE_TO_OPEN;
-                statusQueue = CLOSE;
             }
         }
         if (status == OPEN) {
@@ -103,6 +98,24 @@ public class ListContTwoButtom {
         }
         if (status == CLOSE_TO_OPEN) {
             src = new Rect(frame * buttomListW, 0, (frame + 1) * buttomListW, buttomListH);
+        }
+        if (status == OPEN_TO_CLOSE) {
+            src = new Rect(frame * buttomListW, buttomListH, (frame + 1) * buttomListW, buttomListH * 2);
+        }
+        canvas.drawBitmap(buttomListBitmap, src, dest, null);
+    }
+
+    public void refreshFrame(){
+        if (status == CLOSE) {
+            if (statusQueue == CLOSE)
+                return;
+            if (statusQueue == CLOSE_TO_OPEN) {
+                frame = 0;
+                status = CLOSE_TO_OPEN;
+                statusQueue = CLOSE;
+            }
+        }
+        if (status == CLOSE_TO_OPEN) {
             if (frame == animationEnd) {
                 if (statusQueue == OPEN_TO_CLOSE) {
                     status = OPEN_TO_CLOSE;
@@ -116,7 +129,6 @@ public class ListContTwoButtom {
             }
         }
         if (status == OPEN_TO_CLOSE) {
-            src = new Rect(frame * buttomListW, buttomListH, (frame + 1) * buttomListW, buttomListH * 2);
             if (frame == animationEnd) {
                 if (statusQueue == CLOSE_TO_OPEN) {
                     status = CLOSE_TO_OPEN;
@@ -129,9 +141,8 @@ public class ListContTwoButtom {
                 frame++;
             }
         }
-        canvas.drawBitmap(buttomListBitmap, src, dest, null);
-        
     }
+
     public boolean isOpen(){
         return status == OPEN;
     }
@@ -145,8 +156,7 @@ public class ListContTwoButtom {
         Rect buttomArea = new Rect(startX,0,startX+buttomListW,buttomH);
         if(buttomArea.contains(x,y))return false;
         if(touchArea.contains(x, y)){
-            if(status == OPEN){
-
+            if(status == OPEN || status == CLOSE_TO_OPEN){
                 for (Rect r : buttoms) {
                     if (r.contains(x, y)) {
                         try {

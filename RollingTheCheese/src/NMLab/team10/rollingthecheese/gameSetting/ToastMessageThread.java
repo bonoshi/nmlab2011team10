@@ -50,12 +50,12 @@ public class ToastMessageThread extends Thread {
         }
     }
 
-    public void cancel(){
+    public void cancel() {
         toast.cancel();
     }
 
     public void display() {
-//        father.myHandler.sendEmptyMessage(InterThreadMsg.ToastClose);
+        // father.myHandler.sendEmptyMessage(InterThreadMsg.ToastClose);
         String string = "";
         toast.cancel();
         synchronized (list) {
@@ -67,10 +67,10 @@ public class ToastMessageThread extends Thread {
                     else
                         string += (list.get(i).text);
                 }
-//                Message msg = new Message();
-//                msg.what = InterThreadMsg.ToastDisplay;
-//                msg.obj = string;
-//                father.myHandler.sendMessage(msg);
+                // Message msg = new Message();
+                // msg.what = InterThreadMsg.ToastDisplay;
+                // msg.obj = string;
+                // father.myHandler.sendMessage(msg);
                 toast = Toast.makeText(father, string, Toast.LENGTH_SHORT);
                 toast.show();
             }
@@ -78,21 +78,24 @@ public class ToastMessageThread extends Thread {
     }
 
     public void run() {
-        while(isRunning){
-            //Looper.prepare();
-//            display();
+        while (isRunning) {
+            // Looper.prepare();
+            // display();
             delete();
-            //Looper.loop();
-            try {
-                Thread.sleep(cycle);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            while (isPause) {
+            // Looper.loop();
+            if (isPause) {
+                while (isPause) {
+                    try {
+                        Thread.sleep(cycle);
+                    } catch (InterruptedException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            } else {
                 try {
                     Thread.sleep(cycle);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

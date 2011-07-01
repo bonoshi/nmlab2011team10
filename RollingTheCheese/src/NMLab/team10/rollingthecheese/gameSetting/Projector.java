@@ -185,6 +185,12 @@ public class Projector implements Serializable{
             case Board:
                 this.type = ProjectorEnum.Slide;
                 break;
+            case Slide:
+                this.type = ProjectorEnum.Cannon;
+                break;
+            case Cannon:
+                this.type = ProjectorEnum.Rocket;
+                break;
             default:// no use
                 break;
         }

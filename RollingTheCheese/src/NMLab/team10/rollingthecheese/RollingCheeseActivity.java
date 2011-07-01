@@ -10,21 +10,28 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.logging.Logger;
 
 import NMLab.team10.rollingthecheese.displayData.CheeseDisplay;
+import NMLab.team10.rollingthecheese.displayData.CloudDisplay;
+import NMLab.team10.rollingthecheese.displayData.CowDisplay;
 import NMLab.team10.rollingthecheese.displayData.DisplayData;
+import NMLab.team10.rollingthecheese.displayData.FireLineDisplay;
+import NMLab.team10.rollingthecheese.displayData.HouseDisplay;
+import NMLab.team10.rollingthecheese.displayData.SkyDisplay;
+import NMLab.team10.rollingthecheese.displayData.SmokeDisplay;
 import NMLab.team10.rollingthecheese.event.EventEnum;
-import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 import NMLab.team10.rollingthecheese.gameSetting.AppMessage;
 import NMLab.team10.rollingthecheese.gameSetting.Farm;
 import NMLab.team10.rollingthecheese.gameSetting.House;
+import NMLab.team10.rollingthecheese.gameSetting.Projector;
 import NMLab.team10.rollingthecheese.gameSetting.ServerGameSetting;
 import NMLab.team10.rollingthecheese.gameSetting.SynMessageData;
 import NMLab.team10.rollingthecheese.gameSetting.ToastMessageThread;
 import NMLab.team10.rollingthecheese.gameSetting.cZipFactory;
 import NMLab.team10.rollingthecheese.gameSetting.cZipObject;
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -49,8 +56,8 @@ public class RollingCheeseActivity extends Activity {
                                          // to respond to onBackPressed()
 
     // private boolean isLeft = false;// when two player
-    private boolean isTwoPlayer = true;// be careful to maintain
-    private boolean isClient = true;// be careful to maintain
+    static private boolean isTwoPlayer = true;// be careful to maintain
+    static private boolean isClient = true;// be careful to maintain
 
     private static final int MENU_Exit = 0;
     private static final int MENU_InitClient = 1;
@@ -58,6 +65,9 @@ public class RollingCheeseActivity extends Activity {
 
     public GameView gameView = null;
     public EntranceView entranceView;
+
+    public static Resources r;
+    public static Context context;
 
     ServerSocket server = null;
 
@@ -82,19 +92,19 @@ public class RollingCheeseActivity extends Activity {
         super.onCreate(savedInstanceState);
         viewState = ENTRANCE_VIEW;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-//        SoundController.initSoundController(this);
-//        SoundController.playBackground(SoundController.BACKGROUND1);
+        // SoundController.initSoundController(this);
+        // SoundController.playBackground(SoundController.BACKGROUND1);
 
-        displayData = new DisplayData();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         entranceView = new EntranceView(this);
-        entranceView.isContent = true;
-        initialGameView();
         setContentView(entranceView);
         toastMessage = new ToastMessageThread(this, 200);
         toastMessage.start();
+
+        GameView.initBitmap(this);
     }
 
     public void initialGameView() {
@@ -110,6 +120,12 @@ public class RollingCheeseActivity extends Activity {
         }
     }
 
+    public void interruptGameView() {
+        if (gameView != null) {
+            gameView.interrupt();
+        }
+    }
+
     public void pauseGameView() {
         if (gameView != null) {
             gameView.pause();
@@ -120,12 +136,18 @@ public class RollingCheeseActivity extends Activity {
         if (gameView != null) {
             gameView.stop();
         }
-        gameView = null;
+    }
+
+    public void destroyGameView() {
+        if (gameView != null) {
+            gameView = null;
+        }
     }
 
     public void closeServer() {
         if (serverThread != null) {
             serverThread.closeServer();
+            serverThread = null;
         }
     }
 
@@ -135,17 +157,25 @@ public class RollingCheeseActivity extends Activity {
         }
     }
 
+    public void interruptNetwork() {
+        if (receiveThread != null) {
+            receiveThread.interrupt();
+        }
+    }
+
     public void pauseNetwork() {
         if (receiveThread != null) {
             receiveThread.setPause(true);
         }
     }
 
+    public void destroyNetwork() {
+        receiveThread = null;
+    }
+
     public void stopNetwork() {
         if (receiveThread != null) {
             receiveThread.setRunning(false);
-            receiveThread.setPause(false);
-            receiveThread = null;
         }
     }
 
@@ -154,6 +184,12 @@ public class RollingCheeseActivity extends Activity {
             randomSoundGenerator.resume();
         }
 
+    }
+
+    public void interruptRandomSound() {
+        if (randomSoundGenerator != null) {
+            randomSoundGenerator.interrupt();
+        }
     }
 
     public void pauseRandomSound() {
@@ -165,6 +201,11 @@ public class RollingCheeseActivity extends Activity {
     public void stopRandomSound() {
         if (randomSoundGenerator != null) {
             randomSoundGenerator.stop();
+        }
+    }
+
+    public void destroyRandomSound() {
+        if (randomSoundGenerator != null) {
             randomSoundGenerator = null;
         }
     }
@@ -200,11 +241,18 @@ public class RollingCheeseActivity extends Activity {
         SoundController.initSoundController(this);
 
         entranceView.setPause(false);
+        entranceView.interrupt();
         resumeGameView();
+        interruptGameView();
         resumeGameCalThread();
+        interruptGameCalThread();
+
         resumeRandomSound();
+        interruptRandomSound();
         toastMessage.setPause(false);
-        pauseNetwork();
+        toastMessage.interrupt();
+        resumeNetwork();
+        interruptNetwork();
         if (viewState == ENTRANCE_VIEW) {
             SoundController.playBackground(SoundController.BACKGROUND1);
             setContentView(entranceView);
@@ -218,6 +266,7 @@ public class RollingCheeseActivity extends Activity {
     public void onDestroy() {
         super.onDestroy();
         destroy();
+        Log.e(TAG, "onDestroy");
         // SoundController.cancelAllMusic();
         // if (mBluetoothService != null)
         // mBluetoothService.stop();
@@ -227,11 +276,30 @@ public class RollingCheeseActivity extends Activity {
     private void destroy() {
         entranceView.setRunning(false);
         entranceView.setPause(false);
-        stopGameCalThread();
+        entranceView.interrupt();
+
         stopGameView();
+        resumeGameView();
+        interruptGameView();
+        destroyGameView();
+
+        stopGameCalThread();
+        resumeGameCalThread();
+        interruptGameCalThread();
+        destroyGameCalThread();
+
         stopRandomSound();
+        resumeRandomSound();
+        interruptRandomSound();
+        destroyRandomSound();
+
         closeServer();
+
         stopNetwork();
+        resumeNetwork();
+        interruptNetwork();
+        destroyNetwork();
+
         toastMessage.setRunning(false);
         toastMessage.setPause(false);
         finish();
@@ -248,6 +316,12 @@ public class RollingCheeseActivity extends Activity {
         toastMessage.setPause(true);
         pauseNetwork();
         // closeServer();
+        Log.e(TAG, "onPause");
+    }
+
+    public void onStop() {
+        super.onStop();
+        Log.e(TAG, "onStop");
     }
 
     /**
@@ -326,7 +400,7 @@ public class RollingCheeseActivity extends Activity {
             while (running) {
                 while (pause) {
                     try {
-                        sleep(10);
+                        sleep(0);
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
@@ -422,7 +496,6 @@ public class RollingCheeseActivity extends Activity {
     public void stopGameCalThread() {
         if (gameCalThread != null) {
             gameCalThread.stopGameCal();
-            gameCalThread = null;
         }
     }
 
@@ -438,6 +511,18 @@ public class RollingCheeseActivity extends Activity {
         }
     }
 
+    public void destroyGameCalThread() {
+        if (gameCalThread != null) {
+            gameCalThread = null;
+        }
+    }
+
+    public void interruptGameCalThread() {
+        if (gameCalThread != null) {
+            gameCalThread.interrupt();
+        }
+    }
+
     ServerGameSetting sgs = null;
 
     public Handler myHandler = new Handler() {
@@ -446,19 +531,21 @@ public class RollingCheeseActivity extends Activity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case InterThreadMsg.startCrazyGame:
+
                     isTwoPlayer = false;
 
                     stopGameCalThread();
-
                     sgs = new ServerGameSetting();
-                    gameCalThread = new GameCalThread(rca, sgs);
 
-                    // displayData = gameCalThread.getDisplayData();
+                    // will only draw after initialization
+                    displayData = new DisplayData();
+                    gameCalThread = new GameCalThread(rca, sgs);// need
+                                                                // displayData
+                    initialGameView();
+                    gameView.initialOnePlayer();// need gameCalThread
+
                     gameCalThread.start();
                     resumeGameCalThread();
-                    // will only draw after initialization
-                    // used before drawing
-                    gameView.initialOnePlayer();
 
                     entranceView.setPause(true);
                     gameView.start();
@@ -481,7 +568,11 @@ public class RollingCheeseActivity extends Activity {
                     toast.show();
                     isTwoPlayer = true;
                     isClient = true;
-                    gameView.initialClient();
+
+                    displayData = new DisplayData();
+                    initialGameView();
+                    gameView.initialClient();// need to send message about the
+                                             // clicked events
 
                     receiveThread = new ReceiveThread();
                     receiveThread.start();
@@ -527,9 +618,14 @@ public class RollingCheeseActivity extends Activity {
                     isClient = false;
 
                     sgs = new ServerGameSetting();
+
+                    // will only draw after initialization
+                    displayData = new DisplayData();
                     // before receiveThread to make sure eventqueue is ready to
                     // accept data
                     gameCalThread = new GameCalThread(RollingCheeseActivity.this, sgs);
+                    initialGameView();
+                    gameView.initialServer();
 
                     // start to accept event from client
                     receiveThread = new ReceiveThread();
@@ -537,10 +633,6 @@ public class RollingCheeseActivity extends Activity {
 
                     gameCalThread.start();
                     gameCalThread.resumeGameCal();
-
-                    // will only draw after initialization
-                    // used before drawing
-                    gameView.initialServer();
 
                     entranceView.setPause(true);
                     gameView.start();
@@ -605,20 +697,20 @@ public class RollingCheeseActivity extends Activity {
 
     };
 
-    public void setTwoPlayer(boolean isTwoPlayer) {
-        this.isTwoPlayer = isTwoPlayer;
+    static public void setTwoPlayer(boolean isTwoPlayer) {
+        RollingCheeseActivity.isTwoPlayer = isTwoPlayer;
     }
 
-    public boolean isTwoPlayer() {
-        return isTwoPlayer;
+    static public boolean isTwoPlayer() {
+        return RollingCheeseActivity.isTwoPlayer;
     }
 
-    public void setClient(boolean isClient) {
-        this.isClient = isClient;
+    static public void setClient(boolean isClient) {
+        RollingCheeseActivity.isClient = isClient;
     }
 
-    public boolean isClient() {
-        return isClient;
+    static public boolean isClient() {
+        return RollingCheeseActivity.isClient;
     }
 
     class ServerThread extends Thread {

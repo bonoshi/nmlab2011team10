@@ -50,18 +50,21 @@ public class RandomSoundGenerator {
         windThread.pause = false;
     }
 
+    public void interrupt(){
+        birdThread.interrupt();
+        cowThread.interrupt();
+        nightbirdThread.interrupt();
+        windThread.interrupt();
+    }
+
     public void stop() {
         birdThread.isRunning = false;
         cowThread.isRunning = false;
         nightbirdThread.isRunning = false;
         windThread.isRunning = false;
-        birdThread.interrupt();
-        cowThread.interrupt();
-        nightbirdThread.interrupt();
-        windThread.interrupt();
-        resume();
+        interrupt();
+        //resume();
     }
-
 
     class RandomSoundThread extends Thread {
         public int interval;
@@ -91,12 +94,15 @@ public class RandomSoundGenerator {
                     int rr = random.nextInt(eff.length);
                     SoundController.playSound(eff[rr]);
                 }
-                try {
-                    sleep(interval);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                while (pause) {
+                if (pause) {
+                    while (pause) {
+                        try {
+                            sleep(0);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else {
                     try {
                         sleep(interval);
                     } catch (InterruptedException e) {

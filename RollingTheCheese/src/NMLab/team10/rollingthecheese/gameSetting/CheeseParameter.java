@@ -45,7 +45,7 @@ public class CheeseParameter {// have display light type
 
         // public static final float SizeCrisis = 0.7F;// ratio
         // public static final float ENCrisis = 0.6F;
-        public static final float TimeCrisis = 0.7F;// increment
+        public static final float TimeCrisis = 0.6F;// increment
 
     }
 
@@ -79,7 +79,7 @@ public class CheeseParameter {// have display light type
         public static final float ENLarge = 2.2F;
         public static final float ENMed = 1.5F;
         public static final float ENSmall = 1.0F;
-        public static final float ENTiny = 0.8F;
+        public static final float ENTiny = 0.7F;
 
         // public static final float SizeCrisis = 0.7F;// ratio
         // public static final float ENCrisis = 0.6F;
@@ -124,7 +124,7 @@ public class CheeseParameter {// have display light type
         public static final float ENSmall = 1.0F;
         public static final float ENTiny = 0.8F;
 
-        public static final float TimeCrisis = 0.8F;
+        public static final float TimeCrisis = 0.7F;
 
         // for poison cheese and its contact infection
         public static final float DamageTiny = 1.1F;
@@ -166,7 +166,7 @@ public class CheeseParameter {// have display light type
         public static final float ENSmall = 1.0F;
         public static final float ENTiny = 0.8F;
 
-        public static final float TimeCrisis = 0.9F;
+        public static final float TimeCrisis = 0.8F;
 
         public static final float DamageTiny = 10F;
         public static final float DamageSmall = 12F;

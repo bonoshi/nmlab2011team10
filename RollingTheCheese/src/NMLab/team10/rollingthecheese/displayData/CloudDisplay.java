@@ -132,9 +132,9 @@ public class CloudDisplay {
             for (int i = 0; i < 20; i++) {
                 nightM[i] = 0;
             }
-            nightM[0] = 0.4F;
-            nightM[6] = 0.4F;
-            nightM[12] = 0.4F;
+            nightM[0] = 0.35F;
+            nightM[6] = 0.35F;
+            nightM[12] = 0.35F;
             nightM[18] = 1;
 
             mornM = new float[20];
@@ -159,9 +159,9 @@ public class CloudDisplay {
             for (int i = 0; i < 20; i++) {
                 duskM[i] = 0;
             }
-            duskM[0] = 1.08F;
-            duskM[6] = 0.75F;
-            duskM[12] = 0.75F;
+            duskM[0] = 1.15F;
+            duskM[6] = 0.7F;
+            duskM[12] = 0.7F;
             duskM[18] = 1;
 
             cloudPaint = new Paint();

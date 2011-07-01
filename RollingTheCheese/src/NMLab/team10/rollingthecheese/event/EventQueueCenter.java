@@ -25,17 +25,17 @@ public class EventQueueCenter {
     static public final int TWOPLAYER_SERVER = 2;
 
     public EventQueueCenter(ServerGameSetting s, RollingCheeseActivity father) {
-        //for the server side of two player game or for only one player
+        // for the server side of two player game or for only one player
         this.setting = s;
         this.father = father;
-        this.isTwoPlayer = father.isTwoPlayer();
-        this.isClient = father.isClient();
+        this.isTwoPlayer = RollingCheeseActivity.isTwoPlayer();
+        this.isClient = RollingCheeseActivity.isClient();
     }
 
     public EventQueueCenter(RollingCheeseActivity father) {
         this.father = father;
-        this.isTwoPlayer = father.isTwoPlayer();
-        this.isClient = father.isClient();
+        this.isTwoPlayer = RollingCheeseActivity.isTwoPlayer();
+        this.isClient = RollingCheeseActivity.isClient();
     }
 
     private boolean isTwoPlayer;
@@ -46,27 +46,29 @@ public class EventQueueCenter {
     private ServerGameSetting setting = null;
 
     public void timeElapsing() {
-        int ut = GlobalParameter.FramePeriod;
         // cheese time
         if (leftCheeseQueue.getSize() > 0) {
+            float decreTime = GlobalParameter.FramePeriod;
             byte event = leftCheeseQueue.peak();
             // notice for the side!!!!
             if (setting.getRightDestruct().slowCheese) {
-                leftCheeseQueue.decreWaitingTime((int) (CheeseParameter.getCrisisRatio(event) * ut));
-            } else {
-                leftCheeseQueue.decreWaitingTime(ut);
+                decreTime *= CheeseParameter.getCrisisRatio(event);
             }
+            decreTime *= setting.getLeftHouse().getProdRatio();
+            leftCheeseQueue.decreWaitingTime((int) decreTime);
         }
         if (rightCheeseQueue.getSize() > 0) {
+            float decreTime = GlobalParameter.FramePeriod;
             byte event = rightCheeseQueue.peak();
             // notice for the side!!!!
             if (setting.getLeftDestruct().slowCheese) {
-                rightCheeseQueue.decreWaitingTime((int) (CheeseParameter.getCrisisRatio(event) * ut));
-            } else {
-                rightCheeseQueue.decreWaitingTime(ut);
+                decreTime *= CheeseParameter.getCrisisRatio(event);
             }
+            decreTime *= setting.getRightHouse().getProdRatio();
+            rightCheeseQueue.decreWaitingTime((int) decreTime);
         }
         // construction time
+        int ut = GlobalParameter.FramePeriod;
         if (leftConsQueue.getSize() > 0) {
             leftConsQueue.decreWaitingTime(ut);
         }
@@ -95,7 +97,7 @@ public class EventQueueCenter {
                             continue;
 
                         LinkedList<Cow> cowList = (whichSide) ? setting.getLeftCowList() : setting
-                            .getRightCowList();
+                                .getRightCowList();
                         int cowNum = cowList.size();
                         if (cowNum >= CowParameter.MaxCow) {
                             continue;
@@ -187,11 +189,11 @@ public class EventQueueCenter {
 
                     // notice for the side!!
                     boolean isSmallCrisis = (whichSide) ? setting.getRightDestruct().smallCheese : setting
-                        .getLeftDestruct().smallCheese;
+                            .getLeftDestruct().smallCheese;
 
                     House house = (whichSide) ? setting.getLeftHouse() : setting.getRightHouse();
                     Projector projector = (whichSide) ? setting.getLeftProjector() : setting
-                        .getRightProjector();
+                            .getRightProjector();
 
                     // check if crowd!
                     byte event = peakCheeseEvent(whichSide);
@@ -200,7 +202,7 @@ public class EventQueueCenter {
                     cheese.initialPara(house, projector, whichSide);
 
                     LinkedList<Cheese> cheeseList = (whichSide) ? setting.getLeftCheeseList() : setting
-                        .getRightCheeseList();
+                            .getRightCheeseList();
 
                     if (cheese.checkCrowd(cheeseList))
                         continue;
@@ -270,7 +272,8 @@ public class EventQueueCenter {
                 if (cowQueue.getSize() > 0 && cowQueue.getWaitingTime() <= 0) {
                     popCowEvent(whichSide);
 
-                    Cow cow = new Cow(whichSide);// bonoshi: need to initialize!!!!!!
+                    Cow cow = new Cow(whichSide);// bonoshi: need to
+                                                 // initialize!!!!!!
                     if (whichSide) {
                         setting.getLeftCowList().add(cow);
                     } else {
@@ -366,7 +369,7 @@ public class EventQueueCenter {
             case EventEnum.IntoTheWild: {
                 if (!ds.fense && !ds.fenseTriggered && (milk -= DestructParameter.FenseCost) >= 0) {
                     ds.fenseTriggered = true;
-//                    ds.fense = true;
+                    // ds.fense = true;
                 } else {
                     return;
                 }
@@ -375,7 +378,7 @@ public class EventQueueCenter {
             case EventEnum.BlackOut: {
                 if (!ds.power && !ds.powerTriggered && (milk -= DestructParameter.PowerCost) >= 0) {
                     ds.powerTriggered = true;
-//                    ds.power = true;
+                    // ds.power = true;
                 } else {
                     return;
                 }
@@ -384,7 +387,7 @@ public class EventQueueCenter {
             case EventEnum.MiceArmy: {
                 if (!ds.smallCheese && !ds.smallCheeseTriggered && (milk -= DestructParameter.SmallCost) >= 0) {
                     ds.smallCheeseTriggered = true;
-//                    ds.smallCheese = true;
+                    // ds.smallCheese = true;
                 } else {
                     return;
                 }
@@ -393,7 +396,7 @@ public class EventQueueCenter {
             case EventEnum.LazyWeekend: {
                 if (!ds.slowCheese && !ds.slowCheeseTriggered && (milk -= DestructParameter.SlowCost) >= 0) {
                     ds.slowCheeseTriggered = true;
-//                    ds.slowCheese = true;
+                    // ds.slowCheese = true;
                 } else {
                     return;
                 }
@@ -402,7 +405,7 @@ public class EventQueueCenter {
             case EventEnum.MilkLeak: {
                 if (!ds.milk && !ds.milkTriggered && (milk -= DestructParameter.MilkCost) >= 0) {
                     ds.milkTriggered = true;
-//                    ds.milk = true;
+                    // ds.milk = true;
                 } else {
                     return;
                 }
@@ -481,7 +484,7 @@ public class EventQueueCenter {
                 for (Iterator<Cow> iterator = cowList.iterator(); iterator.hasNext();) {
                     Cow cow = iterator.next();
                     Cow.cowDie(cow, whichSide);
-                    iterator.remove();//only remove one
+                    iterator.remove();// only remove one
                     break;
                 }
             }
@@ -527,57 +530,57 @@ public class EventQueueCenter {
             ds = (i == 0) ? setting.getLeftDestruct() : setting.getRightDestruct();
             if (ds.fense && (ds.fenseCountDown <= 0 || !setting.isNight())) {
                 ds.fense = false;
-//                ds.fenseDisplay = false;
+                // ds.fenseDisplay = false;
             }
-            if((ds.fenseCountDown-=GlobalParameter.FramePeriod)<0)
+            if ((ds.fenseCountDown -= GlobalParameter.FramePeriod) < 0)
                 ds.fenseCountDown = 0;
 
             if (ds.power && (ds.powerCountDown <= 0 || !setting.isNight())) {
                 ds.power = false;
-//                ds.powerDisplay = false;
+                // ds.powerDisplay = false;
             }
-            if((ds.powerCountDown-=GlobalParameter.FramePeriod)<0)
+            if ((ds.powerCountDown -= GlobalParameter.FramePeriod) < 0)
                 ds.powerCountDown = 0;
 
             if (ds.smallCheese && (ds.smallCheeseCountDown <= 0)) {
                 ds.smallCheese = false;
-//                ds.smallCheeseDisplay = false;
+                // ds.smallCheeseDisplay = false;
             }
-            if((ds.smallCheeseCountDown-=GlobalParameter.FramePeriod)<0)
+            if ((ds.smallCheeseCountDown -= GlobalParameter.FramePeriod) < 0)
                 ds.smallCheeseCountDown = 0;
 
             if (ds.slowCheese && (ds.slowCheeseCountDown <= 0)) {
                 ds.slowCheese = false;
-//                ds.slowCheeseDisplay = false;
+                // ds.slowCheeseDisplay = false;
             }
-            if((ds.slowCheeseCountDown-=GlobalParameter.FramePeriod)<0)
-                ds.slowCheeseCountDown= 0;
+            if ((ds.slowCheeseCountDown -= GlobalParameter.FramePeriod) < 0)
+                ds.slowCheeseCountDown = 0;
 
             if (ds.milk && (ds.milkCountDown <= 0)) {
                 ds.milk = false;
-//                ds.milkDisplay = false;
+                // ds.milkDisplay = false;
                 LinkedList<Cow> cowList = (i == 0) ? setting.getRightCowList() : setting.getLeftCowList();
                 for (int j = 0; j < cowList.size(); j++) {
                     Cow cow = cowList.get(j);
                     cow.setStatus(Cow.Normal);
                 }
             }
-            if((ds.milkCountDown-=GlobalParameter.FramePeriod)<0)
-                ds.milkCountDown= 0;
+            if ((ds.milkCountDown -= GlobalParameter.FramePeriod) < 0)
+                ds.milkCountDown = 0;
         }
     }
 
     public void addEvent(Byte i) throws IOException {
         if (isTwoPlayer) {
-            if (isClient){
+            if (isClient) {
                 AppMessage am = new AppMessage();
                 am.setType(i);
                 father.sendMessage(am);
-            }else{
+            } else {
                 addEvent(i, Left);
             }
         } else {
-            addEvent(i, Left);
+            addEvent(i, Right);
         }
     }
 

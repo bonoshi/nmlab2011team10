@@ -67,12 +67,10 @@ public class ListContFourButtom {
         Rect src = new Rect(0,0,1,1);//dummy
 
         if(status == CLOSE){
-            if(statusQueue == CLOSE)return;
+            if (statusQueue == CLOSE)
+                return;
             if(statusQueue == CLOSE_TO_OPEN){
-                frame=0;
                 src = new Rect(0,0,buttomListW,buttomListH);
-                status = CLOSE_TO_OPEN;
-                statusQueue = CLOSE;
             }
         }
         if(status == OPEN){
@@ -81,12 +79,41 @@ public class ListContFourButtom {
         if(status == CLOSE_TO_OPEN){
             if(frame<5){
                 src = new Rect(frame*buttomListW,0,(frame+1)*buttomListW,buttomListH);
-                frame++;
             }else if(frame<10){
                 src = new Rect((frame-5)*buttomListW,buttomListH,(frame-5+1)*buttomListW,buttomListH*2);
-                frame++;
             }else if(frame==10){
                 src = new Rect(0,buttomListH*2,buttomListW,buttomListH*3);
+            }
+        }
+        if(status == OPEN_TO_CLOSE){
+            if(frame<4){
+                src = new Rect((frame+1)*buttomListW,buttomListH*2,(frame+2)*buttomListW,buttomListH*3);
+            }else if(frame <9){
+                src = new Rect((frame-4)*buttomListW,buttomListH*3,(frame-4+1)*buttomListW,buttomListH*4);
+            }else if(frame == 9){
+                src = new Rect(0,buttomListH*4,buttomListW,buttomListH*5);
+            }else if(frame ==10){
+                src = new Rect(buttomListW,buttomListH*4,2*buttomListW,buttomListH*5);
+            }
+        }
+        canvas.drawBitmap(buttomListBitmap,src,dest,null);
+    }
+
+    public void refreshFrame(){
+        if(status == CLOSE){
+            if(statusQueue == CLOSE)return;
+            if(statusQueue == CLOSE_TO_OPEN){
+                frame=0;
+                status = CLOSE_TO_OPEN;
+                statusQueue = CLOSE;
+            }
+        }
+        if(status == CLOSE_TO_OPEN){
+            if(frame<5){
+                frame++;
+            }else if(frame<10){
+                frame++;
+            }else if(frame==10){
                 if(statusQueue == OPEN_TO_CLOSE){
                     status = OPEN_TO_CLOSE;
                     statusQueue = CLOSE;
@@ -98,16 +125,12 @@ public class ListContFourButtom {
         }
         if(status == OPEN_TO_CLOSE){
             if(frame<4){
-                src = new Rect((frame+1)*buttomListW,buttomListH*2,(frame+2)*buttomListW,buttomListH*3);
                 frame++;
             }else if(frame <9){
-                src = new Rect((frame-4)*buttomListW,buttomListH*3,(frame-4+1)*buttomListW,buttomListH*4);
                 frame++;
             }else if(frame == 9){
-                src = new Rect(0,buttomListH*4,buttomListW,buttomListH*5);
                 frame++;
             }else if(frame ==10){
-                src = new Rect(buttomListW,buttomListH*4,2*buttomListW,buttomListH*5);
                 if(statusQueue == CLOSE_TO_OPEN){
                     status = CLOSE_TO_OPEN;
                     statusQueue = CLOSE;
@@ -117,7 +140,6 @@ public class ListContFourButtom {
                 }
             }
         }
-        canvas.drawBitmap(buttomListBitmap,src,dest,null);
     }
 
     public void buttomPress(){
@@ -150,7 +172,7 @@ public class ListContFourButtom {
         Rect buttomArea = new Rect(startX+150-55,0,startX+150+55,buttomH);
         if(buttomArea.contains(x,y))return false;
         if(touchArea.contains(x, y)){
-            if(status == OPEN){
+            if(status == OPEN || status == CLOSE_TO_OPEN){
                 for (Rect r : buttoms) {
                     if(r.contains(x,y)){
                         try {

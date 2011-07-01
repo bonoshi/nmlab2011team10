@@ -3,6 +3,8 @@ package NMLab.team10.rollingthecheese;
 import java.io.IOException;
 import java.util.Date;
 
+import android.util.Log;
+
 import NMLab.team10.rollingthecheese.event.EventEnum;
 import NMLab.team10.rollingthecheese.event.EventQueueCenter;
 import NMLab.team10.rollingthecheese.gameSetting.AppMessage;
@@ -24,15 +26,15 @@ public class GameCalThread extends Thread {
 
     private boolean hasNewData = false;
 
-    public GameCalThread(RollingCheeseActivity father, ServerGameSetting sgs){
+    public GameCalThread(RollingCheeseActivity father, ServerGameSetting sgs) {
         this.father = father;
         this.setting = sgs;
-        eventCenter = new EventQueueCenter(sgs,father);
+        eventCenter = new EventQueueCenter(sgs, father);
         synMessageData = new SynMessageData(sgs, eventCenter, Left);
         clientSMD = new SynMessageData(sgs, eventCenter, Right);
     }
 
-    public void sendEvent(byte event){
+    public void sendEvent(byte event) {
         eventCenter.addEvent(event, Right);
     }
 
@@ -40,17 +42,6 @@ public class GameCalThread extends Thread {
 
     public void run() {
         while (!stop) {
-            while (pause) {
-                if(stop){
-                    return;
-                }
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
 
             timeLast = new Date(System.currentTimeMillis());
 
@@ -63,15 +54,17 @@ public class GameCalThread extends Thread {
             // (2)prepare data for server
             // (3)send to client
             // local game display
-            synMessageData = new SynMessageData(setting, eventCenter, Left);
-            if(father.isTwoPlayer()){
+            //Log.e("Newly", "onCalculated");
+            synMessageData = new SynMessageData(setting, eventCenter, Right);
+            if (RollingCheeseActivity.isTwoPlayer()) {
                 clientSMD = new SynMessageData(setting, eventCenter, Right);
                 AppMessage am = new AppMessage();
                 am.setType(EventEnum.Data);
                 am.setSmd(clientSMD);
                 try {
-//                    Toast toast = Toast.makeText(father, "Try to send", Toast.LENGTH_SHORT);
-//                    toast.show();
+                    // Toast toast = Toast.makeText(father, "Try to send",
+                    // Toast.LENGTH_SHORT);
+                    // toast.show();
                     father.sendMessage(am);
                     GameView.refreshPPS(true);
                 } catch (IOException e) {
@@ -96,22 +89,44 @@ public class GameCalThread extends Thread {
             // Step 6: Time Elapsing
             eventCenter.timeElapsing();// cheese, cow and construction time
             setting.timeElapsing();// time++, milk++, takeAction()
-            while (true) {
-                Date timeNow = new Date(System.currentTimeMillis());
-                long interval = timeNow.getTime() - timeLast.getTime();
-                if (interval < GlobalParameter.FramePeriod) {
+
+            if (pause) {
+                while (pause) {
                     try {
-                        sleep(1);
+                        Thread.sleep(0);
                     } catch (InterruptedException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
-                } else {
-                    break;
+                }
+            } else {
+                while (true) {
+                    Date timeNow = new Date(System.currentTimeMillis());
+                    long interval = timeNow.getTime() - timeLast.getTime();
+                    if (pause) {
+                        while (pause) {
+                            try {
+                                Thread.sleep(0);
+                            } catch (InterruptedException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                        }
+                    } else if (interval < GlobalParameter.FramePeriod) {
+                        try {
+                            sleep(1);
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    } else {
+                        break;
+                    }
                 }
             }
         }
     }
+
     public void stopGameCal() {
         this.stop = true;
     }

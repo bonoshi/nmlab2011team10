@@ -84,6 +84,22 @@ public class House {
                 return Integer.MAX_VALUE;
         }
     }
+    
+    public float getProdRatio(){
+        switch (prod) {
+            case ForFun:
+                return HouseParameter.ForFun;
+            case AfterHours:
+                return HouseParameter.AfterHours;
+            case Bakery:
+                return HouseParameter.Bakery;
+            case FoodFactory:
+                return HouseParameter.FoodFactory;
+            default:// no use
+                return 0;
+        }
+    }
+
 
     public float getHouseMaxHP() {
         switch (prod) {
@@ -187,7 +203,7 @@ public class House {
                 return 0;
         }
     }
-
+    
     public byte getQual() {
         return qual;
     }
