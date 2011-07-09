@@ -136,20 +136,6 @@ public class GameView extends View {
         // alpha value = 255 => ���z��//
         // modifyAlpah(clould1, 80);
 
-        // nightM = new float[20];
-        // for (int i = 0; i < 20; i++) {
-        // nightM[i] = 0;
-        // }
-        // nightM[18] = 1;
-        //
-        // mornM = new float[20];
-        // for (int i = 0; i < 20; i++) {
-        // mornM[i] = 0;
-        // }
-        // mornM[0] = 1;
-        // mornM[6] = 1;
-        // mornM[12] = 1;
-        // mornM[18] = 1;
         backPaint = new Paint();
         backPaint.setColor(GameView.closeAlphaByRatio(0, 0, 1));
 
@@ -164,6 +150,13 @@ public class GameView extends View {
         FireLineDisplay.initial();
         Projector.initBitmap();
         ButtomBar.initBitmap(context);
+    }
+
+    static public void release(){
+        CheeseDisplay.release();
+        backgroundBitmap = null;
+        farmBitmap = null;
+        grassBitmap = null;
     }
 
     private void refreshPaint() {

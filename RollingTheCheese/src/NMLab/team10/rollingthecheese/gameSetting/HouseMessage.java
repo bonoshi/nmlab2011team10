@@ -99,20 +99,20 @@ public class HouseMessage implements Serializable{
                 return 0.0F;
         }
     }
-    public int getUpProdMilk() {
-        switch (prod) {
-            case ForFun:
-                return HouseParameter.AfterHoursMilk;
-            case AfterHours:
-                return HouseParameter.BakeryMilk;
-            case Bakery:
-                return HouseParameter.FoodFactoryMilk;
-            case FoodFactory:
-                return Integer.MAX_VALUE;
-            default:// no use
-                return Integer.MAX_VALUE;
-        }
-    }
+//    public int getUpProdMilk() {
+//        switch (prod) {
+//            case ForFun:
+//                return HouseParameter.AfterHoursMilk;
+//            case AfterHours:
+//                return HouseParameter.BakeryMilk;
+//            case Bakery:
+//                return HouseParameter.FoodFactoryMilk;
+//            case FoodFactory:
+//                return Integer.MAX_VALUE;
+//            default:// no use
+//                return Integer.MAX_VALUE;
+//        }
+//    }
 
     public String getUpProdMilkText() {
         switch (prod) {
@@ -129,27 +129,27 @@ public class HouseMessage implements Serializable{
         }
     }
     
-    public int getUpQualMilk() {
-        switch (qual) {
-            case Handmade:
-                return HouseParameter.CheeseMoldMilk;
-            case CheeseMold:
-                return HouseParameter.FoodChemistyMilk;
-            case FoodChemisty:
-                return HouseParameter.GMOMilk;
-            case GMO:
-                return Integer.MAX_VALUE;
-            default:// no use
-                return Integer.MAX_VALUE;
-        }
-    }
+//    public int getUpQualMilk() {
+//        switch (qual) {
+//            case Handmade:
+//                return HouseParameter.CheeseMoldMilk;
+//            case CheeseMold:
+//                return HouseParameter.FoodChemistyMilk;
+//            case FoodChemisty:
+//                return HouseParameter.GMOMilk;
+//            case GMO:
+//                return Integer.MAX_VALUE;
+//            default:// no use
+//                return Integer.MAX_VALUE;
+//        }
+//    }
 
     public String getUpQualMilkText() {
         switch (qual) {
             case Handmade:
                 return Integer.toString(HouseParameter.CheeseMoldMilk);
             case CheeseMold:
-                return Integer.toString(HouseParameter.FoodFactoryMilk);
+                return Integer.toString(HouseParameter.FoodChemistyMilk);
             case FoodChemisty:
                 return Integer.toString(HouseParameter.GMOMilk);
             case GMO:

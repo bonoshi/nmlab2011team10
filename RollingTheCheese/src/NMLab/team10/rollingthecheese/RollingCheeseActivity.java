@@ -232,12 +232,7 @@ public class RollingCheeseActivity extends Activity {
     @Override
     public synchronized void onResume() {
         super.onResume();
-        // if (mBluetoothService != null) {
-        // if (mBluetoothService.getState() == BluetoothService.STATE_NONE) {
-        // // Start the Blue-tooth chat services
-        // mBluetoothService.start();
-        // }
-        // }
+
         SoundController.initSoundController(this);
 
         entranceView.setPause(false);

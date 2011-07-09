@@ -279,6 +279,18 @@ public class CheeseDisplay {
 
 
     }
+    
+    static public void release(){
+        cheeseOU = null;
+        cheeseO = null;
+        cheeseCU = null;
+        cheeseC = null;
+        cheeseSU = null;
+        cheeseS = null;
+        cheeseFU = null;
+        cheeseF = null;
+        sweatyBitmap = null;
+    }
 
 
 

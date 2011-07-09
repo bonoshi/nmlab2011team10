@@ -580,7 +580,7 @@ public class EventQueueCenter {
                 addEvent(i, Left);
             }
         } else {
-            addEvent(i, Right);
+            addEvent(i, Left);
         }
     }
 

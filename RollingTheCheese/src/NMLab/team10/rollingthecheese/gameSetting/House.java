@@ -55,20 +55,20 @@ public class House {
         }
     }
 
-    public String getUpProdMilkText() {
-        switch (prod) {
-            case ForFun:
-                return Integer.toString(HouseParameter.AfterHoursMilk);
-            case AfterHours:
-                return Integer.toString(HouseParameter.BakeryMilk);
-            case Bakery:
-                return Integer.toString(HouseParameter.FoodFactoryMilk);
-            case FoodFactory:
-                return "MAX";
-            default:// no use
-                return "NOUSE";
-        }
-    }
+//    public String getUpProdMilkText() {
+//        switch (prod) {
+//            case ForFun:
+//                return Integer.toString(HouseParameter.AfterHoursMilk);
+//            case AfterHours:
+//                return Integer.toString(HouseParameter.BakeryMilk);
+//            case Bakery:
+//                return Integer.toString(HouseParameter.FoodFactoryMilk);
+//            case FoodFactory:
+//                return "MAX";
+//            default:// no use
+//                return "NOUSE";
+//        }
+//    }
 
     public int getUpProdTime() {
         switch (prod) {
@@ -84,7 +84,7 @@ public class House {
                 return Integer.MAX_VALUE;
         }
     }
-    
+
     public float getProdRatio(){
         switch (prod) {
             case ForFun:
@@ -176,20 +176,20 @@ public class House {
         }
     }
 
-    public String getUpQualMilkText() {
-        switch (qual) {
-            case Handmade:
-                return Integer.toString(HouseParameter.CheeseMoldMilk);
-            case CheeseMold:
-                return Integer.toString(HouseParameter.FoodFactoryMilk);
-            case FoodChemisty:
-                return Integer.toString(HouseParameter.GMOMilk);
-            case GMO:
-                return "MAX";
-            default:// no use
-                return "NOUSE";
-        }
-    }
+//    public String getUpQualMilkText() {
+//        switch (qual) {
+//            case Handmade:
+//                return Integer.toString(HouseParameter.CheeseMoldMilk);
+//            case CheeseMold:
+//                return Integer.toString(HouseParameter.FoodChemistyMilk);
+//            case FoodChemisty:
+//                return Integer.toString(HouseParameter.GMOMilk);
+//            case GMO:
+//                return "MAX";
+//            default:// no use
+//                return "NOUSE";
+//        }
+//    }
 
     public int getUpQualTime() {
         switch (qual) {
@@ -203,7 +203,7 @@ public class House {
                 return 0;
         }
     }
-    
+
     public byte getQual() {
         return qual;
     }

@@ -2,8 +2,6 @@ package NMLab.team10.rollingthecheese.gameSetting;
 
 class ProjectorParameter {
 
-    static final int TimeInterval = 10000;// ms
-
     public static final float BoardSpeed = 1.0F;
     public static final float SlideSpeed = 1.5F;
     public static final float CannonSpeed = 2.2F;
@@ -158,11 +156,7 @@ class ProjectorParameter {
         }
 
         static float getBattleBorderX(float radix, boolean whichSide) {
-            float x = getCheeseX(getMaxPrepareD(radix), radix, whichSide);
-            if (!whichSide) {// right
-                x = GlobalParameter.MapWidth - x;
-            }
-            return x;
+            return getCheeseX(getMaxPrepareD(radix), radix, whichSide);
         }
 
         // no need since it is equal to radix

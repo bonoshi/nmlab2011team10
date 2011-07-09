@@ -55,7 +55,7 @@ public class GameCalThread extends Thread {
             // (3)send to client
             // local game display
             //Log.e("Newly", "onCalculated");
-            synMessageData = new SynMessageData(setting, eventCenter, Right);
+            synMessageData = new SynMessageData(setting, eventCenter, Left);
             if (RollingCheeseActivity.isTwoPlayer()) {
                 clientSMD = new SynMessageData(setting, eventCenter, Right);
                 AppMessage am = new AppMessage();
